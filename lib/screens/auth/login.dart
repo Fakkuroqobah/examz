@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 import '../../services/teacher/t_auth_service.dart';
@@ -109,8 +110,13 @@ class _LoginState extends State<Login> {
                       Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => const TExam()));
                     }).catchError((err) {
                       setState(() => _isLoading = false);
-                      SnackBar snackBar = const SnackBar(content: Text("Username atau password guru salah"));
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      if (err is DioError) {
+                        SnackBar snackBar = SnackBar(content: Text(err.response?.data['error']));
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      }else{
+                        SnackBar snackBar = const SnackBar(content: Text("Terjadi kesalahan"));
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      }
                     });
                   }else if(_valRole == 'student') {
                     setState(() => _isLoading = false);
@@ -131,9 +137,10 @@ class _LoginState extends State<Login> {
                   }
                 },
                 style: const ButtonStyle(
-                  elevation: MaterialStatePropertyAll(0)
+                  elevation: MaterialStatePropertyAll(0),
+                  padding: MaterialStatePropertyAll(EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0))
                 ),
-                child: Text(_isLoading ? "Loading..." : "Login")
+                child: _isLoading ? const CircularProgressIndicator(color: Colors.white) : const Text("Login")
               )
             ],
           ),

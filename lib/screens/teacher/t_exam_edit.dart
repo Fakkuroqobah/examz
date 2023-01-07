@@ -3,16 +3,19 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
+import '../../models/teacher/t_exam_model.dart';
 import '../../services/teacher/t_exam_service.dart';
 
-class TExamAdd extends StatefulWidget {
-  const TExamAdd({super.key});
+class TExamEdit extends StatefulWidget {
+  const TExamEdit({super.key, required this.data});
+
+  final Exam data;
 
   @override
-  State<TExamAdd> createState() => _TExamAddState();
+  State<TExamEdit> createState() => _TExamEditState();
 }
 
-class _TExamAddState extends State<TExamAdd> {
+class _TExamEditState extends State<TExamEdit> {
   bool _isLoading = false;
   final TExamService _tExamService = TExamService();
   final TextEditingController _controllerName = TextEditingController();
@@ -25,13 +28,15 @@ class _TExamAddState extends State<TExamAdd> {
   @override
   void initState() {
     super.initState();
+    _controllerName.text = widget.data.name;
+    _valClass = widget.data.examClass;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Tambah Ujian"),
+        title: const Text("Edit Ujian"),
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -116,11 +121,7 @@ class _TExamAddState extends State<TExamAdd> {
 
                   String name = _controllerName.text.toString();
 
-                  if(thumbnailFile == null) {
-                    setState(() => _isLoading = false);
-                    SnackBar snackBar = const SnackBar(content: Text("Thumbnail harus diisi"));
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  }else if(name == "") {
+                  if(name == "") {
                     setState(() => _isLoading = false);
                     SnackBar snackBar = const SnackBar(content: Text("Nama ujian harus diisi"));
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -130,7 +131,7 @@ class _TExamAddState extends State<TExamAdd> {
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   }
 
-                  _tExamService.addExam(name,  _valClass, thumbnailFile!, thumbnailName).then((value) {
+                  _tExamService.editExam(widget.data.id, name,  _valClass, thumbnailFile, thumbnailName).then((value) {
                     setState(() => _isLoading = false);
                     Navigator.pop(context, 'refresh');
                   }).catchError((err) {
@@ -139,7 +140,7 @@ class _TExamAddState extends State<TExamAdd> {
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   });
                 },
-                child: Text(_isLoading ? "Loading..." : "Tambah Ujian")
+                child: Text(_isLoading ? "Loading..." : "Edit Ujian")
               )
             ],
           ),

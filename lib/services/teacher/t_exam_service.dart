@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../config/api.dart';
+import '../../configs/api.dart';
 import '../../models/teacher/t_exam_model.dart';
 
 class TExamService {
@@ -20,6 +20,17 @@ class TExamService {
     return data;
   }
 
+  Future<Exam> detailExam(int id) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    _dio.options.headers['authorization'] = 'Bearer ${preferences.getString("token")}';
+    final response = await _dio.get("${Api.tExamDetail}/$id");
+
+    Exam data = Exam.fromJson(response.data['data']);
+
+    return data;
+  }
+
   Future<bool> addExam(String txtName, String txtClass, File thumbnailPath, String thumbnailName) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
@@ -32,36 +43,56 @@ class TExamService {
       ),
     });
 
-    try{
-      _dio.options.headers['authorization'] = 'Bearer ${preferences.getString("token")}';
-      final response = await _dio.post(Api.tExamAdd, 
-        data: data,
-        options: Options(
-          contentType: 'multipart/form-data',
-          followRedirects: false,
-        )
-      );
-      
-      if(response.statusCode == 200) {
-        return true;
-      }else{
-        return false;
-      }
-    } catch(error){
-      return false;
+    _dio.options.headers['authorization'] = 'Bearer ${preferences.getString("token")}';
+    await _dio.post(Api.tExamAdd, 
+      data: data,
+      options: Options(
+        contentType: 'multipart/form-data',
+        followRedirects: false,
+      )
+    );
+    
+    return true;
+  }
+
+  Future<bool> editExam(int id, String txtName, String txtClass, File? thumbnailPath, String? thumbnailName) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    FormData data;
+    if(thumbnailPath != null) {
+      data = FormData.fromMap({
+        "name": txtName,
+        "class": txtClass,
+        "thumbnail": await MultipartFile.fromFile(
+          thumbnailPath.path,
+          filename: thumbnailName,
+        ),
+      });
+    }else{
+      data = FormData.fromMap({
+        "name": txtName,
+        "class": txtClass
+      });
     }
+
+    _dio.options.headers['authorization'] = 'Bearer ${preferences.getString("token")}';
+    await _dio.post("${Api.tExamEdit}/$id", 
+      data: data,
+      options: Options(
+        contentType: 'multipart/form-data',
+        followRedirects: false,
+      )
+    );
+    
+    return true;
   }
 
   Future<bool> deleteExam(int id) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     _dio.options.headers['authorization'] = 'Bearer ${preferences.getString("token")}';
-    final response = await _dio.delete("${Api.tExamDelete}/$id");
+    await _dio.delete("${Api.tExamDelete}/$id");
     
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      return false;
-    }
+    return true;
   }
 }
