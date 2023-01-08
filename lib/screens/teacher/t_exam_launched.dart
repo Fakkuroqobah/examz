@@ -6,14 +6,14 @@ import '../../services/teacher/t_exam_service.dart';
 
 import '../../widgets/exam_card.dart';
 
-class TExamActive extends StatefulWidget {
-  const TExamActive({super.key});
+class TExamLaunched extends StatefulWidget {
+  const TExamLaunched({super.key});
 
   @override
-  State<TExamActive> createState() => _TExamActiveState();
+  State<TExamLaunched> createState() => _TExamLaunchedState();
 }
 
-class _TExamActiveState extends State<TExamActive> {
+class _TExamLaunchedState extends State<TExamLaunched> {
   final Api _api = Api();
   final TExamService _tExamService = TExamService();
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
@@ -40,14 +40,14 @@ class _TExamActiveState extends State<TExamActive> {
             if (snapshot.hasError) {
               return Center(child: Text("Something wrong with message: ${snapshot.error.toString()}"));
             } else if (snapshot.connectionState == ConnectionState.done) {
-              List<Exam>? exam = snapshot.data?.examActive;
+              List<Exam>? exam = snapshot.data?.examLaunched;
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 8.0),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Text("Jumlah ujian: ${snapshot.data?.sumExamActive}", 
+                    child: Text("Jumlah ujian: ${snapshot.data?.sumExamLaunched}", 
                       style: const TextStyle(fontSize: 18.0),
                     ),
                   ),

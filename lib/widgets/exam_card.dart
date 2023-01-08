@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/teacher/t_exam_model.dart';
 import '../screens/teacher/t_exam_edit.dart';
+import '../screens/teacher/t_exam_detail.dart';
 import '../services/teacher/t_exam_service.dart';
 
 class ExamCard extends StatefulWidget {
@@ -22,9 +23,10 @@ class _ExamCardState extends State<ExamCard> {
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: () {
-          
+          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TExamDetail(data: widget.exam)));
         },
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ListTile(
               leading: Image.network(widget.exam.thumbnail),
