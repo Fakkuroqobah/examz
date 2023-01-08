@@ -93,7 +93,7 @@ class _TExamEditState extends State<TExamEdit> {
                 width: MediaQuery.of(context).size.width,
                 height: 300,
               )
-              : const Text("Tidak ada gambar", style: TextStyle(fontSize: 20)),
+              : const Text("Tidak ada gambar", style: TextStyle(fontSize: 16)),
 
               const SizedBox(height: 12.0),
               SizedBox(

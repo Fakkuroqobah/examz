@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../services/teacher/t_auth_service.dart';
 import '../auth/login.dart';
 import 't_exam.dart';
+import 't_student_detail.dart';
 
 class TStudent extends StatefulWidget {
   const TStudent({super.key});
@@ -98,197 +99,149 @@ class _TStudentState extends State<TStudent> with SingleTickerProviderStateMixin
               },
             ),
           ),
-          body: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: DataTable(
-                showCheckboxColumn: false,
-                columns: const <DataColumn>[
-                  DataColumn(label: Text("No")),
-                  DataColumn(label: Text("Nama")),
-                  DataColumn(label: Text("Kelas")),
-                  DataColumn(label: Text("Aksi")),
-                ],
-                rows:  <DataRow>[
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text("1")),
-                      DataCell(Text("Ace")),
-                      DataCell(Text("1")),
-                      DataCell(ElevatedButton(onPressed: () {}, child: Text("Detail"))),
-                    ]
+          body: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    ElevatedButton(onPressed: () {}, child: const Text("Kelas 1")),
+                    
+                    const SizedBox(width: 8.0),
+                    ElevatedButton(onPressed: () {}, child: const Text("Kelas 2")),
+
+                    const SizedBox(width: 8.0),
+                    ElevatedButton(onPressed: () {}, child: const Text("Kelas 3")),
+                  ],
+                ),
+
+                const SizedBox(height: 8.0),
+                Expanded(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: DataTable(
+                        showCheckboxColumn: false,
+                        columns: const <DataColumn>[
+                          DataColumn(label: Text("No")),
+                          DataColumn(label: Text("Nama")),
+                          DataColumn(label: Text("Aksi")),
+                        ],
+                        rows:  <DataRow>[
+                          DataRow(
+                            cells: <DataCell>[
+                              const DataCell(Text("1")),
+                              const DataCell(Text("M. Fakkuroqobah")),
+                              DataCell(ElevatedButton(onPressed: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const TStudentDetail()));
+                              }, child: const Text("Detail"))),
+                            ]
+                          ),
+                          DataRow(
+                            cells: <DataCell>[
+                              const DataCell(Text("1")),
+                              const DataCell(Text("M. Fakkuroqobah")),
+                              DataCell(ElevatedButton(onPressed: () {}, child: const Text("Detail"))),
+                            ]
+                          ),
+                          DataRow(
+                            cells: <DataCell>[
+                              const DataCell(Text("1")),
+                              const DataCell(Text("M. Fakkuroqobah")),
+                              DataCell(ElevatedButton(onPressed: () {}, child: const Text("Detail"))),
+                            ]
+                          ),
+                          DataRow(
+                            cells: <DataCell>[
+                              const DataCell(Text("1")),
+                              const DataCell(Text("M. Fakkuroqobah")),
+                              DataCell(ElevatedButton(onPressed: () {}, child: const Text("Detail"))),
+                            ]
+                          ),
+                          DataRow(
+                            cells: <DataCell>[
+                              const DataCell(Text("1")),
+                              const DataCell(Text("M. Fakkuroqobah")),
+                              DataCell(ElevatedButton(onPressed: () {}, child: const Text("Detail"))),
+                            ]
+                          ),
+                          DataRow(
+                            cells: <DataCell>[
+                              const DataCell(Text("1")),
+                              const DataCell(Text("M. Fakkuroqobah")),
+                              DataCell(ElevatedButton(onPressed: () {}, child: const Text("Detail"))),
+                            ]
+                          ),
+                          DataRow(
+                            cells: <DataCell>[
+                              const DataCell(Text("1")),
+                              const DataCell(Text("M. Fakkuroqobah")),
+                              DataCell(ElevatedButton(onPressed: () {}, child: const Text("Detail"))),
+                            ]
+                          ),
+                          DataRow(
+                            cells: <DataCell>[
+                              const DataCell(Text("1")),
+                              const DataCell(Text("M. Fakkuroqobah")),
+                              DataCell(ElevatedButton(onPressed: () {}, child: const Text("Detail"))),
+                            ]
+                          ),
+                          DataRow(
+                            cells: <DataCell>[
+                              const DataCell(Text("1")),
+                              const DataCell(Text("M. Fakkuroqobah")),
+                              DataCell(ElevatedButton(onPressed: () {}, child: const Text("Detail"))),
+                            ]
+                          ),
+                          DataRow(
+                            cells: <DataCell>[
+                              const DataCell(Text("1")),
+                              const DataCell(Text("M. Fakkuroqobah")),
+                              DataCell(ElevatedButton(onPressed: () {}, child: const Text("Detail"))),
+                            ]
+                          ),
+                          DataRow(
+                            cells: <DataCell>[
+                              const DataCell(Text("1")),
+                              const DataCell(Text("M. Fakkuroqobah")),
+                              DataCell(ElevatedButton(onPressed: () {}, child: const Text("Detail"))),
+                            ]
+                          ),
+                          DataRow(
+                            cells: <DataCell>[
+                              const DataCell(Text("1")),
+                              const DataCell(Text("M. Fakkuroqobah")),
+                              DataCell(ElevatedButton(onPressed: () {}, child: const Text("Detail"))),
+                            ]
+                          ),
+                          DataRow(
+                            cells: <DataCell>[
+                              const DataCell(Text("1")),
+                              const DataCell(Text("M. Fakkuroqobah")),
+                              DataCell(ElevatedButton(onPressed: () {}, child: const Text("Detail"))),
+                            ]
+                          ),
+                          DataRow(
+                            cells: <DataCell>[
+                              const DataCell(Text("1")),
+                              const DataCell(Text("M. Fakkuroqobah")),
+                              DataCell(ElevatedButton(onPressed: () {}, child: const Text("Detail"))),
+                            ]
+                          ),
+                          DataRow(
+                            cells: <DataCell>[
+                              const DataCell(Text("1")),
+                              const DataCell(Text("M. Fakkuroqobah")),
+                              DataCell(ElevatedButton(onPressed: () {}, child: const Text("Detail"))),
+                            ]
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text("1")),
-                      DataCell(Text("Ace")),
-                      DataCell(Text("1")),
-                      DataCell(ElevatedButton(onPressed: () {}, child: Text("Detail"))),
-                    ]
-                  ),
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text("1")),
-                      DataCell(Text("Ace")),
-                      DataCell(Text("1")),
-                      DataCell(ElevatedButton(onPressed: () {}, child: Text("Detail"))),
-                    ]
-                  ),
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text("1")),
-                      DataCell(Text("Ace")),
-                      DataCell(Text("1")),
-                      DataCell(ElevatedButton(onPressed: () {}, child: Text("Detail"))),
-                    ]
-                  ),
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text("1")),
-                      DataCell(Text("Ace")),
-                      DataCell(Text("1")),
-                      DataCell(ElevatedButton(onPressed: () {}, child: Text("Detail"))),
-                    ]
-                  ),
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text("1")),
-                      DataCell(Text("Ace")),
-                      DataCell(Text("1")),
-                      DataCell(ElevatedButton(onPressed: () {}, child: Text("Detail"))),
-                    ]
-                  ),
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text("1")),
-                      DataCell(Text("Ace")),
-                      DataCell(Text("1")),
-                      DataCell(ElevatedButton(onPressed: () {}, child: Text("Detail"))),
-                    ]
-                  ),
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text("1")),
-                      DataCell(Text("Ace")),
-                      DataCell(Text("1")),
-                      DataCell(ElevatedButton(onPressed: () {}, child: Text("Detail"))),
-                    ]
-                  ),
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text("1")),
-                      DataCell(Text("Ace")),
-                      DataCell(Text("1")),
-                      DataCell(ElevatedButton(onPressed: () {}, child: Text("Detail"))),
-                    ]
-                  ),
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text("1")),
-                      DataCell(Text("Ace")),
-                      DataCell(Text("1")),
-                      DataCell(ElevatedButton(onPressed: () {}, child: Text("Detail"))),
-                    ]
-                  ),
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text("1")),
-                      DataCell(Text("Ace")),
-                      DataCell(Text("1")),
-                      DataCell(ElevatedButton(onPressed: () {}, child: Text("Detail"))),
-                    ]
-                  ),
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text("1")),
-                      DataCell(Text("Ace")),
-                      DataCell(Text("1")),
-                      DataCell(ElevatedButton(onPressed: () {}, child: Text("Detail"))),
-                    ]
-                  ),
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text("1")),
-                      DataCell(Text("Ace")),
-                      DataCell(Text("1")),
-                      DataCell(ElevatedButton(onPressed: () {}, child: Text("Detail"))),
-                    ]
-                  ),
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text("1")),
-                      DataCell(Text("Ace")),
-                      DataCell(Text("1")),
-                      DataCell(ElevatedButton(onPressed: () {}, child: Text("Detail"))),
-                    ]
-                  ),
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text("1")),
-                      DataCell(Text("Ace")),
-                      DataCell(Text("1")),
-                      DataCell(ElevatedButton(onPressed: () {}, child: Text("Detail"))),
-                    ]
-                  ),
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text("1")),
-                      DataCell(Text("Ace")),
-                      DataCell(Text("1")),
-                      DataCell(ElevatedButton(onPressed: () {}, child: Text("Detail"))),
-                    ]
-                  ),
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text("1")),
-                      DataCell(Text("Ace")),
-                      DataCell(Text("1")),
-                      DataCell(ElevatedButton(onPressed: () {}, child: Text("Detail"))),
-                    ]
-                  ),
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text("1")),
-                      DataCell(Text("Ace")),
-                      DataCell(Text("1")),
-                      DataCell(ElevatedButton(onPressed: () {}, child: Text("Detail"))),
-                    ]
-                  ),
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text("1")),
-                      DataCell(Text("Ace")),
-                      DataCell(Text("1")),
-                      DataCell(ElevatedButton(onPressed: () {}, child: Text("Detail"))),
-                    ]
-                  ),
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text("1")),
-                      DataCell(Text("Ace")),
-                      DataCell(Text("1")),
-                      DataCell(ElevatedButton(onPressed: () {}, child: Text("Detail"))),
-                    ]
-                  ),
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text("1")),
-                      DataCell(Text("Ace")),
-                      DataCell(Text("1")),
-                      DataCell(ElevatedButton(onPressed: () {}, child: Text("Detail"))),
-                    ]
-                  ),
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text("1")),
-                      DataCell(Text("Ace")),
-                      DataCell(Text("1")),
-                      DataCell(ElevatedButton(onPressed: () {}, child: Text("Detail"))),
-                    ]
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

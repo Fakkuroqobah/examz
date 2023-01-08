@@ -1,9 +1,5 @@
-import 'dart:io';
-
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:flutter/material.dart';
-
-import '../../services/teacher/t_exam_service.dart';
 
 class TQuestionAdd extends StatefulWidget {
   const TQuestionAdd({super.key});
@@ -13,8 +9,7 @@ class TQuestionAdd extends StatefulWidget {
 }
 
 class _TQuestionAddState extends State<TQuestionAdd> {
-  bool _isLoading = false;
-  final TExamService _tExamService = TExamService();
+  final bool _isLoading = false;
   final HtmlEditorController _controllerNarrative = HtmlEditorController();
   final HtmlEditorController _controllerSubject = HtmlEditorController();
   final HtmlEditorController _controllerQuestion1 = HtmlEditorController();
