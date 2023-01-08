@@ -54,11 +54,35 @@ class _TStudentDetailState extends State<TStudentDetail> {
               ),
 
               const SizedBox(height: 8.0),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text("Daftar Soal & Jawaban"),
-                ],
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: ElevatedButton(onPressed: () {}, child: const Text("IPA")),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: ElevatedButton(onPressed: () {}, child: const Text("IPS")),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: ElevatedButton(onPressed: () {}, child: const Text("MATEMATIKA")),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 8.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Text("Daftar Soal & Jawaban"),
+                  ],
+                ),
               ),
 
               const SizedBox(height: 8.0),

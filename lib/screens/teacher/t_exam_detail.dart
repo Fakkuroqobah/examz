@@ -117,11 +117,14 @@ class _TExamDetailState extends State<TExamDetail> {
               ),
 
               const SizedBox(height: 8.0),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text("Daftar Soal"),
-                ],
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Text("Daftar Soal"),
+                  ],
+                ),
               ),
 
               const SizedBox(height: 8.0),
