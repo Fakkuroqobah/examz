@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import '../../services/teacher/t_auth_service.dart';
 import '../auth/login.dart';
-import 't_exam_active.dart';
 import 't_exam_finished.dart';
 import 't_exam_inactive.dart';
 import 't_exam_launched.dart';
@@ -31,7 +30,6 @@ class _TExamState extends State<TExam> with SingleTickerProviderStateMixin {
 
   final _pageOptions = const [
     TExamInactive(),
-    TExamActive(),
     TExamLaunched(),
     TExamFinished(),
   ];
@@ -136,10 +134,6 @@ class _TExamState extends State<TExam> with SingleTickerProviderStateMixin {
               BottomNavigationBarItem(
                 icon: Icon(Icons.assignment),
                 label: 'Nonaktif',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.event),
-                label: 'Aktif',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.assignment_turned_in),
