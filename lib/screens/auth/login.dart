@@ -6,6 +6,7 @@ import '../../services/student/s_auth_service.dart';
 import '../../services/supervisor/p_auth_service.dart';
 import '../../services/teacher/t_auth_service.dart';
 
+import '../admin/a_teacher.dart';
 import '../student/s_exam.dart';
 import '../supervisor/p_exam.dart';
 import '../teacher/t_exam.dart';
@@ -24,7 +25,7 @@ class _LoginState extends State<Login> {
   final PAuthService _pAuthService = PAuthService();
   
   bool _isLoading = false;
-  String _valRole = "supervisor";
+  String _valRole = "admin";
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController txtUsername = TextEditingController();
@@ -35,7 +36,7 @@ class _LoginState extends State<Login> {
   
   @override
   Widget build(BuildContext context) {
-    txtUsername.text = "supervisor";
+    txtUsername.text = "admin";
     txtPassword.text = "password";
 
     return Scaffold(
@@ -143,7 +144,7 @@ class _LoginState extends State<Login> {
                   }else if(_valRole == 'admin') {
                     _aAuthService.login(email, password).then((value) {
                       setState(() => _isLoading = false);
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => const SExam()));
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => const ATeacher()));
                     }).catchError((err) {
                       setState(() => _isLoading = false);
                       if (err is DioError) {
