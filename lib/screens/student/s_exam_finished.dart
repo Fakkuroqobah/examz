@@ -4,16 +4,16 @@ import '../../configs/api.dart';
 import '../../models/teacher/t_exam_model.dart';
 import '../../services/teacher/t_exam_service.dart';
 
-import '../../widgets/t_exam_card.dart';
+import '../../widgets/s_exam_card.dart';
 
-class TExamInactive extends StatefulWidget {
-  const TExamInactive({super.key});
+class SExamFinished extends StatefulWidget {
+  const SExamFinished({super.key});
 
   @override
-  State<TExamInactive> createState() => _TExamInactiveState();
+  State<SExamFinished> createState() => _SExamFinishedState();
 }
 
-class _TExamInactiveState extends State<TExamInactive> {
+class _SExamFinishedState extends State<SExamFinished> {
   final Api _api = Api();
   final TExamService _tExamService = TExamService();
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
@@ -40,14 +40,14 @@ class _TExamInactiveState extends State<TExamInactive> {
             if (snapshot.hasError) {
               return Center(child: Text("Something wrong with message: ${snapshot.error.toString()}"));
             } else if (snapshot.connectionState == ConnectionState.done) {
-              List<Exam>? exam = snapshot.data?.examInActive;
+              List<Exam>? exam = snapshot.data?.examLaunched;
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 8.0),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Text("Jumlah ujian: ${snapshot.data?.sumExamInActive}", 
+                    child: Text("Jumlah ujian: ${snapshot.data?.sumExamLaunched}", 
                       style: const TextStyle(fontSize: 18.0),
                     ),
                   ),
@@ -74,7 +74,7 @@ class _TExamInactiveState extends State<TExamInactive> {
         String src = _api.tBaseUrlAsset + data.thumbnail;
         data.thumbnail = src;
 
-        return TExamCard(exam: data);
+        return SExamCard(exam: data, type: "finished");
       },
     );
   }

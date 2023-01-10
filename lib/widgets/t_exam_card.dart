@@ -5,16 +5,16 @@ import '../screens/teacher/t_exam_edit.dart';
 import '../screens/teacher/t_exam_detail.dart';
 import '../services/teacher/t_exam_service.dart';
 
-class ExamCard extends StatefulWidget {
-  const ExamCard({super.key, required this.exam});
+class TExamCard extends StatefulWidget {
+  const TExamCard({super.key, required this.exam});
 
   final Exam exam;
 
   @override
-  State<ExamCard> createState() => _ExamCardState();
+  State<TExamCard> createState() => _TExamCardState();
 }
 
-class _ExamCardState extends State<ExamCard> {
+class _TExamCardState extends State<TExamCard> {
   final TExamService _tExamService = TExamService();
   
   @override

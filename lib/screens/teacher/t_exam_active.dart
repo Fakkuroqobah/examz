@@ -4,7 +4,7 @@ import '../../configs/api.dart';
 import '../../models/teacher/t_exam_model.dart';
 import '../../services/teacher/t_exam_service.dart';
 
-import '../../widgets/exam_card.dart';
+import '../../widgets/t_exam_card.dart';
 
 class TExamActive extends StatefulWidget {
   const TExamActive({super.key});
@@ -74,7 +74,7 @@ class _TExamActiveState extends State<TExamActive> {
         String src = _api.tBaseUrlAsset + data.thumbnail;
         data.thumbnail = src;
 
-        return ExamCard(exam: data);
+        return TExamCard(exam: data);
       },
     );
   }

@@ -1,8 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
+import '../../services/student/s_auth_service.dart';
 import '../../services/teacher/t_auth_service.dart';
 
+import '../student/s_exam.dart';
 import '../teacher/t_exam.dart';
 
 class Login extends StatefulWidget {
@@ -14,6 +16,7 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final TAuthService _tAuthService = TAuthService();
+  final SAuthService _sAuthService = SAuthService();
   
   bool _isLoading = false;
   String _valRole = "student";
@@ -27,7 +30,7 @@ class _LoginState extends State<Login> {
   
   @override
   Widget build(BuildContext context) {
-    txtUsername.text = "teacher";
+    txtUsername.text = "student";
     txtPassword.text = "password";
 
     return Scaffold(
@@ -119,9 +122,19 @@ class _LoginState extends State<Login> {
                       }
                     });
                   }else if(_valRole == 'student') {
-                    setState(() => _isLoading = false);
-                    SnackBar snackBar = const SnackBar(content: Text("Siswa"));
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    _sAuthService.login(email, password).then((value) {
+                      setState(() => _isLoading = false);
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => const SExam()));
+                    }).catchError((err) {
+                      setState(() => _isLoading = false);
+                      if (err is DioError) {
+                        SnackBar snackBar = SnackBar(content: Text(err.response?.data['error']));
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      }else{
+                        SnackBar snackBar = const SnackBar(content: Text("Terjadi kesalahan"));
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      }
+                    });
                   }else if(_valRole == 'admin') {
                     setState(() => _isLoading = false);
                     SnackBar snackBar = const SnackBar(content: Text("Admin"));
