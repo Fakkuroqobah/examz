@@ -3,15 +3,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../configs/api.dart';
 import '../../models/login_model.dart';
-import '../../models/student/s_student_model.dart';
+import '../../models/admin/a_admin_model.dart';
 
-class SAuthService {
+class AAuthService {
   final Dio _dio = Dio();
   
   Future<bool> login(String txtUsername, String txtPassword) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     
-    final response = await _dio.post(Api.sLogin, 
+    final response = await _dio.post(Api.aLogin, 
       data: {
         "username": txtUsername,
         "password": txtPassword
@@ -21,16 +21,14 @@ class SAuthService {
     LoginModel loginModel = LoginModel.fromJson(response.data);
 
     _dio.options.headers['authorization'] = 'Bearer ${loginModel.accessToken}';
-    final getUser = await _dio.get(Api.sGetUser);
+    final getUser = await _dio.get(Api.aGetUser);
 
-    SStudentModel studentModel = SStudentModel.fromJson(getUser.data);
+    AAdminModel adminModel = AAdminModel.fromJson(getUser.data);
 
     preferences.setString("token", loginModel.accessToken);
-    preferences.setInt("id", studentModel.id);
-    preferences.setString("name", studentModel.name);
-    preferences.setString("username", studentModel.username);
-    preferences.setString("sStudentModelClass", studentModel.sStudentModelClass);
-    preferences.setString("role", studentModel.role);
+    preferences.setInt("id", adminModel.id);
+    preferences.setString("username", adminModel.username);
+    preferences.setString("role", adminModel.role);
 
     return true;
   }
@@ -39,7 +37,7 @@ class SAuthService {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     
     _dio.options.headers['authorization'] = 'Bearer ${preferences.getString("token")}';
-    await _dio.get(Api.sLogout);
+    await _dio.get(Api.aLogout);
 
     return true;
   }
