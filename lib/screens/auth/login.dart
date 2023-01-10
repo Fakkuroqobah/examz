@@ -25,7 +25,7 @@ class _LoginState extends State<Login> {
   final PAuthService _pAuthService = PAuthService();
   
   bool _isLoading = false;
-  String _valRole = "admin";
+  String _valRole = "student";
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController txtUsername = TextEditingController();
@@ -36,7 +36,6 @@ class _LoginState extends State<Login> {
   
   @override
   Widget build(BuildContext context) {
-    txtUsername.text = "admin";
     txtPassword.text = "password";
 
     return Scaffold(
@@ -92,10 +91,10 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                   items: const [
-                    DropdownMenuItem(value: 'student', child: Text('student')),
-                    DropdownMenuItem(value: 'admin', child: Text('admin')),
-                    DropdownMenuItem(value: 'teacher', child: Text('teacher')),
-                    DropdownMenuItem(value: 'supervisor', child: Text('supervisor'))
+                    DropdownMenuItem(value: 'student', child: Text('Siswa')),
+                    DropdownMenuItem(value: 'admin', child: Text('Admin')),
+                    DropdownMenuItem(value: 'teacher', child: Text('Guru')),
+                    DropdownMenuItem(value: 'supervisor', child: Text('Pengawas'))
                   ],
                   onChanged: (String? value) {
                     setState(() {
