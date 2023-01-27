@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../models/teacher/t_question_model.dart';
+
 class QuestionCard extends StatefulWidget {
-  const QuestionCard({super.key});
+  const QuestionCard({super.key, required this.question});
+
+  final TQuestionModel question;
 
   @override
   State<QuestionCard> createState() => _QuestionCardState();
@@ -17,23 +21,24 @@ class _QuestionCardState extends State<QuestionCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-              children: const [
-                Text("1.", style: TextStyle(fontWeight: FontWeight.bold)),
+              children: [
+                Text("${widget.question.orderNumber}.", style: const TextStyle(fontWeight: FontWeight.bold)),
 
-                SizedBox(width: 10.0),
-                Text("Apa makna dari mencintai?"),
+                const SizedBox(width: 8.0),
+                Text(widget.question.subject),
               ],
             ),
             
             const Divider(),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text("Menyangi setulus hati"),
-                Text("Mencampakan keinginannya"),
-                Text("Tidak pernah mengabari"),
-                Text("Tidak perhatian di kala manja"),
-              ],
+            SizedBox(
+              height: 80.0,
+              child: ListView.builder(
+                itemCount: widget.question.answerOption.length,
+                itemBuilder: (ctx, index) {
+                  AnswerOption answerOption = widget.question.answerOption[index];
+                  return (answerOption.correct != null) ? Text(answerOption.subject, style: const TextStyle(color: Colors.green)) : Text(answerOption.subject);
+                },
+              ),
             ),
             
             const Divider(),

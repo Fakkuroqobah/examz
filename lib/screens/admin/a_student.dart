@@ -115,6 +115,7 @@ class _AStudentState extends State<AStudent> with SingleTickerProviderStateMixin
                   ],
                 ),
 
+                const SizedBox(height: 8.0),
                 Row(
                   children: [
                     ElevatedButton(onPressed: () {}, child: const Text("Kelas 1")),

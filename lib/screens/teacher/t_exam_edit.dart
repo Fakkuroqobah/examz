@@ -19,6 +19,7 @@ class _TExamEditState extends State<TExamEdit> {
   bool _isLoading = false;
   final TExamService _tExamService = TExamService();
   final TextEditingController _controllerName = TextEditingController();
+  final TextEditingController _controllerDescription = TextEditingController();
 
   String thumbnailName = "";
   File? thumbnailFile;
@@ -29,6 +30,7 @@ class _TExamEditState extends State<TExamEdit> {
   void initState() {
     super.initState();
     _controllerName.text = widget.data.name;
+    _controllerDescription.text = widget.data.description ?? "";
     _valClass = widget.data.examClass;
   }
 
@@ -48,10 +50,10 @@ class _TExamEditState extends State<TExamEdit> {
                 controller: _controllerName,
                 keyboardType: TextInputType.text,
                 decoration: const InputDecoration(
-                  labelText: "Nama ujian",      
+                  labelText: "Nama ujian",
                   filled: true,
                   fillColor: Colors.white,
-                  border: OutlineInputBorder()
+                  border: OutlineInputBorder(borderSide: BorderSide.none)
                 ),
               ),
       
@@ -82,6 +84,19 @@ class _TExamEditState extends State<TExamEdit> {
                       _valClass = value!;
                     });
                   },
+                ),
+              ),
+
+              const SizedBox(height: 12.0),
+              TextField(
+                controller: _controllerDescription,
+                maxLines: null,
+                keyboardType: TextInputType.multiline,
+                decoration: const InputDecoration(
+                  labelText: "Deskripsi ujian",
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(borderSide: BorderSide.none)
                 ),
               ),
       
@@ -120,18 +135,22 @@ class _TExamEditState extends State<TExamEdit> {
                   setState(() => _isLoading = true);
 
                   String name = _controllerName.text.toString();
+                  String description = _controllerDescription.text.toString();
+                  // String description = await _controllerDescription.getText();
 
                   if(name == "") {
                     setState(() => _isLoading = false);
                     SnackBar snackBar = const SnackBar(content: Text("Nama ujian harus diisi"));
+                    if (!mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   }else if(_valClass == "") {
                     setState(() => _isLoading = false);
                     SnackBar snackBar = const SnackBar(content: Text("Kelas harus diisi"));
+                    if (!mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   }
 
-                  _tExamService.editExam(widget.data.id, name,  _valClass, thumbnailFile, thumbnailName).then((value) {
+                  _tExamService.editExam(widget.data.id, name,  _valClass, description, thumbnailFile, thumbnailName).then((value) {
                     setState(() => _isLoading = false);
                     Navigator.pop(context, 'refresh');
                   }).catchError((err) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 
 import '../models/teacher/t_exam_model.dart';
 import '../screens/teacher/t_exam_edit.dart';
@@ -37,9 +38,14 @@ class _TExamCardState extends State<TExamCard> {
             ),
             widget.exam.description != null ?
               Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(widget.exam.description ?? "",
-                  style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Html(
+                  data: widget.exam.description,
+                  style: {
+                    "p": Style(
+                      padding: const EdgeInsets.all(0),
+                    )
+                  }
                 ),
               )
             : Container(),

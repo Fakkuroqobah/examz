@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../configs/utils.dart';
 import '../../models/teacher/t_exam_model.dart';
-import '../../services/teacher/t_auth_service.dart';
 
+import '../../models/teacher/t_question_model.dart';
+import '../../services/teacher/t_question_service.dart';
 import '../../widgets/question_card.dart';
-import '../auth/login.dart';
 import 't_question_add.dart';
 
 class TExamDetail extends StatefulWidget {
@@ -18,8 +18,8 @@ class TExamDetail extends StatefulWidget {
 }
 
 class _TExamDetailState extends State<TExamDetail> {
-  final TAuthService _tAuthService = TAuthService();
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+  final TQuestionService _tQuestionService = TQuestionService();
   
   Future<void> _refresh() async {
     setState(() {});
@@ -47,16 +47,7 @@ class _TExamDetailState extends State<TExamDetail> {
                 setState(() {});
               }
             },
-          ),
-          IconButton(
-            icon: const Icon(Icons.logout),
-            tooltip: 'Keluar',
-            onPressed: () {
-              _tAuthService.logout().then((value) {
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => const Login()));
-              });
-            },
-          ),
+          )
         ],
       ),
       body: RefreshIndicator(
@@ -91,21 +82,6 @@ class _TExamDetailState extends State<TExamDetail> {
                           )),
 
                           const SizedBox(height: 8.0),
-                          Text("Tanggal Mulai : ${widget.data.starts != null ? Utils.getFormatedDate(widget.data.starts) : 'Belum diatur'}", style: const TextStyle(
-                            fontSize: 12.0
-                          )),
-
-                          const SizedBox(height: 8.0),
-                          Text("Tanggal Selesai : ${widget.data.due != null ? Utils.getFormatedDate(widget.data.due) : 'Belum diatur'}", style: const TextStyle(
-                            fontSize: 12.0
-                          )),
-
-                          const SizedBox(height: 8.0),
-                          Text("Waktu : ${widget.data.hours ?? 0} Jam ${widget.data.minutes ?? 0} Menit", 
-                            style: const TextStyle(fontSize: 12.0)
-                          ),
-
-                          const SizedBox(height: 8.0),
                           Text("Acak Soal : ${widget.data.isRandom == 0 ? "Tidak" : "Iya"}", 
                             style: const TextStyle(fontSize: 12.0)
                           ),
@@ -129,14 +105,23 @@ class _TExamDetailState extends State<TExamDetail> {
 
               const SizedBox(height: 8.0),
               Expanded(
-                child: ListView(
-                  children: const [
-                    QuestionCard(),
-                    QuestionCard(),
-                    QuestionCard(),
-                    QuestionCard(),
-                    QuestionCard(),
-                  ],
+                child: FutureBuilder(
+                  future: _tQuestionService.getQuestion(widget.data.id),
+                  builder: (BuildContext ctx, AsyncSnapshot<List<TQuestionModel>> snapshot) {
+                    if (snapshot.hasError) {
+                      return Center(child: Text("Something wrong with message: ${snapshot.error.toString()}"));
+                    } else if (snapshot.connectionState == ConnectionState.done) {
+                      List<TQuestionModel>? tQuestionModel = snapshot.data;
+                      return ListView.builder(
+                        itemCount: snapshot.data?.length,
+                        itemBuilder: (ctx, index) {
+                          return QuestionCard(question: tQuestionModel![index]);
+                        }
+                      );
+                    } else {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                  }
                 ),
               )
             ],

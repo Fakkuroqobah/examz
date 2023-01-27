@@ -31,12 +31,13 @@ class TExamService {
     return data;
   }
 
-  Future<bool> addExam(String txtName, String txtClass, File thumbnailPath, String thumbnailName) async {
+  Future<bool> addExam(String txtName, String txtClass, String txtDescription, File thumbnailPath, String thumbnailName) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     FormData data = FormData.fromMap({
       "name": txtName,
       "class": txtClass,
+      "description": txtDescription,
       "thumbnail": await MultipartFile.fromFile(
         thumbnailPath.path,
         filename: thumbnailName,
@@ -55,7 +56,7 @@ class TExamService {
     return true;
   }
 
-  Future<bool> editExam(int id, String txtName, String txtClass, File? thumbnailPath, String? thumbnailName) async {
+  Future<bool> editExam(int id, String txtName, String txtClass, String txtDescription, File? thumbnailPath, String? thumbnailName) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     FormData data;
@@ -63,6 +64,7 @@ class TExamService {
       data = FormData.fromMap({
         "name": txtName,
         "class": txtClass,
+        "description": txtDescription,
         "thumbnail": await MultipartFile.fromFile(
           thumbnailPath.path,
           filename: thumbnailName,
@@ -71,7 +73,8 @@ class TExamService {
     }else{
       data = FormData.fromMap({
         "name": txtName,
-        "class": txtClass
+        "class": txtClass,
+        "description": txtDescription,
       });
     }
 

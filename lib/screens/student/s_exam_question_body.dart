@@ -38,23 +38,26 @@ class _SExamQuestionBodyState extends State<SExamQuestionBody> {
     );
   }
 
-  OutlinedButton btnAnswer(String text, int value) {
-    return OutlinedButton(
-      onPressed: () {
-        setState(() {
-          isChecked = value;
-        });
-      },
-      style: OutlinedButton.styleFrom(
-        backgroundColor: (isChecked == value) ? Colors.green : Colors.white,
-        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 14.0),
-        alignment: Alignment.centerLeft,
-        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),
+  Padding btnAnswer(String text, int value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: OutlinedButton(
+        onPressed: () {
+          setState(() {
+            isChecked = value;
+          });
+        },
+        style: OutlinedButton.styleFrom(
+          backgroundColor: (isChecked == value) ? Colors.green : Colors.white,
+          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 14.0),
+          alignment: Alignment.centerLeft,
+          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),
+          ),
         ),
-      ),
-      child: Text(text,
-        style: TextStyle(
-          color: (isChecked == value) ? Colors.white : Colors.black54,
+        child: Text(text,
+          style: TextStyle(
+            color: (isChecked == value) ? Colors.white : Colors.black54,
+          ),
         ),
       ),
     );

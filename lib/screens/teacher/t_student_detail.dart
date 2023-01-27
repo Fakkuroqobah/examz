@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../widgets/question_card.dart';
-
 class TStudentDetail extends StatefulWidget {
   const TStudentDetail({super.key});
 
@@ -43,6 +41,9 @@ class _TStudentDetailState extends State<TStudentDetail> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       const Text("M. Fakkuroqobah", style: TextStyle(fontSize: 20.0)),
+
+                      const SizedBox(height: 6.0),
+                      const Text("Nilai 98/100", style: TextStyle(fontSize: 16.0)),
               
                       const SizedBox(height: 6.0),
                       Text("Kelas 1",
@@ -89,11 +90,11 @@ class _TStudentDetailState extends State<TStudentDetail> {
               Expanded(
                 child: ListView(
                   children: const [
-                    QuestionCard(),
-                    QuestionCard(),
-                    QuestionCard(),
-                    QuestionCard(),
-                    QuestionCard(),
+                    // QuestionCard(),
+                    // QuestionCard(),
+                    // QuestionCard(),
+                    // QuestionCard(),
+                    // QuestionCard(),
                   ],
                 ),
               )

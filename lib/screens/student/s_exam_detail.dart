@@ -67,21 +67,6 @@ class _SExamDetailState extends State<SExamDetail> {
                           )),
 
                           const SizedBox(height: 8.0),
-                          Text("Tanggal Mulai : ${widget.data.starts != null ? Utils.getFormatedDate(widget.data.starts) : 'Belum diatur'}", style: const TextStyle(
-                            fontSize: 12.0
-                          )),
-
-                          const SizedBox(height: 8.0),
-                          Text("Tanggal Selesai : ${widget.data.due != null ? Utils.getFormatedDate(widget.data.due) : 'Belum diatur'}", style: const TextStyle(
-                            fontSize: 12.0
-                          )),
-
-                          const SizedBox(height: 8.0),
-                          Text("Waktu : ${widget.data.hours ?? 0} Jam ${widget.data.minutes ?? 0} Menit", 
-                            style: const TextStyle(fontSize: 12.0)
-                          ),
-
-                          const SizedBox(height: 8.0),
                           Text("Acak Soal : ${widget.data.isRandom == 0 ? "Tidak" : "Iya"}", 
                             style: const TextStyle(fontSize: 12.0)
                           ),

@@ -1,4 +1,3 @@
-import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:flutter/material.dart';
 
 class TQuestionAdd extends StatefulWidget {
@@ -10,13 +9,12 @@ class TQuestionAdd extends StatefulWidget {
 
 class _TQuestionAddState extends State<TQuestionAdd> {
   final bool _isLoading = false;
-  final HtmlEditorController _controllerNarrative = HtmlEditorController();
-  final HtmlEditorController _controllerSubject = HtmlEditorController();
-  final HtmlEditorController _controllerQuestion1 = HtmlEditorController();
-  final HtmlEditorController _controllerQuestion2 = HtmlEditorController();
-  final HtmlEditorController _controllerQuestion3 = HtmlEditorController();
-  final HtmlEditorController _controllerQuestion4 = HtmlEditorController();
-  final HtmlEditorController _controllerQuestion5 = HtmlEditorController();
+  final TextEditingController _controllerSubject = TextEditingController();
+  final TextEditingController _controllerQuestion1 = TextEditingController();
+  final TextEditingController _controllerQuestion2 = TextEditingController();
+  final TextEditingController _controllerQuestion3 = TextEditingController();
+  final TextEditingController _controllerQuestion4 = TextEditingController();
+  final TextEditingController _controllerQuestion5 = TextEditingController();
 
   @override
   void initState() {
@@ -36,23 +34,14 @@ class _TQuestionAddState extends State<TQuestionAdd> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text("Petunjuk Menjawab"),
-              const SizedBox(height: 8.0),
-              HtmlEditor(
-                controller: _controllerNarrative,
-                otherOptions: const OtherOptions(
-                  height: 200,
-                ),
-              ),
-
               const SizedBox(height: 16.0),
               const Text("Pertanyaan"),
+
               const SizedBox(height: 8.0),
-              HtmlEditor(
+              TextField(
                 controller: _controllerSubject,
-                otherOptions: const OtherOptions(
-                  height: 200,
-                ),
+                maxLines: null,
+                keyboardType: TextInputType.multiline,
               ),
 
               const SizedBox(height: 16.0),
@@ -71,11 +60,10 @@ class _TQuestionAddState extends State<TQuestionAdd> {
                 ],
               ),
               const SizedBox(height: 8.0),
-              HtmlEditor(
+              TextField(
                 controller: _controllerQuestion1,
-                otherOptions: const OtherOptions(
-                  height: 200,
-                ),
+                maxLines: null,
+                keyboardType: TextInputType.multiline,
               ),
 
               const SizedBox(height: 16.0),
@@ -94,11 +82,10 @@ class _TQuestionAddState extends State<TQuestionAdd> {
                 ],
               ),
               const SizedBox(height: 8.0),
-              HtmlEditor(
+              TextField(
                 controller: _controllerQuestion2,
-                otherOptions: const OtherOptions(
-                  height: 200,
-                ),
+                maxLines: null,
+                keyboardType: TextInputType.multiline,
               ),
 
               const SizedBox(height: 16.0),
@@ -117,11 +104,10 @@ class _TQuestionAddState extends State<TQuestionAdd> {
                 ],
               ),
               const SizedBox(height: 8.0),
-              HtmlEditor(
+              TextField(
                 controller: _controllerQuestion3,
-                otherOptions: const OtherOptions(
-                  height: 200,
-                ),
+                maxLines: null,
+                keyboardType: TextInputType.multiline,
               ),
 
               const SizedBox(height: 16.0),
@@ -140,11 +126,10 @@ class _TQuestionAddState extends State<TQuestionAdd> {
                 ],
               ),
               const SizedBox(height: 8.0),
-              HtmlEditor(
+              TextField(
                 controller: _controllerQuestion4,
-                otherOptions: const OtherOptions(
-                  height: 100,
-                ),
+                maxLines: null,
+                keyboardType: TextInputType.multiline,
               ),
 
               const SizedBox(height: 16.0),
@@ -163,11 +148,11 @@ class _TQuestionAddState extends State<TQuestionAdd> {
                 ],
               ),
               const SizedBox(height: 8.0),
-              HtmlEditor(
+              TextField(
                 controller: _controllerQuestion5,
-                otherOptions: const OtherOptions(
-                  height: 100,
-                ),
+                maxLines: null,
+                keyboardType: TextInputType.multiline,
+                
               ),
 
               const SizedBox(height: 8.0),
