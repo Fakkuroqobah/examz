@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../widgets/question_card_student.dart';
+
 class TStudentDetail extends StatefulWidget {
   const TStudentDetail({super.key});
 
@@ -90,11 +92,11 @@ class _TStudentDetailState extends State<TStudentDetail> {
               Expanded(
                 child: ListView(
                   children: const [
-                    // QuestionCard(),
-                    // QuestionCard(),
-                    // QuestionCard(),
-                    // QuestionCard(),
-                    // QuestionCard(),
+                    QuestionCardStudent(),
+                    QuestionCardStudent(),
+                    QuestionCardStudent(),
+                    QuestionCardStudent(),
+                    QuestionCardStudent(),
                   ],
                 ),
               )

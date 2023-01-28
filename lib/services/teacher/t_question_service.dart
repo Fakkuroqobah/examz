@@ -20,4 +20,25 @@ class TQuestionService {
 
     return data;
   }
+
+  Future<bool> addQuestion(int id, String txtSubject, Map<String, dynamic> answer) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    FormData data = FormData.fromMap({
+      "exam_id": id,
+      "subject": txtSubject,
+      "answer": answer,
+    });
+
+    try {
+      _dio.options.headers['authorization'] = 'Bearer ${preferences.getString("token")}';
+      await _dio.post(Api.tQuestionAdd, data: data);
+      
+      return true;
+    }on DioError catch (e) {
+      e.response?.data.toString();
+      // print(e.response?.data.toString());
+      return false;
+    }
+  }
 }

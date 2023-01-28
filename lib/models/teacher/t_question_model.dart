@@ -18,7 +18,7 @@ class TQuestionModel {
   int id;
   int examId;
   String subject;
-  int orderNumber;
+  int? orderNumber;
   DateTime createdAt;
   DateTime updatedAt;
   List<AnswerOption> answerOption;

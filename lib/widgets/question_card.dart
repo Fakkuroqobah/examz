@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import '../models/teacher/t_question_model.dart';
 
 class QuestionCard extends StatefulWidget {
-  const QuestionCard({super.key, required this.question});
+  const QuestionCard({super.key, required this.question, required this.number});
 
   final TQuestionModel question;
+  final int number;
 
   @override
   State<QuestionCard> createState() => _QuestionCardState();
@@ -22,7 +23,7 @@ class _QuestionCardState extends State<QuestionCard> {
           children: [
             Row(
               children: [
-                Text("${widget.question.orderNumber}.", style: const TextStyle(fontWeight: FontWeight.bold)),
+                Text("${widget.number}.", style: const TextStyle(fontWeight: FontWeight.bold)),
 
                 const SizedBox(width: 8.0),
                 Text(widget.question.subject),

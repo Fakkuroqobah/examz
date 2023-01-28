@@ -42,7 +42,7 @@ class _TExamDetailState extends State<TExamDetail> {
             icon: const Icon(Icons.add),
             tooltip: 'Tambah Pertanyaan',
             onPressed: () async {
-              String refresh = await Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const TQuestionAdd()));
+              String refresh = await Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TQuestionAdd(id: widget.data.id)));
               if(refresh == 'refresh') {
                 setState(() {});
               }
@@ -112,10 +112,11 @@ class _TExamDetailState extends State<TExamDetail> {
                       return Center(child: Text("Something wrong with message: ${snapshot.error.toString()}"));
                     } else if (snapshot.connectionState == ConnectionState.done) {
                       List<TQuestionModel>? tQuestionModel = snapshot.data;
+                      int number = 1;
                       return ListView.builder(
                         itemCount: snapshot.data?.length,
                         itemBuilder: (ctx, index) {
-                          return QuestionCard(question: tQuestionModel![index]);
+                          return QuestionCard(question: tQuestionModel![index], number: number++);
                         }
                       );
                     } else {
