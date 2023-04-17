@@ -1,5 +1,5 @@
 class Api {
-  static const String baseUrl = "http://192.168.43.147/examz/public";
+  static const String baseUrl = "http://192.168.43.148/examz/public";
   static const String tBaseUrl = "$baseUrl/api/teacher";
   static const String sBaseUrl = "$baseUrl/api/student";
   static const String pBaseUrl = "$baseUrl/api/supervisor";

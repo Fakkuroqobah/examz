@@ -1,6 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../configs/constant.dart';
+
+import '../../provider/auth/o_select_role_provider.dart';
+import '../../provider/loading_provider.dart';
 import '../../services/admin/a_auth_service.dart';
 import '../../services/student/s_auth_service.dart';
 import '../../services/supervisor/p_auth_service.dart';
@@ -23,9 +28,6 @@ class _LoginState extends State<Login> {
   final SAuthService _sAuthService = SAuthService();
   final AAuthService _aAuthService = AAuthService();
   final PAuthService _pAuthService = PAuthService();
-  
-  bool _isLoading = false;
-  String _valRole = "student";
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController txtUsername = TextEditingController();
@@ -39,147 +41,146 @@ class _LoginState extends State<Login> {
     txtPassword.text = "password";
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Masuk"),
-        elevation: 0,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 44.0, vertical: 0),
-        child: Form(
-          key: formKey,
+      body: SafeArea(
+        child: SingleChildScrollView(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text("Selamat Datang Di Examz", style: TextStyle(
-                fontSize: 20.0
-              )),
-              
-              const SizedBox(height: 22.0),
-              FormAuth(
-                hint: "Username",
-                action: TextInputAction.next, 
-                textEditingController: txtUsername,
-                focusNow: focusUsername,
-                focusNext: focusPassword
-              ),
-      
-              const SizedBox(height: 18.0),
-              FormAuth(
-                hint: "Password",
-                action: TextInputAction.next, 
-                textEditingController: txtPassword,
-                obsecure: true,
-                focusNow: focusPassword,
-                focusNext: focusLogin
-              ),
-
-              const SizedBox(height: 18.0),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
+                width: double.infinity,
+                height: 250.0,
+                padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 18.0),
+                alignment: Alignment.center,
                 decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0), topRight: Radius.circular(10.0))
+                  color: Colors.green
                 ),
-                child: DropdownButton<String>(
-                  isExpanded: true,
-                  hint: const Text("Pilih Role"),
-                  value: _valRole,
-                  underline: Container(
-                    height: 1.0,
-                    decoration: const BoxDecoration(
-                        border: Border(bottom: BorderSide(color: Colors.transparent, width: 0.0))
-                    ),
-                  ),
-                  items: const [
-                    DropdownMenuItem(value: 'student', child: Text('Siswa')),
-                    DropdownMenuItem(value: 'admin', child: Text('Admin')),
-                    DropdownMenuItem(value: 'teacher', child: Text('Guru')),
-                    DropdownMenuItem(value: 'supervisor', child: Text('Pengawas'))
-                  ],
-                  onChanged: (String? value) {
-                    setState(() {
-                      _valRole = value!;
-                    });
-                  }
+                child: Image.asset(
+                  "${Constant.assetUrlLogo}/logo-white.png",
+                  width: 150.0,
                 ),
               ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 22.0),
+                      FormAuth(
+                        hint: "Username",
+                        action: TextInputAction.next, 
+                        textEditingController: txtUsername,
+                        focusNow: focusUsername,
+                        focusNext: focusPassword
+                      ),
               
-              const SizedBox(height: 18.0),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() => _isLoading = true);
-                  
-                  String email = txtUsername.text.toString();
-                  String password= txtPassword.text.toString();
+                      const SizedBox(height: 18.0),
+                      FormAuth(
+                        hint: "Password",
+                        action: TextInputAction.next, 
+                        textEditingController: txtPassword,
+                        obsecure: true,
+                        focusNow: focusPassword,
+                        focusNext: focusLogin
+                      ),
+              
+                      const SizedBox(height: 18.0),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0), topRight: Radius.circular(10.0))
+                        ),
+                        child: Consumer<OSelectRoleProvider>(
+                          builder: (_, oSelectRoleProvider, widget) {
+                            return DropdownButton<String>(
+                              value: oSelectRoleProvider.selectedItem,
+                              hint: const Text("Pilih Role"),
+                              isExpanded: true,
+                              elevation: 0,
+                              underline: Container(
+                                height: 1.0,
+                                decoration: const BoxDecoration(
+                                  border: Border(bottom: BorderSide(color: Colors.transparent, width: 0.0))
+                                ),
+                              ),
+                              items: oSelectRoleProvider.items.map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                              onChanged: (String? newValue) {
+                                oSelectRoleProvider.setSelectedItem(newValue!);
+                              }
+                            );
+                          }
+                        ),
+                      ),
+                      
+                      const SizedBox(height: 18.0),
+                      Consumer<LoadingProvider>(
+                        builder: (_, loadingProvider, widget) {
+                          return ElevatedButton(
+                            onPressed: () {
+                              loadingProvider.setLoading(true);
+                              
+                              String username = txtUsername.text.toString();
+                              String password= txtPassword.text.toString();
+                              String selectedRole = context.read<OSelectRoleProvider>().selectedItem;
 
-                  if(_valRole == "teacher") {
-                    _tAuthService.login(email, password).then((value) {
-                      setState(() => _isLoading = false);
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => const TExam()));
-                    }).catchError((err) {
-                      setState(() => _isLoading = false);
-                      if (err is DioError) {
-                        SnackBar snackBar = SnackBar(content: Text(err.response?.data['error']));
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      }else{
-                        SnackBar snackBar = const SnackBar(content: Text("Terjadi kesalahan"));
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      }
-                    });
-                  }else if(_valRole == 'student') {
-                    _sAuthService.login(email, password).then((value) {
-                      setState(() => _isLoading = false);
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => const SExam()));
-                    }).catchError((err) {
-                      setState(() => _isLoading = false);
-                      if (err is DioError) {
-                        SnackBar snackBar = SnackBar(content: Text(err.response?.data['error']));
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      }else{
-                        SnackBar snackBar = const SnackBar(content: Text("Terjadi kesalahan"));
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      }
-                    });
-                  }else if(_valRole == 'admin') {
-                    _aAuthService.login(email, password).then((value) {
-                      setState(() => _isLoading = false);
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => const ATeacher()));
-                    }).catchError((err) {
-                      setState(() => _isLoading = false);
-                      if (err is DioError) {
-                        SnackBar snackBar = SnackBar(content: Text(err.response?.data['error']));
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      }else{
-                        SnackBar snackBar = const SnackBar(content: Text("Terjadi kesalahan"));
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      }
-                    });
-                  }else if(_valRole == 'supervisor') {
-                    _pAuthService.login(email, password).then((value) {
-                      setState(() => _isLoading = false);
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => const PExam()));
-                    }).catchError((err) {
-                      setState(() => _isLoading = false);
-                      if (err is DioError) {
-                        SnackBar snackBar = SnackBar(content: Text(err.response?.data['error']));
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      }else{
-                        SnackBar snackBar = const SnackBar(content: Text("Terjadi kesalahan"));
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      }
-                    });
-                  }else{
-                    setState(() => _isLoading = false);
-                    SnackBar snackBar = const SnackBar(content: Text("Role tidak valid"));
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  }
-                },
-                style: const ButtonStyle(
-                  elevation: MaterialStatePropertyAll(0),
-                  padding: MaterialStatePropertyAll(EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0))
+                              if(selectedRole == "Teacher") {
+                                _tAuthService.login(username, password).then((value) {
+                                  loadingProvider.setLoading(false);
+                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => const TExam()));
+                                }).catchError((err) {
+                                  loadingProvider.setLoading(false);
+                                  catchErrorLogin(context, err);
+                                });
+                              }else if(selectedRole == 'Student') {
+                                _sAuthService.login(username, password).then((value) {
+                                  loadingProvider.setLoading(false);
+                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => const SExam()));
+                                }).catchError((err) {
+                                  loadingProvider.setLoading(false);
+                                  catchErrorLogin(context, err);
+                                });
+                              }else if(selectedRole == 'Admin') {
+                                _aAuthService.login(username, password).then((value) {
+                                  loadingProvider.setLoading(false);
+                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => const ATeacher()));
+                                }).catchError((err) {
+                                  loadingProvider.setLoading(false);
+                                  catchErrorLogin(context, err);
+                                });
+                              }else if(selectedRole == 'Supervisor') {
+                                _pAuthService.login(username, password).then((value) {
+                                  loadingProvider.setLoading(false);
+                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => const PExam()));
+                                }).catchError((err) {
+                                  loadingProvider.setLoading(false);
+                                  catchErrorLogin(context, err);
+                                });
+                              }else{
+                                loadingProvider.setLoading(false);
+                                SnackBar snackBar = const SnackBar(content: Text("Role tidak valid"));
+                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                              }
+                            },
+                            style: const ButtonStyle(
+                              elevation: MaterialStatePropertyAll(0),
+                              padding: MaterialStatePropertyAll(EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0)),
+                              minimumSize: MaterialStatePropertyAll(Size(double.infinity, 48)),
+                              maximumSize: MaterialStatePropertyAll(Size(double.infinity, double.infinity)),
+                            ),
+                            child: loadingProvider.isLoading ? const Text("Loading...") : const Text("Login")
+                          );
+                        }
+                      )
+                    ],
+                  ),
                 ),
-                child: _isLoading ? const CircularProgressIndicator(color: Colors.white) : const Text("Login")
-              )
+              ),
             ],
           ),
         ),
@@ -214,14 +215,33 @@ class FormAuth extends StatelessWidget {
       obscureText: obsecure,
       focusNode: focusNow,
       textInputAction: action,
-      onFieldSubmitted: (v){
+      onFieldSubmitted: (v) {
         FocusScope.of(context).requestFocus(focusNext);
       },
       decoration: InputDecoration(
         hintText: hint,
+        border: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.grey),
+        ),
+        enabledBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.grey),
+        ),
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.green),
+        ),
         filled: true,
-        fillColor: Colors.white,
+        fillColor: Colors.transparent,
       ),
     );
+  }
+}
+
+void catchErrorLogin(BuildContext context, err) {
+  if (err is DioError) {
+    SnackBar snackBar = SnackBar(content: Text(err.response?.data['error']));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }else{
+    SnackBar snackBar = const SnackBar(content: Text("Terjadi kesalahan"));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
