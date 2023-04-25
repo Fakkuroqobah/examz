@@ -45,6 +45,8 @@ class Exam {
     required this.id,
     required this.examClass,
     required this.name,
+    required this.status,
+    required this.token,
     required this.isRandom,
     required this.thumbnail,
     required this.description,
@@ -55,6 +57,8 @@ class Exam {
   int id;
   String examClass;
   String name;
+  String? status;
+  String? token;
   int isRandom;
   String thumbnail;
   String? description;
@@ -65,6 +69,8 @@ class Exam {
     id: json["id"],
     examClass: json["class"],
     name: json["name"],
+    status: json["status"],
+    token: json["token"],
     isRandom: json["is_random"],
     thumbnail: json["thumbnail"],
     description: json["description"],
@@ -76,6 +82,8 @@ class Exam {
     "id": id,
     "class": examClass,
     "name": name,
+    "status": status,
+    "token": token,
     "is_random": isRandom,
     "thumbnail": thumbnail,
     "description": description,

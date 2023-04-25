@@ -119,11 +119,8 @@ class _TExamState extends State<TExam> with SingleTickerProviderStateMixin {
               IconButton(
                 icon: const Icon(Icons.add),
                 tooltip: 'Tambah Ujian',
-                onPressed: () async {
-                  String refresh = await Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const TExamAdd()));
-                  if(refresh == 'refresh') {
-                    setState(() {});
-                  }
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const TExamAdd()));
                 },
               )
             ],

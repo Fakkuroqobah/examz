@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../configs/api.dart';
 import '../../models/teacher/t_exam_model.dart';
-import '../../services/teacher/t_exam_service.dart';
+import '../../provider/teacher/t_exam_provider.dart';
 
+import '../../widgets/empty_condition.dart';
 import '../../widgets/t_exam_card.dart';
 
 class TExamInactive extends StatefulWidget {
@@ -14,18 +15,18 @@ class TExamInactive extends StatefulWidget {
 }
 
 class _TExamInactiveState extends State<TExamInactive> {
-  final Api _api = Api();
-  final TExamService _tExamService = TExamService();
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
   
   Future<void> _refresh() async {
-    setState(() {});
+    Provider.of<TExamProvider>(context, listen: false).getExamInactive();
   }
   
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _refreshIndicatorKey.currentState?.show());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<TExamProvider>(context, listen: false).getExamInactive();
+    });
   }
 
   @override
@@ -34,45 +35,43 @@ class _TExamInactiveState extends State<TExamInactive> {
       body: RefreshIndicator(
         key: _refreshIndicatorKey,
         onRefresh: _refresh,
-        child: FutureBuilder(
-          future: _tExamService.getExam(),
-          builder: (BuildContext ctx, AsyncSnapshot<TExamModel> snapshot) {
-            if (snapshot.hasError) {
-              return Center(child: Text("Something wrong with message: ${snapshot.error.toString()}"));
-            } else if (snapshot.connectionState == ConnectionState.done) {
-              List<Exam>? exam = snapshot.data?.examInActive;
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 8.0),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Text("Jumlah ujian: ${snapshot.data?.sumExamInActive}", 
-                      style: const TextStyle(fontSize: 18.0),
-                    ),
-                  ),
-                  
-                  const SizedBox(height: 8.0),
-                  Expanded(child: _buildListView(context, exam)),
-                ],
-              );
-            } else {
+        child: Consumer<TExamProvider>(
+          builder: (_, tExamI, widget) {
+            if(tExamI.isLoading) {
               return const Center(child: CircularProgressIndicator());
             }
-          }
+
+            if(tExamI.hasError) {
+              return const Center(child: Text("Terjadi kesalahan pada server"));
+            }
+            
+            return (tExamI.examList.sumExamInActive > 0) ? Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                const SizedBox(height: 8.0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                  child: Text("Jumlah ujian: ${tExamI.examList.sumExamInActive}", 
+                    style: const TextStyle(fontSize: 16.0, color: Colors.grey),
+                  ),
+                ),
+                const Divider(),
+                
+                const SizedBox(height: 8.0),
+                Expanded(child: _buildListView(context, tExamI.examList.examInActive)),
+              ],
+            ) : const EmptyCondition();
+          },
         ),
       )
     );
   }
 
-  ListView _buildListView(context, List<Exam>? exam) {
+  ListView _buildListView(context, List<Exam> exam) {
     return ListView.builder(
-      itemCount: exam?.length,
+      itemCount: exam.length,
       itemBuilder: (ctx, index) {
-        Exam data = exam![index];
-        
-        String src = _api.tBaseUrlAsset + data.thumbnail;
-        data.thumbnail = src;
+        Exam data = exam[index];
 
         return TExamCard(exam: data);
       },

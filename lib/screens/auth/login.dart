@@ -16,6 +16,10 @@ import '../student/s_exam.dart';
 import '../supervisor/p_exam.dart';
 import '../teacher/t_exam.dart';
 
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
+
+
 class Login extends StatefulWidget {
   const Login({super.key});
 
@@ -163,8 +167,12 @@ class _LoginState extends State<Login> {
                                 });
                               }else{
                                 loadingProvider.setLoading(false);
-                                SnackBar snackBar = const SnackBar(content: Text("Role tidak valid"));
-                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                showTopSnackBar(
+                                  Overlay.of(context),
+                                  const CustomSnackBar.error(
+                                    message: "Role tidak valid",
+                                  )
+                                );
                               }
                             },
                             style: const ButtonStyle(
@@ -173,7 +181,7 @@ class _LoginState extends State<Login> {
                               minimumSize: MaterialStatePropertyAll(Size(double.infinity, 48)),
                               maximumSize: MaterialStatePropertyAll(Size(double.infinity, double.infinity)),
                             ),
-                            child: loadingProvider.isLoading ? const Text("Loading...") : const Text("Login")
+                            child: Text(loadingProvider.isLoading ? "Loading..." : "Login")
                           );
                         }
                       )
@@ -238,10 +246,18 @@ class FormAuth extends StatelessWidget {
 
 void catchErrorLogin(BuildContext context, err) {
   if (err is DioError) {
-    SnackBar snackBar = SnackBar(content: Text(err.response?.data['error']));
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    showTopSnackBar(
+      Overlay.of(context),
+      CustomSnackBar.error(
+        message: (err.response != null) ? err.response?.data['error'] : "Terjadi kesalahan, periksa koneksi internetmu",
+      )
+    );
   }else{
-    SnackBar snackBar = const SnackBar(content: Text("Terjadi kesalahan"));
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    showTopSnackBar(
+      Overlay.of(context),
+      const CustomSnackBar.error(
+        message: "Terjadi kesalahan",
+      )
+    );
   }
 }

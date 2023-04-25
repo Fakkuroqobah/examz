@@ -1,9 +1,20 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:html_editor_enhanced/html_editor.dart';
+import 'package:provider/provider.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
+import '../../configs/api.dart';
 import '../../models/teacher/t_exam_model.dart';
+import '../../provider/loading_provider.dart';
+import '../../provider/teacher/t_exam_provider.dart';
+import '../../provider/teacher/t_is_random_provider.dart';
+import '../../provider/teacher/t_select_class_provider.dart';
+import '../../provider/teacher/t_thumbnail_provider.dart';
 import '../../services/teacher/t_exam_service.dart';
 
 class TExamEdit extends StatefulWidget {
@@ -16,22 +27,21 @@ class TExamEdit extends StatefulWidget {
 }
 
 class _TExamEditState extends State<TExamEdit> {
-  bool _isLoading = false;
   final TExamService _tExamService = TExamService();
   final TextEditingController _controllerName = TextEditingController();
-  final TextEditingController _controllerDescription = TextEditingController();
-
-  String thumbnailName = "";
-  File? thumbnailFile;
-  
-  String _valClass = "1";
+  final HtmlEditorController _controllerDescription = HtmlEditorController();
+  final Api _api = Api();
 
   @override
   void initState() {
     super.initState();
     _controllerName.text = widget.data.name;
-    _controllerDescription.text = widget.data.description ?? "";
-    _valClass = widget.data.examClass;
+    
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<TSelectClassProvider>(context, listen: false).setSelectedItem(widget.data.examClass);
+      Provider.of<TIsRandomProvider>(context, listen: false).setChecked((widget.data.isRandom == 1));
+      Provider.of<TThumbnailProvider>(context, listen: false).setItem({});
+    });
   }
 
   @override
@@ -49,122 +59,235 @@ class _TExamEditState extends State<TExamEdit> {
               TextField(
                 controller: _controllerName,
                 keyboardType: TextInputType.text,
+                maxLength: 30,
                 decoration: const InputDecoration(
-                  labelText: "Nama ujian",
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(borderSide: BorderSide.none)
+                  labelText: "Masukan nama ujian",
                 ),
               ),
-      
+
               const SizedBox(height: 12.0),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
                 decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                  border: Border(bottom: BorderSide(width: 1.0, color: Colors.grey))
                 ),
-                child: DropdownButton<String>(
-                  isExpanded: true,
-                  hint: const Text("Pilih Kelas"),
-                  value: _valClass,
-                  items: const [
-                    DropdownMenuItem(value: '1', child: Text('Kelas 1')),
-                    DropdownMenuItem(value: '2', child: Text('Kelas 2')),
-                    DropdownMenuItem(value: '3', child: Text('Kelas 3')),
-                  ],
-                  underline: Container(
-                    height: 1.0,
-                    decoration: const BoxDecoration(
-                        border: Border(bottom: BorderSide(color: Colors.transparent, width: 0.0))
+                child: Consumer<TSelectClassProvider>(
+                  builder: (_, tSelectClassProvider, widget) {
+                    return DropdownButton<String>(
+                      value: tSelectClassProvider.selectedItem,
+                      hint: const Text("Pilih Kelas"),
+                      isExpanded: true,
+                      elevation: 0,
+                      style: TextStyle(color: Colors.grey.shade600, fontSize: 16.0),
+                      underline: Container(
+                        height: 1.0,
+                        decoration: const BoxDecoration(
+                          border: Border(bottom: BorderSide(color: Colors.transparent, width: 0.0))
+                        ),
+                      ),
+                      items: tSelectClassProvider.items.map<DropdownMenuItem<String>>((List<String> value) {
+                        return DropdownMenuItem<String>(
+                          value: value[0],
+                          child: Text(value[1]),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        tSelectClassProvider.setSelectedItem(newValue!);
+                      }
+                    );
+                  }
+                ),
+              ),
+
+              const SizedBox(height: 12.0),
+              HtmlEditor(
+                controller: _controllerDescription,
+                htmlEditorOptions: HtmlEditorOptions(
+                  hint: "Masukan Deskripsi",
+                  initialText: widget.data.description
+                ),
+                htmlToolbarOptions: const HtmlToolbarOptions(
+                  toolbarType: ToolbarType.nativeExpandable,
+                ),
+                otherOptions: const OtherOptions(
+                  height: 300,
+                ),
+              ),
+
+              const SizedBox(height: 16.0),
+              Row(
+                children: [
+                  SizedBox(
+                    height: 24.0,
+                    width: 24.0,
+                    child: Consumer<TIsRandomProvider>(
+                      builder: (_, tIsRandomProvider, widget) {
+                        return Checkbox(
+                          checkColor: Colors.white,
+                          fillColor: MaterialStateProperty.resolveWith(getColor),
+                          value: tIsRandomProvider.isChecked,
+                          onChanged: (bool? value) {
+                            tIsRandomProvider.setChecked(value);
+                          },
+                        );
+                      }
                     ),
                   ),
-                  onChanged: (String? value) {
-                    setState(() {
-                      _valClass = value!;
-                    });
-                  },
-                ),
+                  const SizedBox(width: 8.0),
+                  Text("Acak soal", style: TextStyle(color: Colors.grey.shade600, fontSize: 16.0))
+                ],
               ),
 
-              const SizedBox(height: 12.0),
-              TextField(
-                controller: _controllerDescription,
-                maxLines: null,
-                keyboardType: TextInputType.multiline,
-                decoration: const InputDecoration(
-                  labelText: "Deskripsi ujian",
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(borderSide: BorderSide.none)
-                ),
+              const SizedBox(height: 16.0),
+              Consumer<TThumbnailProvider>(
+                builder: (_, tThumbnailProvider, __) {
+                  return Column(
+                    children: [
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(Colors.green.shade600),
+                            elevation: const MaterialStatePropertyAll(0),
+                            padding: const MaterialStatePropertyAll(EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0)),
+                            minimumSize: const MaterialStatePropertyAll(Size(double.infinity, 48)),
+                            maximumSize: const MaterialStatePropertyAll(Size(double.infinity, double.infinity)),
+                          ),
+                          onPressed: () async {
+                            final result = await FilePicker.platform.pickFiles(type: FileType.image, withData: true);
+                            
+                            if (result != null) {
+                              final bytes = result.files.single.bytes!;
+                              final extensions = result.files.single.extension!;
+
+                              File file = File(result.files.single.path.toString());
+                              Map<String, dynamic> thumbnail = {};
+
+                              thumbnail = {
+                                "file": file,
+                                "byte": base64.encode(bytes),
+                                "extension": extensions
+                              };
+
+                              tThumbnailProvider.setItem(thumbnail);
+                            }
+                          },
+                          child: const Text("Pilih Gambar"),
+                        ),
+                      ),
+
+                      const SizedBox(height: 12.0),
+                      tThumbnailProvider.thumbnails['file'] != null ?
+                      Image.file(
+                        File(tThumbnailProvider.thumbnails['file']!.path),
+                        fit: BoxFit.fill,
+                        width: MediaQuery.of(context).size.width,
+                        height: 300,
+                      )
+                      : Image.network(_api.tBaseUrlAsset + widget.data.thumbnail, 
+                        fit: BoxFit.fill,
+                        width: MediaQuery.of(context).size.width, 
+                        height: 300
+                      ),
+                    ],
+                  );
+                }
               ),
-      
-              const SizedBox(height: 12.0),
-              thumbnailFile != null ?
-              Image.file(
-                File(thumbnailFile!.path),
-                fit: BoxFit.cover,
-                width: MediaQuery.of(context).size.width,
-                height: 300,
-              )
-              : const Text("Tidak ada gambar", style: TextStyle(fontSize: 16)),
-
-              const SizedBox(height: 12.0),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () async {
-                    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.image);
-                    
-                    if (result != null) {
-                      File file = File(result.files.single.path.toString());
-                      setState(() {
-                        thumbnailFile = file;
-                        thumbnailName = result.files.single.name;
-                      });
-                    }
-                  },
-                  child: const Text("Pilih Gambar"),
-                ),
-              ),
-
-              const SizedBox(height: 8.0),
-              ElevatedButton(
-                onPressed: () async {
-                  setState(() => _isLoading = true);
-
-                  String name = _controllerName.text.toString();
-                  String description = _controllerDescription.text.toString();
-                  // String description = await _controllerDescription.getText();
-
-                  if(name == "") {
-                    setState(() => _isLoading = false);
-                    SnackBar snackBar = const SnackBar(content: Text("Nama ujian harus diisi"));
-                    if (!mounted) return;
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  }else if(_valClass == "") {
-                    setState(() => _isLoading = false);
-                    SnackBar snackBar = const SnackBar(content: Text("Kelas harus diisi"));
-                    if (!mounted) return;
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  }
-
-                  _tExamService.editExam(widget.data.id, name,  _valClass, description, thumbnailFile, thumbnailName).then((value) {
-                    setState(() => _isLoading = false);
-                    Navigator.pop(context, 'refresh');
-                  }).catchError((err) {
-                    setState(() => _isLoading = false);
-                    SnackBar snackBar = const SnackBar(content: Text("Terjadi Kesalahan"));
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  });
-                },
-                child: Text(_isLoading ? "Loading..." : "Edit Ujian")
-              )
             ],
           ),
         ),
       ),
+
+      bottomNavigationBar: Container(
+        height: 50,
+        color: Colors.white,
+        child: Consumer<LoadingProvider>(
+          builder: (_, loadingProvider, __) {
+            return ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(0),
+                ),
+              ),
+              onPressed: () async {
+                loadingProvider.setLoading(true);
+
+                String name = _controllerName.text.toString();
+                String selectedClass = context.read<TSelectClassProvider>().selectedItem;
+                bool? isRandom = context.read<TIsRandomProvider>().isChecked;
+                Map<String, dynamic> thumbnail = context.read<TThumbnailProvider>().thumbnails;
+                String description = await _controllerDescription.getText();
+
+                if(name == "") {
+                  loadingProvider.setLoading(false);
+                  if (!mounted) return;
+                  showTopSnackBar(
+                    Overlay.of(context),
+                    const CustomSnackBar.error(
+                      message: "Nama ujian harus diisi",
+                    )
+                  );
+                }else if(selectedClass == "") {
+                  loadingProvider.setLoading(false);
+                  if (!mounted) return;
+                  showTopSnackBar(
+                    Overlay.of(context),
+                    const CustomSnackBar.error(
+                      message: "Kelas harus diisi",
+                    )
+                  );
+                }else{
+                  _tExamService.editExam(widget.data.id, name,  selectedClass, description, thumbnail['byte'], thumbnail['extension'], isRandom).then((value) {
+                    loadingProvider.setLoading(false);
+                    value.fold(
+                      (errorMessage) {
+                        showTopSnackBar(
+                          Overlay.of(context),
+                          CustomSnackBar.error(
+                            message: errorMessage,
+                          )
+                        );
+                        return;
+                      },
+                      (response) {
+                        context.read<TExamProvider>().updateExamInactive(response);
+                        showTopSnackBar(
+                          Overlay.of(context),
+                          CustomSnackBar.success(
+                            message: "Ujian ${response.name} berhasil diedit",
+                          )
+                        );
+                        Navigator.pop(context);
+                        return null;
+                      },
+                    );
+                  }).catchError((err) {
+                    loadingProvider.setLoading(false);
+                    showTopSnackBar(
+                      Overlay.of(context),
+                      const CustomSnackBar.error(
+                        message: "Terjadi kesalahan",
+                      )
+                    );
+                  });
+                }
+              },
+              child: Text(loadingProvider.isLoading ? "Loading..." : "Edit Ujian")
+            );
+          }
+        ),
+      ),
     );
+  }
+
+  Color getColor(Set<MaterialState> states) {
+    const Set<MaterialState> interactiveStates = <MaterialState>{
+      MaterialState.pressed,
+      MaterialState.hovered,
+      MaterialState.focused,
+    };
+    if (states.any(interactiveStates.contains)) {
+      return Colors.grey;
+    }
+    return Colors.green;
   }
 }
