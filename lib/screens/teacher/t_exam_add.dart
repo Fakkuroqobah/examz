@@ -64,7 +64,7 @@ class _TExamAddState extends State<TExamAdd> {
                   border: Border(bottom: BorderSide(width: 1.0, color: Colors.grey))
                 ),
                 child: Consumer<TSelectClassProvider>(
-                  builder: (_, tSelectClassProvider, widget) {
+                  builder: (_, tSelectClassProvider, __) {
                     return DropdownButton<String>(
                       value: tSelectClassProvider.selectedItem,
                       hint: const Text("Pilih Kelas"),
@@ -102,7 +102,6 @@ class _TExamAddState extends State<TExamAdd> {
                 ),
                 otherOptions: const OtherOptions(
                   height: 300,
-                  
                 ),
               ),
 
@@ -113,7 +112,7 @@ class _TExamAddState extends State<TExamAdd> {
                     height: 24.0,
                     width: 24.0,
                     child: Consumer<TIsRandomProvider>(
-                      builder: (_, tIsRandomProvider, widget) {
+                      builder: (_, tIsRandomProvider, __) {
                         return Checkbox(
                           checkColor: Colors.white,
                           fillColor: MaterialStateProperty.resolveWith(getColor),
@@ -132,7 +131,7 @@ class _TExamAddState extends State<TExamAdd> {
 
               const SizedBox(height: 16.0),
               Consumer<TThumbnailProvider>(
-                builder: (_, tThumbnailProvider, widget) {
+                builder: (_, tThumbnailProvider, __) {
                   return Column(
                     children: [
                       SizedBox(
@@ -190,7 +189,7 @@ class _TExamAddState extends State<TExamAdd> {
         height: 50,
         color: Colors.white,
         child: Consumer<LoadingProvider>(
-          builder: (_, loadingProvider, widget) {
+          builder: (_, loadingProvider, __) {
             return ElevatedButton(
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(

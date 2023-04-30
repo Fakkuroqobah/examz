@@ -15,7 +15,7 @@ class EmptyCondition extends StatelessWidget {
           Image.asset("${Constant.assetUrl}/empty.png", width: 200.0),
 
           const SizedBox(height: 4.0),
-          const Text("Belum ada ujian", style: TextStyle(fontSize: 16.0, color: Colors.grey))
+          const Text("Belum ada data", style: TextStyle(fontSize: 16.0, color: Colors.grey))
         ],
       )
     );

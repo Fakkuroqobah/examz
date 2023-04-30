@@ -96,7 +96,7 @@ class _LoginState extends State<Login> {
                           borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0), topRight: Radius.circular(10.0))
                         ),
                         child: Consumer<OSelectRoleProvider>(
-                          builder: (_, oSelectRoleProvider, widget) {
+                          builder: (_, oSelectRoleProvider, __) {
                             return DropdownButton<String>(
                               value: oSelectRoleProvider.selectedItem,
                               hint: const Text("Pilih Role"),
@@ -124,7 +124,7 @@ class _LoginState extends State<Login> {
                       
                       const SizedBox(height: 18.0),
                       Consumer<LoadingProvider>(
-                        builder: (_, loadingProvider, widget) {
+                        builder: (_, loadingProvider, __) {
                           return ElevatedButton(
                             onPressed: () {
                               loadingProvider.setLoading(true);

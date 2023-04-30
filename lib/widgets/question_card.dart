@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:provider/provider.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 import '../models/teacher/t_question_model.dart';
+import '../provider/teacher/t_question_provider.dart';
+import '../screens/teacher/t_question_edit.dart';
+import '../services/teacher/t_question_service.dart';
 
 class QuestionCard extends StatefulWidget {
   const QuestionCard({super.key, required this.question, required this.number});
@@ -13,6 +20,8 @@ class QuestionCard extends StatefulWidget {
 }
 
 class _QuestionCardState extends State<QuestionCard> {
+  final TQuestionService _tQuestionService = TQuestionService();
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -21,23 +30,53 @@ class _QuestionCardState extends State<QuestionCard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("${widget.number}.", style: const TextStyle(fontWeight: FontWeight.bold)),
+                Text("Soal ${widget.number}", style: const TextStyle(fontWeight: FontWeight.bold)),
 
-                const SizedBox(width: 8.0),
-                Text(widget.question.subject),
+                const SizedBox(height: 8.0),
+                Html(
+                  data: widget.question.subject,
+                  style: {
+                    "body": Style(
+                      padding: const EdgeInsets.all(0),
+                      margin: const EdgeInsets.all(0),
+                    ),
+                    "p": Style(
+                      margin: const EdgeInsets.all(0),
+                    ),
+                  }
+                )
               ],
             ),
             
             const Divider(),
             SizedBox(
-              height: 80.0,
+              height: 200.0,
               child: ListView.builder(
                 itemCount: widget.question.answerOption.length,
                 itemBuilder: (ctx, index) {
                   AnswerOption answerOption = widget.question.answerOption[index];
-                  return (answerOption.correct != null) ? Text(answerOption.subject, style: const TextStyle(color: Colors.green)) : Text(answerOption.subject);
+                  
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      (answerOption.correct != null) ? const Text("+", style: TextStyle(color: Colors.green, fontSize: 24.0)) : const Text("-", style: TextStyle(fontSize: 24.0)),
+                      Html(
+                        data: answerOption.subject,
+                        style: {
+                          "body": Style(
+                            padding: const EdgeInsets.all(0),
+                            margin: const EdgeInsets.all(0),
+                          ),
+                          "p": Style(
+                            margin: const EdgeInsets.only(top: 0, bottom: 10),
+                          ),
+                        }
+                      ),
+                    ],
+                  );
                 },
               ),
             ),
@@ -46,6 +85,18 @@ class _QuestionCardState extends State<QuestionCard> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TQuestionEdit(data: widget.question)));
+                  },
+                  style: const ButtonStyle(
+                    backgroundColor: MaterialStatePropertyAll<Color>(Colors.orange),
+                    elevation: MaterialStatePropertyAll(0)
+                  ),
+                  child: const Text("Edit"),
+                ),
+
+                const SizedBox(width: 8.0),
                 ElevatedButton(
                   onPressed: () {
                     showDialog(
@@ -62,10 +113,30 @@ class _QuestionCardState extends State<QuestionCard> {
                               ),
                               onPressed: () {
                                 Navigator.pop(context);
+                                _tQuestionService.deleteQuestion(widget.question.id).then((value) {
+                                  Provider.of<TQuestionProvider>(context, listen: false).deleteQuestion(widget.question.id);
+                                  showTopSnackBar(
+                                    Overlay.of(context),
+                                    const CustomSnackBar.error(
+                                      message: "Pertanyaan berhasil dihapus",
+                                    )
+                                  );
+                                }).catchError((err) {
+                                  showTopSnackBar(
+                                    Overlay.of(context),
+                                    const CustomSnackBar.error(
+                                      message: "Terjadi kesalahan",
+                                    )
+                                  );
+                                });
                               },
                               child: const Text("Iya"),
                             ),
                             ElevatedButton(
+                              style: const ButtonStyle(
+                                backgroundColor: MaterialStatePropertyAll<Color>(Colors.grey),
+                                elevation: MaterialStatePropertyAll(0)
+                              ),
                               child: const Text("Tidak"),
                               onPressed: () {
                                 Navigator.pop(context);

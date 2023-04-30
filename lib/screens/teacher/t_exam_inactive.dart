@@ -36,7 +36,7 @@ class _TExamInactiveState extends State<TExamInactive> {
         key: _refreshIndicatorKey,
         onRefresh: _refresh,
         child: Consumer<TExamProvider>(
-          builder: (_, tExamI, widget) {
+          builder: (_, tExamI, __) {
             if(tExamI.isLoading) {
               return const Center(child: CircularProgressIndicator());
             }

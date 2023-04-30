@@ -98,7 +98,7 @@ class TExamService {
       );
 
       if (response.statusCode == 200) {
-        return Right(Exam.fromJson(response.data['data']['exam']));
+        return Right(Exam.fromJson(response.data['data']));
       }
       return const Left('Terjadi kesalahan');
     } on DioError catch (e) {

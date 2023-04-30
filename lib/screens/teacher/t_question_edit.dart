@@ -5,21 +5,22 @@ import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
+import '../../models/teacher/t_question_model.dart';
 import '../../provider/loading_provider.dart';
 import '../../provider/teacher/t_is_correct_answer_provider.dart';
 import '../../provider/teacher/t_question_provider.dart';
 import '../../services/teacher/t_question_service.dart';
 
-class TQuestionAdd extends StatefulWidget {
-  const TQuestionAdd({super.key, required this.id});
+class TQuestionEdit extends StatefulWidget {
+  const TQuestionEdit({super.key, required this.data});
 
-  final int id;
+  final TQuestionModel data;
 
   @override
-  State<TQuestionAdd> createState() => _TQuestionAddState();
+  State<TQuestionEdit> createState() => _TQuestionEditState();
 }
 
-class _TQuestionAddState extends State<TQuestionAdd> {
+class _TQuestionEditState extends State<TQuestionEdit> {
   final TQuestionService _tQuestionService = TQuestionService();
   final HtmlEditorController _controllerSubject = HtmlEditorController();
   final HtmlEditorController _controllerQuestion1 = HtmlEditorController();
@@ -32,7 +33,7 @@ class _TQuestionAddState extends State<TQuestionAdd> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<TIsCorrectAnswerProvider>(context, listen: false).setFalse();
+      Provider.of<TIsCorrectAnswerProvider>(context, listen: false).setCheckedEdit(widget.data.answerOption);
     });
   }
 
@@ -54,9 +55,9 @@ class _TQuestionAddState extends State<TQuestionAdd> {
               const SizedBox(height: 8.0),
               HtmlEditor(
                 controller: _controllerSubject,
-                htmlEditorOptions: const HtmlEditorOptions(
+                htmlEditorOptions: HtmlEditorOptions(
                   hint: "Masukan Pertanyaan",
-                  initialText: "<p>Pertanyaan</p>"
+                  initialText: widget.data.subject
                 ),
                 htmlToolbarOptions: const HtmlToolbarOptions(
                   toolbarType: ToolbarType.nativeExpandable,
@@ -87,9 +88,9 @@ class _TQuestionAddState extends State<TQuestionAdd> {
               ),
               HtmlEditor(
                 controller: _controllerQuestion1,
-                htmlEditorOptions: const HtmlEditorOptions(
+                htmlEditorOptions: HtmlEditorOptions(
                   hint: "Masukan jawaban soal",
-                  initialText: "<p>Opsi 1</p>"
+                  initialText: widget.data.answerOption[0].subject
                 ),
                 htmlToolbarOptions: const HtmlToolbarOptions(
                   toolbarType: ToolbarType.nativeExpandable,
@@ -121,9 +122,9 @@ class _TQuestionAddState extends State<TQuestionAdd> {
               const SizedBox(height: 8.0),
               HtmlEditor(
                 controller: _controllerQuestion2,
-                htmlEditorOptions: const HtmlEditorOptions(
+                htmlEditorOptions: HtmlEditorOptions(
                   hint: "Masukan jawaban soal",
-                  initialText: "<p>Opsi 2</p>"
+                  initialText: widget.data.answerOption[1].subject
                 ),
                 htmlToolbarOptions: const HtmlToolbarOptions(
                   toolbarType: ToolbarType.nativeExpandable,
@@ -155,9 +156,9 @@ class _TQuestionAddState extends State<TQuestionAdd> {
               const SizedBox(height: 8.0),
               HtmlEditor(
                 controller: _controllerQuestion3,
-                htmlEditorOptions: const HtmlEditorOptions(
+                htmlEditorOptions: HtmlEditorOptions(
                   hint: "Masukan jawaban soal",
-                  initialText: "<p>Opsi 3</p>"
+                  initialText: widget.data.answerOption[2].subject
                 ),
                 htmlToolbarOptions: const HtmlToolbarOptions(
                   toolbarType: ToolbarType.nativeExpandable,
@@ -189,9 +190,9 @@ class _TQuestionAddState extends State<TQuestionAdd> {
               const SizedBox(height: 8.0),
               HtmlEditor(
                 controller: _controllerQuestion4,
-                htmlEditorOptions: const HtmlEditorOptions(
+                htmlEditorOptions: HtmlEditorOptions(
                   hint: "Masukan jawaban soal",
-                  initialText: "<p>Opsi 4</p>"
+                  initialText: widget.data.answerOption[3].subject
                 ),
                 htmlToolbarOptions: const HtmlToolbarOptions(
                   toolbarType: ToolbarType.nativeExpandable,
@@ -223,9 +224,9 @@ class _TQuestionAddState extends State<TQuestionAdd> {
               const SizedBox(height: 8.0),
               HtmlEditor(
                 controller: _controllerQuestion5,
-                htmlEditorOptions: const HtmlEditorOptions(
+                htmlEditorOptions: HtmlEditorOptions(
                   hint: "Masukan jawaban soal",
-                  initialText: "<p>Opsi 5</p>"
+                  initialText: widget.data.answerOption[4].subject
                 ),
                 htmlToolbarOptions: const HtmlToolbarOptions(
                   toolbarType: ToolbarType.nativeExpandable,
@@ -278,7 +279,7 @@ class _TQuestionAddState extends State<TQuestionAdd> {
                     }
                   };
 
-                  _tQuestionService.addOrEditQuestion(widget.id, subject, answer, 'add').then((value) {
+                  _tQuestionService.addOrEditQuestion(widget.data.id, subject, answer, 'edit', examId: widget.data.examId).then((value) {
                     loadingProvider.setLoading(false);
                     value.fold(
                       (errorMessage) {
@@ -291,11 +292,11 @@ class _TQuestionAddState extends State<TQuestionAdd> {
                         return;
                       },
                       (response) {
-                        context.read<TQuestionProvider>().addQuestion(response);
+                        context.read<TQuestionProvider>().updateQuestion(response);
                         showTopSnackBar(
                           Overlay.of(context),
                           const CustomSnackBar.success(
-                            message: "Pertanyaan baru berhasil dibuat",
+                            message: "Pertanyaan berhasil diedit",
                           )
                         );
                         Navigator.pop(context);
@@ -312,7 +313,7 @@ class _TQuestionAddState extends State<TQuestionAdd> {
                     );
                   });
                 },
-                child: Text(loadingProvider.isLoading ? "Loading..." : "Tambah Pertanyaan")
+                child: Text(loadingProvider.isLoading ? "Loading..." : "Edit Pertanyaan")
               );
             }
           )

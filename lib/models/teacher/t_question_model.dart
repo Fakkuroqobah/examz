@@ -9,7 +9,6 @@ class TQuestionModel {
     required this.id,
     required this.examId,
     required this.subject,
-    required this.orderNumber,
     required this.createdAt,
     required this.updatedAt,
     required this.answerOption,
@@ -18,7 +17,6 @@ class TQuestionModel {
   int id;
   int examId;
   String subject;
-  int? orderNumber;
   DateTime createdAt;
   DateTime updatedAt;
   List<AnswerOption> answerOption;
@@ -27,7 +25,6 @@ class TQuestionModel {
     id: json["id"],
     examId: json["exam_id"],
     subject: json["subject"],
-    orderNumber: json["order_number"],
     createdAt: DateTime.parse(json["created_at"]),
     updatedAt: DateTime.parse(json["updated_at"]),
     answerOption: List<AnswerOption>.from(json["answer_option"].map((x) => AnswerOption.fromJson(x))),
@@ -37,7 +34,6 @@ class TQuestionModel {
     "id": id,
     "exam_id": examId,
     "subject": subject,
-    "order_number": orderNumber,
     "created_at": createdAt.toIso8601String(),
     "updated_at": updatedAt.toIso8601String(),
     "answer_option": List<dynamic>.from(answerOption.map((x) => x.toJson())),

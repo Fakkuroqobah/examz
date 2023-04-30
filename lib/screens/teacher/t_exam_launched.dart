@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../configs/api.dart';
 import '../../models/teacher/t_exam_model.dart';
 import '../../services/teacher/t_exam_service.dart';
 
@@ -15,7 +14,6 @@ class TExamLaunched extends StatefulWidget {
 }
 
 class _TExamLaunchedState extends State<TExamLaunched> {
-  final Api _api = Api();
   final TExamService _tExamService = TExamService();
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
   
@@ -26,7 +24,6 @@ class _TExamLaunchedState extends State<TExamLaunched> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _refreshIndicatorKey.currentState?.show());
   }
 
   @override
@@ -72,9 +69,6 @@ class _TExamLaunchedState extends State<TExamLaunched> {
       itemCount: exam?.length,
       itemBuilder: (ctx, index) {
         Exam data = exam![index];
-        
-        String src = _api.tBaseUrlAsset + data.thumbnail;
-        data.thumbnail = src;
 
         return TExamCard(exam: data);
       },

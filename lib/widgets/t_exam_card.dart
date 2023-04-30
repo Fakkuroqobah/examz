@@ -43,7 +43,7 @@ class _TExamCardState extends State<TExamCard> {
                   style: TextStyle(color: Colors.black.withOpacity(0.6)),
                 ),
               ),
-              ButtonBar(
+              (widget.exam.status == 'inactive') ? ButtonBar(
                 alignment: MainAxisAlignment.start,
                 children: [
                   ElevatedButton(
@@ -113,7 +113,7 @@ class _TExamCardState extends State<TExamCard> {
                     child: const Text("Hapus"),
                   ),
                 ],
-              ),
+              ) : Container(),
             ],
           ),
         ),

@@ -19,7 +19,9 @@ class Api {
   static const String tExamDelete = "$tBaseUrl/exam/delete";
 
   static const String tQuestion = "$tBaseUrl/exam/question";
+  static const String tQuestionEdit = "$tBaseUrl/exam/question/edit";
   static const String tQuestionAdd = "$tBaseUrl/exam/question/add";
+  static const String tQuestionDelete = "$tBaseUrl/exam/question/delete";
 
   // STUDENT
   static const String sLogin = "$sBaseUrl/login";

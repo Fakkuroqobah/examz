@@ -5,7 +5,9 @@ import 'package:provider/provider.dart';
 import 'provider/auth/o_select_role_provider.dart';
 import 'provider/loading_provider.dart';
 import 'provider/teacher/t_exam_provider.dart';
+import 'provider/teacher/t_is_correct_answer_provider.dart';
 import 'provider/teacher/t_is_random_provider.dart';
+import 'provider/teacher/t_question_provider.dart';
 import 'provider/teacher/t_select_class_provider.dart';
 import 'provider/teacher/t_thumbnail_provider.dart';
 
@@ -30,7 +32,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<TSelectClassProvider>(create: (_) => TSelectClassProvider()),
         ChangeNotifierProvider<TThumbnailProvider>(create: (_) => TThumbnailProvider()),
         ChangeNotifierProvider<TIsRandomProvider>(create: (_) => TIsRandomProvider()),
-        ChangeNotifierProvider<TExamProvider>(create: (_) => TExamProvider())
+        ChangeNotifierProvider<TExamProvider>(create: (_) => TExamProvider()),
+        ChangeNotifierProvider<TQuestionProvider>(create: (_) => TQuestionProvider()),
+        ChangeNotifierProvider<TIsCorrectAnswerProvider>(create: (_) => TIsCorrectAnswerProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
