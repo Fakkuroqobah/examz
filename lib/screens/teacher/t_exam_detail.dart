@@ -44,13 +44,13 @@ class _TExamDetailState extends State<TExamDetail> {
         title: const Text("Detail Ujian"),
         elevation: 0,
         actions: [
-          IconButton(
+          (widget.data.status == 'inactive') ? IconButton(
             icon: const Icon(Icons.add),
             tooltip: 'Tambah Pertanyaan',
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TQuestionAdd(id: widget.data.id)));
             },
-          )
+          ) : Container()
         ],
       ),
       body: RefreshIndicator(
