@@ -25,11 +25,16 @@ class TExamAdd extends StatefulWidget {
 class _TExamAddState extends State<TExamAdd> {
   final TExamService _tExamService = TExamService();
   final TextEditingController _controllerName = TextEditingController();
+  final TextEditingController _controllerTime = TextEditingController();
   final HtmlEditorController _controllerDescription = HtmlEditorController();
 
   @override
   void initState() {
     super.initState();
+
+    _controllerName.text = "PKN";
+    _controllerTime.text = '1';
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<TSelectClassProvider>(context, listen: false).setSelectedItem("1");
       Provider.of<TThumbnailProvider>(context, listen: false).setItem({});
@@ -92,10 +97,21 @@ class _TExamAddState extends State<TExamAdd> {
               ),
 
               const SizedBox(height: 12.0),
+              TextField(
+                controller: _controllerTime,
+                keyboardType: TextInputType.number,
+                maxLength: 3,
+                decoration: const InputDecoration(
+                  labelText: "Masukan waktu ujian (menit)",
+                ),
+              ),
+
+              const SizedBox(height: 12.0),
               HtmlEditor(
                 controller: _controllerDescription,
                 htmlEditorOptions: const HtmlEditorOptions(
                   hint: "Masukan Deskripsi",
+                  initialText: "<p>Keren</p>"
                 ),
                 htmlToolbarOptions: const HtmlToolbarOptions(
                   toolbarType: ToolbarType.nativeExpandable,
@@ -200,6 +216,7 @@ class _TExamAddState extends State<TExamAdd> {
                 loadingProvider.setLoading(true);
 
                 String name = _controllerName.text.toString();
+                String time = _controllerTime.text.toString();
                 String selectedClass = context.read<TSelectClassProvider>().selectedItem;
                 bool? isRandom = context.read<TIsRandomProvider>().isChecked;
                 Map<String, dynamic> thumbnail = context.read<TThumbnailProvider>().thumbnails;
@@ -233,7 +250,7 @@ class _TExamAddState extends State<TExamAdd> {
                     )
                   );
                 }else{
-                  _tExamService.addExam(name,  selectedClass, description, thumbnail['byte'], thumbnail['extension'], isRandom).then((value) {
+                  _tExamService.addExam(name,  selectedClass, description, thumbnail['byte'], thumbnail['extension'], isRandom, int.parse(time)).then((value) {
                     loadingProvider.setLoading(false);
                     value.fold(
                       (errorMessage) {

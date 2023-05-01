@@ -19,18 +19,7 @@ class TExamService {
     return data;
   }
 
-  Future<Exam> detailExam(int id) async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-
-    _dio.options.headers['authorization'] = 'Bearer ${preferences.getString("token")}';
-    final response = await _dio.get("${Api.tExamDetail}/$id");
-
-    Exam data = Exam.fromJson(response.data['data']);
-
-    return data;
-  }
-
-  Future<Either<String, Exam>> addExam(String txtName, String txtClass, String txtDescription, String thumbnailByte, String thumbnailExtension, bool? isRandom) async {
+  Future<Either<String, Exam>> addExam(String txtName, String txtClass, String txtDescription, String thumbnailByte, String thumbnailExtension, bool? isRandom, int time) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     final data = {
@@ -38,7 +27,8 @@ class TExamService {
       "class": txtClass,
       "description": txtDescription,
       "thumbnail": {"extension": thumbnailExtension, "byte": thumbnailByte},
-      "is_random": isRandom
+      "is_random": isRandom,
+      "time": time,
     };
 
     try {
@@ -69,7 +59,7 @@ class TExamService {
     }
   }
 
-  Future<Either<String, Exam>> editExam(int id, String txtName, String txtClass, String txtDescription, String? thumbnailByte, String? thumbnailExtension, bool? isRandom) async {
+  Future<Either<String, Exam>> editExam(int id, String txtName, String txtClass, String txtDescription, String? thumbnailByte, String? thumbnailExtension, bool? isRandom, int time) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     Map<String, dynamic> data = {};
@@ -78,7 +68,8 @@ class TExamService {
         "name": txtName,
         "class": txtClass,
         "description": txtDescription,
-        "is_random": isRandom
+        "is_random": isRandom,
+        "time": time,
       };
     }else{
       data = {
@@ -86,7 +77,8 @@ class TExamService {
         "class": txtClass,
         "description": txtDescription,
         "thumbnail": {"extension": thumbnailExtension, "byte": thumbnailByte},
-        "is_random": isRandom
+        "is_random": isRandom,
+        "time": time,
       };
     }
 

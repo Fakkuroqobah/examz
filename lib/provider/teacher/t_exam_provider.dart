@@ -41,10 +41,10 @@ class TExamProvider extends ChangeNotifier {
       examClass: data.examClass, 
       name: data.name, 
       status: data.status, 
-      token: data.token, 
       isRandom: data.isRandom, 
       thumbnail: data.thumbnail, 
       description: data.description, 
+      time: data.time,
       createdAt: data.createdAt, 
       updatedAt: data.updatedAt
     );

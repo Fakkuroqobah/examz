@@ -29,6 +29,7 @@ class TExamEdit extends StatefulWidget {
 class _TExamEditState extends State<TExamEdit> {
   final TExamService _tExamService = TExamService();
   final TextEditingController _controllerName = TextEditingController();
+  final TextEditingController _controllerTime = TextEditingController();
   final HtmlEditorController _controllerDescription = HtmlEditorController();
   final Api _api = Api();
 
@@ -36,6 +37,7 @@ class _TExamEditState extends State<TExamEdit> {
   void initState() {
     super.initState();
     _controllerName.text = widget.data.name;
+    _controllerTime.text = widget.data.time.toString();
     
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<TSelectClassProvider>(context, listen: false).setSelectedItem(widget.data.examClass);
@@ -95,6 +97,16 @@ class _TExamEditState extends State<TExamEdit> {
                       }
                     );
                   }
+                ),
+              ),
+
+              const SizedBox(height: 12.0),
+              TextField(
+                controller: _controllerTime,
+                keyboardType: TextInputType.number,
+                maxLength: 3,
+                decoration: const InputDecoration(
+                  labelText: "Masukan waktu ujian (menit)",
                 ),
               ),
 
@@ -212,6 +224,7 @@ class _TExamEditState extends State<TExamEdit> {
                 loadingProvider.setLoading(true);
 
                 String name = _controllerName.text.toString();
+                String time = _controllerTime.text.toString();
                 String selectedClass = context.read<TSelectClassProvider>().selectedItem;
                 bool? isRandom = context.read<TIsRandomProvider>().isChecked;
                 Map<String, dynamic> thumbnail = context.read<TThumbnailProvider>().thumbnails;
@@ -236,7 +249,7 @@ class _TExamEditState extends State<TExamEdit> {
                     )
                   );
                 }else{
-                  _tExamService.editExam(widget.data.id, name,  selectedClass, description, thumbnail['byte'], thumbnail['extension'], isRandom).then((value) {
+                  _tExamService.editExam(widget.data.id, name,  selectedClass, description, thumbnail['byte'], thumbnail['extension'], isRandom, int.parse(time)).then((value) {
                     loadingProvider.setLoading(false);
                     value.fold(
                       (errorMessage) {

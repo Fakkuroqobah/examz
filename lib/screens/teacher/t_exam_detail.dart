@@ -69,13 +69,22 @@ class _TExamDetailState extends State<TExamDetail> {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Image.network(_api.tBaseUrlAsset + widget.data.thumbnail, width: 80.0),
+                            Image.network(_api.tBaseUrlAsset + widget.data.thumbnail, width: 100.0),
         
                             const SizedBox(width: 12.0),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(widget.data.name, style: const TextStyle(fontSize: 18.0)),
+                                SizedBox(
+                                  width: 200.0,
+                                  child: Wrap(
+                                    children: [
+                                      Text(widget.data.name, 
+                                        style: const TextStyle(fontSize: 18.0)
+                                      ),
+                                    ],
+                                  ),
+                                ),
         
                                 const SizedBox(height: 8.0),
                                 Text("Kelas ${widget.data.examClass}",
@@ -87,6 +96,11 @@ class _TExamDetailState extends State<TExamDetail> {
                                   fontSize: 12.0
                                 )),
         
+                                const SizedBox(height: 8.0),
+                                Text("Waktu Ujian : ${widget.data.time} Menit", 
+                                  style: const TextStyle(fontSize: 12.0)
+                                ),
+
                                 const SizedBox(height: 8.0),
                                 Text("Acak Soal : ${widget.data.isRandom == 0 ? "Tidak" : "Iya"}", 
                                   style: const TextStyle(fontSize: 12.0)

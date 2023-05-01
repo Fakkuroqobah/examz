@@ -46,10 +46,10 @@ class Exam {
     required this.examClass,
     required this.name,
     required this.status,
-    required this.token,
     required this.isRandom,
     required this.thumbnail,
     required this.description,
+    required this.time,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -57,11 +57,11 @@ class Exam {
   int id;
   String examClass;
   String name;
-  String? status;
-  String? token;
+  String status;
   int isRandom;
   String thumbnail;
   String? description;
+  int? time;
   DateTime createdAt;
   DateTime updatedAt;
 
@@ -70,10 +70,10 @@ class Exam {
     examClass: json["class"],
     name: json["name"],
     status: json["status"],
-    token: json["token"],
     isRandom: json["is_random"],
     thumbnail: json["thumbnail"],
     description: json["description"],
+    time: json["time"],
     createdAt: DateTime.parse(json["created_at"]),
     updatedAt: DateTime.parse(json["updated_at"]),
   );
@@ -83,10 +83,10 @@ class Exam {
     "class": examClass,
     "name": name,
     "status": status,
-    "token": token,
     "is_random": isRandom,
     "thumbnail": thumbnail,
     "description": description,
+    "time": time,
     "created_at": createdAt.toIso8601String(),
     "updated_at": updatedAt.toIso8601String(),
   };
