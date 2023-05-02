@@ -39,4 +39,18 @@ class Api {
   static const String aGetUser = "$aBaseUrl/get-user";
   static const String aRefresh = "$aBaseUrl/refresh";
   static const String aLogout = "$aBaseUrl/logout";
+
+  static const String aRooms = "$aBaseUrl/rooms";
+  static const String aSchedules = "$aBaseUrl/schedules";
+  static const String aStudentSchedule = "$aBaseUrl/student-schedule";
+  static const String aStudents = "$aBaseUrl/students";
+  static const String aSupervisors = "$aBaseUrl/supervisors";
+  static const String aTeachers = "$aBaseUrl/teachers";
+  
+  static const String aRoomsImport = "$aBaseUrl/import/rooms";
+  static const String aSchedulesImport = "$aBaseUrl/import/schedules";
+  static const String aStudentScheduleImport = "$aBaseUrl/import/student-schedule";
+  static const String aStudentsImport = "$aBaseUrl/import/students";
+  static const String aSupervisorsImport = "$aBaseUrl/import/supervisors";
+  static const String aTeachersImport = "$aBaseUrl/import/teachers";
 }
