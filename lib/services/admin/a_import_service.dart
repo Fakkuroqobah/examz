@@ -11,6 +11,20 @@ import '../../models/admin/a_room_model.dart';
 class AImportService {
   final Dio _dio = Dio();
   
+  Future<List<ARoomModel>> getTeacher() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    _dio.options.headers['authorization'] = 'Bearer ${preferences.getString("token")}';
+    final response = await _dio.get(Api.aRooms);
+    
+    List<ARoomModel> data = <ARoomModel>[];
+    response.data['data'].forEach((val) {
+      data.add(ARoomModel.fromJson(val));
+    });
+
+    return data;
+  }
+
   Future<List<ARoomModel>> getRoom() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
@@ -47,7 +61,7 @@ class AImportService {
       }
 
       return const Left('Terjadi kesalahan');
-    } on DioError catch (e) {
+    } on DioError catch (_) {
       return const Left('Terjadi kesalahan pada server');
     }
   }

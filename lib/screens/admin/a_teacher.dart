@@ -7,7 +7,6 @@ import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:flutter/material.dart';
 
-import '../../models/admin/a_room_model.dart';
 import '../../provider/admin/a_import_provider.dart';
 import '../../provider/loading_provider.dart';
 import '../../services/admin/a_import_service.dart';
@@ -117,6 +116,7 @@ class _ATeacherState extends State<ATeacher> with SingleTickerProviderStateMixin
           body: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Row(
                   children: [
@@ -161,6 +161,8 @@ class _ATeacherState extends State<ATeacher> with SingleTickerProviderStateMixin
                                   )
                                 );
                               });
+                            }else{
+                              loadingProvider.setLoading(false);
                             }
                           },
                           style: const ButtonStyle(
