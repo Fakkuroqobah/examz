@@ -1,9 +1,18 @@
+import 'dart:io';
+
 import 'package:fancy_drawer/fancy_drawer.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:flutter/material.dart';
 
-import '../../services/teacher/t_auth_service.dart';
-import '../auth/login.dart';
-import 'a_teacher.dart';
+import '../../provider/admin/a_import_provider.dart';
+import '../../provider/loading_provider.dart';
+import '../../services/admin/a_auth_service.dart';
+import '../../services/admin/a_import_service.dart';
+import '../../widgets/empty_condition.dart';
+import 'a_data_drawer.dart';
 
 class AStudent extends StatefulWidget {
   const AStudent({super.key});
@@ -13,7 +22,8 @@ class AStudent extends StatefulWidget {
 }
 
 class _AStudentState extends State<AStudent> with SingleTickerProviderStateMixin {
-  final TAuthService _tAuthService = TAuthService();
+  final AAuthService _aAuthService = AAuthService();
+  final AImportService _aImportService = AImportService();
   late FancyDrawerController _controllerDrawer;
 
   @override
@@ -24,6 +34,10 @@ class _AStudentState extends State<AStudent> with SingleTickerProviderStateMixin
       ..addListener(() {
         setState(() {});
       });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<AImportProvider>(context, listen: false).getStudent();
+    });
   }
 
   @override
@@ -39,51 +53,7 @@ class _AStudentState extends State<AStudent> with SingleTickerProviderStateMixin
         backgroundColor: Colors.green,
         drawerPadding: const EdgeInsets.only(left: 26.0),
         controller: _controllerDrawer,
-        drawerItems: <Widget>[
-          GestureDetector(
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const ATeacher()));
-            },
-            child: const Text(
-              "Daftar Guru",
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-
-          GestureDetector(
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const AStudent()));
-            },
-            child: const Text(
-              "Daftar Siswa",
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-
-          GestureDetector(
-            onTap: () {
-              _tAuthService.logout().then((value) {
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => const Login()));
-              });
-            },
-            child: const Text(
-              "Log out",
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
+        drawerItems: dataDrawer(context, _aAuthService),
         child: Scaffold(
           appBar: AppBar(
             title: const Text("Daftar Siswa"),
@@ -101,30 +71,62 @@ class _AStudentState extends State<AStudent> with SingleTickerProviderStateMixin
           body: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Row(
                   children: [
-                    ElevatedButton(
-                      onPressed: () {},
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll<Color>(Colors.green.shade400),
-                        elevation: const MaterialStatePropertyAll(0)
-                      ),
-                      child: const Text("Import Data")
+                    Consumer<LoadingProvider>(
+                      builder: (_, loadingProvider, __) {
+                        return ElevatedButton(
+                          onPressed: () async {
+                            loadingProvider.setLoading(true);
+                            final result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['xls', 'xlsx']);
+                                
+                            if (result != null) {
+                              File file = File(result.files.single.path.toString());
+                              _aImportService.studentsImport(file).then((value) {
+                                loadingProvider.setLoading(false);
+                                value.fold(
+                                  (errorMessage) {
+                                    showTopSnackBar(
+                                      Overlay.of(context),
+                                      CustomSnackBar.error(
+                                        message: errorMessage,
+                                      )
+                                    );
+                                    return;
+                                  },
+                                  (response) {
+                                    context.read<AImportProvider>().addStudent(response);
+                                    showTopSnackBar(
+                                      Overlay.of(context),
+                                      const CustomSnackBar.success(
+                                        message: "Import data berhasil",
+                                      )
+                                    );
+                                    return null;
+                                  },
+                                );
+                              }).catchError((err) {
+                                loadingProvider.setLoading(false);
+                                showTopSnackBar(
+                                  Overlay.of(context),
+                                  const CustomSnackBar.error(
+                                    message: "Terjadi kesalahan",
+                                  )
+                                );
+                              });
+                            }else{
+                              loadingProvider.setLoading(false);
+                            }
+                          },
+                          style: const ButtonStyle(
+                            elevation: MaterialStatePropertyAll(0),
+                          ),
+                          child: Text(loadingProvider.isLoading ? "Loading..." : "Import")
+                        );
+                      }
                     ),
-                  ],
-                ),
-
-                const SizedBox(height: 8.0),
-                Row(
-                  children: [
-                    ElevatedButton(onPressed: () {}, child: const Text("Kelas 1")),
-                    
-                    const SizedBox(width: 8.0),
-                    ElevatedButton(onPressed: () {}, child: const Text("Kelas 2")),
-
-                    const SizedBox(width: 8.0),
-                    ElevatedButton(onPressed: () {}, child: const Text("Kelas 3")),
                   ],
                 ),
 
@@ -134,237 +136,77 @@ class _AStudentState extends State<AStudent> with SingleTickerProviderStateMixin
                     scrollDirection: Axis.vertical,
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
-                      child: DataTable(
-                        showCheckboxColumn: false,
-                        columns: const <DataColumn>[
-                          DataColumn(label: Text("No")),
-                          DataColumn(label: Text("Nama")),
-                          DataColumn(label: Text("Aksi")),
-                        ],
-                        rows:  <DataRow>[
-                          DataRow(
-                            cells: <DataCell>[
-                              const DataCell(Text("1")),
-                              const DataCell(Text("M. Fakkuroqobah")),
-                              DataCell(ElevatedButton(
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (ctx) {
-                                      return AlertDialog(
-                                        title: const Text("Peringatan"),
-                                        content: const Text("Apakah kamu yakin ingin menghapus siswa ini?"),
-                                        actions: <Widget>[
-                                          ElevatedButton(
-                                            style: const ButtonStyle(
-                                              backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
-                                              elevation: MaterialStatePropertyAll(0)
-                                            ),
-                                            onPressed: () {
-                                              
-                                            },
-                                            child: const Text("Iya"),
-                                          ),
-                                          ElevatedButton(
-                                            child: const Text("Tidak"),
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                          )
-                                        ],
+                      child: Consumer<AImportProvider>(
+                        builder: (_, aImportProvider, __) {
+                          int number = 1;
+
+                          if(aImportProvider.isLoading) {
+                            return const Center(child: CircularProgressIndicator());
+                          }
+              
+                          if(aImportProvider.hasError) {
+                            return const Center(child: Text("Terjadi kesalahan pada server"));
+                          }
+              
+                          if(aImportProvider.studentList.isEmpty) {
+                            return const EmptyCondition();
+                          }
+
+                          return DataTable(
+                            showCheckboxColumn: false,
+                            columns: const <DataColumn>[
+                              DataColumn(label: Text("No")),
+                              DataColumn(label: Text("Nama")),
+                              DataColumn(label: Text("Username")),
+                              DataColumn(label: Text("Aksi")),
+                            ],
+                            rows: aImportProvider.studentList.map((el) {
+                              return DataRow(
+                                cells: <DataCell>[
+                                  DataCell(Text("${number++}")),
+                                  DataCell(Text(el.name)),
+                                  DataCell(Text(el.username)),
+                                  DataCell(ElevatedButton(
+                                    onPressed: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (ctx) {
+                                          return AlertDialog(
+                                            title: const Text("Peringatan"),
+                                            content: const Text("Apakah kamu yakin ingin menghapus guru ini?"),
+                                            actions: <Widget>[
+                                              ElevatedButton(
+                                                style: const ButtonStyle(
+                                                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
+                                                  elevation: MaterialStatePropertyAll(0)
+                                                ),
+                                                onPressed: () {
+                                                  
+                                                },
+                                                child: const Text("Iya"),
+                                              ),
+                                              ElevatedButton(
+                                                child: const Text("Tidak"),
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                              )
+                                            ],
+                                          );
+                                        }
                                       );
-                                    }
-                                  );
-                                }, 
-                                style: const ButtonStyle(
-                                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
-                                  elevation: MaterialStatePropertyAll(0)
-                                ),
-                                child: const Text("Hapus")
-                              )),
-                            ]
-                          ),
-                          DataRow(
-                            cells: <DataCell>[
-                              const DataCell(Text("1")),
-                              const DataCell(Text("M. Fakkuroqobah")),
-                              DataCell(ElevatedButton(
-                                onPressed: () {
-                                }, 
-                                style: const ButtonStyle(
-                                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
-                                  elevation: MaterialStatePropertyAll(0)
-                                ),
-                                child: const Text("Hapus")
-                              )),
-                            ]
-                          ),
-                          DataRow(
-                            cells: <DataCell>[
-                              const DataCell(Text("1")),
-                              const DataCell(Text("M. Fakkuroqobah")),
-                              DataCell(ElevatedButton(
-                                onPressed: () {
-                                }, 
-                                style: const ButtonStyle(
-                                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
-                                  elevation: MaterialStatePropertyAll(0)
-                                ),
-                                child: const Text("Hapus")
-                              )),
-                            ]
-                          ),
-                          DataRow(
-                            cells: <DataCell>[
-                              const DataCell(Text("1")),
-                              const DataCell(Text("M. Fakkuroqobah")),
-                              DataCell(ElevatedButton(
-                                onPressed: () {
-                                }, 
-                                style: const ButtonStyle(
-                                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
-                                  elevation: MaterialStatePropertyAll(0)
-                                ),
-                                child: const Text("Hapus")
-                              )),
-                            ]
-                          ),
-                          DataRow(
-                            cells: <DataCell>[
-                              const DataCell(Text("1")),
-                              const DataCell(Text("M. Fakkuroqobah")),
-                              DataCell(ElevatedButton(
-                                onPressed: () {
-                                }, 
-                                style: const ButtonStyle(
-                                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
-                                  elevation: MaterialStatePropertyAll(0)
-                                ),
-                                child: const Text("Hapus")
-                              )),
-                            ]
-                          ),
-                          DataRow(
-                            cells: <DataCell>[
-                              const DataCell(Text("1")),
-                              const DataCell(Text("M. Fakkuroqobah")),
-                              DataCell(ElevatedButton(
-                                onPressed: () {
-                                }, 
-                                style: const ButtonStyle(
-                                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
-                                  elevation: MaterialStatePropertyAll(0)
-                                ),
-                                child: const Text("Hapus")
-                              )),
-                            ]
-                          ),
-                          DataRow(
-                            cells: <DataCell>[
-                              const DataCell(Text("1")),
-                              const DataCell(Text("M. Fakkuroqobah")),
-                              DataCell(ElevatedButton(
-                                onPressed: () {
-                                }, 
-                                style: const ButtonStyle(
-                                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
-                                  elevation: MaterialStatePropertyAll(0)
-                                ),
-                                child: const Text("Hapus")
-                              )),
-                            ]
-                          ),
-                          DataRow(
-                            cells: <DataCell>[
-                              const DataCell(Text("1")),
-                              const DataCell(Text("M. Fakkuroqobah")),
-                              DataCell(ElevatedButton(
-                                onPressed: () {
-                                }, 
-                                style: const ButtonStyle(
-                                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
-                                  elevation: MaterialStatePropertyAll(0)
-                                ),
-                                child: const Text("Hapus")
-                              )),
-                            ]
-                          ),
-                          DataRow(
-                            cells: <DataCell>[
-                              const DataCell(Text("1")),
-                              const DataCell(Text("M. Fakkuroqobah")),
-                              DataCell(ElevatedButton(
-                                onPressed: () {
-                                }, 
-                                style: const ButtonStyle(
-                                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
-                                  elevation: MaterialStatePropertyAll(0)
-                                ),
-                                child: const Text("Hapus")
-                              )),
-                            ]
-                          ),
-                          DataRow(
-                            cells: <DataCell>[
-                              const DataCell(Text("1")),
-                              const DataCell(Text("M. Fakkuroqobah")),
-                              DataCell(ElevatedButton(
-                                onPressed: () {
-                                }, 
-                                style: const ButtonStyle(
-                                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
-                                  elevation: MaterialStatePropertyAll(0)
-                                ),
-                                child: const Text("Hapus")
-                              )),
-                            ]
-                          ),
-                          DataRow(
-                            cells: <DataCell>[
-                              const DataCell(Text("1")),
-                              const DataCell(Text("M. Fakkuroqobah")),
-                              DataCell(ElevatedButton(
-                                onPressed: () {
-                                }, 
-                                style: const ButtonStyle(
-                                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
-                                  elevation: MaterialStatePropertyAll(0)
-                                ),
-                                child: const Text("Hapus")
-                              )),
-                            ]
-                          ),
-                          DataRow(
-                            cells: <DataCell>[
-                              const DataCell(Text("1")),
-                              const DataCell(Text("M. Fakkuroqobah")),
-                              DataCell(ElevatedButton(
-                                onPressed: () {
-                                }, 
-                                style: const ButtonStyle(
-                                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
-                                  elevation: MaterialStatePropertyAll(0)
-                                ),
-                                child: const Text("Hapus")
-                              )),
-                            ]
-                          ),
-                          DataRow(
-                            cells: <DataCell>[
-                              const DataCell(Text("1")),
-                              const DataCell(Text("M. Fakkuroqobah")),
-                              DataCell(ElevatedButton(
-                                onPressed: () {
-                                }, 
-                                style: const ButtonStyle(
-                                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
-                                  elevation: MaterialStatePropertyAll(0)
-                                ),
-                                child: const Text("Hapus")
-                              )),
-                            ]
-                          ),
-                        ],
+                                    }, 
+                                    style: const ButtonStyle(
+                                      backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
+                                      elevation: MaterialStatePropertyAll(0)
+                                    ),
+                                    child: const Text("Hapus")
+                                  )),
+                                ]
+                              );
+                            }).toList(),
+                          );
+                        }
                       ),
                     ),
                   ),

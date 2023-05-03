@@ -14,14 +14,14 @@ import '../../services/admin/a_import_service.dart';
 import '../../widgets/empty_condition.dart';
 import 'a_data_drawer.dart';
 
-class ATeacher extends StatefulWidget {
-  const ATeacher({super.key});
+class ARoom extends StatefulWidget {
+  const ARoom({super.key});
 
   @override
-  State<ATeacher> createState() => _ATeacherState();
+  State<ARoom> createState() => _ARoomState();
 }
 
-class _ATeacherState extends State<ATeacher> with SingleTickerProviderStateMixin {
+class _ARoomState extends State<ARoom> with SingleTickerProviderStateMixin {
   final AAuthService _aAuthService = AAuthService();
   final AImportService _aImportService = AImportService();
   late FancyDrawerController _controllerDrawer;
@@ -36,7 +36,7 @@ class _ATeacherState extends State<ATeacher> with SingleTickerProviderStateMixin
       });
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<AImportProvider>(context, listen: false).getTeacher();
+      Provider.of<AImportProvider>(context, listen: false).getRoom();
     });
   }
 
@@ -56,7 +56,7 @@ class _ATeacherState extends State<ATeacher> with SingleTickerProviderStateMixin
         drawerItems: dataDrawer(context, _aAuthService),
         child: Scaffold(
           appBar: AppBar(
-            title: const Text("Daftar Guru"),
+            title: const Text("Daftar Ruangan"),
             elevation: 0,
             leading: IconButton(
               icon: const Icon(
@@ -84,7 +84,7 @@ class _ATeacherState extends State<ATeacher> with SingleTickerProviderStateMixin
                                 
                             if (result != null) {
                               File file = File(result.files.single.path.toString());
-                              _aImportService.teachersImport(file).then((value) {
+                              _aImportService.roomsImport(file).then((value) {
                                 loadingProvider.setLoading(false);
                                 value.fold(
                                   (errorMessage) {
@@ -97,7 +97,7 @@ class _ATeacherState extends State<ATeacher> with SingleTickerProviderStateMixin
                                     return;
                                   },
                                   (response) {
-                                    context.read<AImportProvider>().addTeacher(response);
+                                    context.read<AImportProvider>().addRoom(response);
                                     showTopSnackBar(
                                       Overlay.of(context),
                                       const CustomSnackBar.success(
@@ -148,7 +148,7 @@ class _ATeacherState extends State<ATeacher> with SingleTickerProviderStateMixin
                             return const Center(child: Text("Terjadi kesalahan pada server"));
                           }
               
-                          if(aImportProvider.teacherList.isEmpty) {
+                          if(aImportProvider.roomList.isEmpty) {
                             return const EmptyCondition();
                           }
 
@@ -157,15 +157,13 @@ class _ATeacherState extends State<ATeacher> with SingleTickerProviderStateMixin
                             columns: const <DataColumn>[
                               DataColumn(label: Text("No")),
                               DataColumn(label: Text("Nama")),
-                              DataColumn(label: Text("Username")),
                               DataColumn(label: Text("Aksi")),
                             ],
-                            rows: aImportProvider.teacherList.map((el) {
+                            rows: aImportProvider.roomList.map((el) {
                               return DataRow(
                                 cells: <DataCell>[
                                   DataCell(Text("${number++}")),
                                   DataCell(Text(el.name)),
-                                  DataCell(Text(el.username)),
                                   DataCell(ElevatedButton(
                                     onPressed: () {
                                       showDialog(

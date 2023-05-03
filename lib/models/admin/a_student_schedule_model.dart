@@ -6,40 +6,116 @@ String aStudentScheduleModelToJson(List<AStudentScheduleModel> data) => json.enc
 
 class AStudentScheduleModel {
   int id;
-  int scheduleId;
+  int roomId;
   int studentId;
   int status;
   int block;
-  dynamic startTime;
-  dynamic endTime;
+  DateTime? startTime;
+  DateTime? endTime;
+  Room room;
+  Student student;
 
   AStudentScheduleModel({
     required this.id,
-    required this.scheduleId,
+    required this.roomId,
     required this.studentId,
     required this.status,
     required this.block,
     this.startTime,
     this.endTime,
+    required this.room,
+    required this.student,
   });
 
   factory AStudentScheduleModel.fromJson(Map<String, dynamic> json) => AStudentScheduleModel(
     id: json["id"],
-    scheduleId: json["schedule_id"],
+    roomId: json["room_id"],
     studentId: json["student_id"],
     status: json["status"],
     block: json["block"],
-    startTime: json["start_time"],
-    endTime: json["end_time"],
+    startTime: json["start_time"] == null ? null : DateTime.parse(json["start_time"]),
+    endTime: json["end_time"] == null ? null : DateTime.parse(json["end_time"]),
+    room: Room.fromJson(json["room"]),
+    student: Student.fromJson(json["student"]),
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
-    "schedule_id": scheduleId,
+    "room_id": roomId,
     "student_id": studentId,
     "status": status,
     "block": block,
-    "start_time": startTime,
-    "end_time": endTime,
+    "start_time": startTime?.toIso8601String(),
+    "end_time": endTime?.toIso8601String(),
+    "room": room.toJson(),
+    "student": student.toJson(),
+  };
+}
+
+class Room {
+  int id;
+  String name;
+  DateTime createdAt;
+  DateTime updatedAt;
+
+  Room({
+    required this.id,
+    required this.name,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+
+  factory Room.fromJson(Map<String, dynamic> json) => Room(
+    id: json["id"],
+    name: json["name"],
+    createdAt: DateTime.parse(json["created_at"]),
+    updatedAt: DateTime.parse(json["updated_at"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "name": name,
+    "created_at": createdAt.toIso8601String(),
+    "updated_at": updatedAt.toIso8601String(),
+  };
+}
+
+class Student {
+  int id;
+  String name;
+  String studentClass;
+  String username;
+  String role;
+  DateTime createdAt;
+  DateTime updatedAt;
+
+  Student({
+    required this.id,
+    required this.name,
+    required this.studentClass,
+    required this.username,
+    required this.role,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+
+  factory Student.fromJson(Map<String, dynamic> json) => Student(
+    id: json["id"],
+    name: json["name"],
+    studentClass: json["class"],
+    username: json["username"],
+    role: json["role"],
+    createdAt: DateTime.parse(json["created_at"]),
+    updatedAt: DateTime.parse(json["updated_at"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "name": name,
+    "class": studentClass,
+    "username": username,
+    "role": role,
+    "created_at": createdAt.toIso8601String(),
+    "updated_at": updatedAt.toIso8601String(),
   };
 }

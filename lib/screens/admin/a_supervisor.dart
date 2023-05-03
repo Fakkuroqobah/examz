@@ -14,14 +14,14 @@ import '../../services/admin/a_import_service.dart';
 import '../../widgets/empty_condition.dart';
 import 'a_data_drawer.dart';
 
-class ATeacher extends StatefulWidget {
-  const ATeacher({super.key});
+class ASupervisor extends StatefulWidget {
+  const ASupervisor({super.key});
 
   @override
-  State<ATeacher> createState() => _ATeacherState();
+  State<ASupervisor> createState() => _ASupervisorState();
 }
 
-class _ATeacherState extends State<ATeacher> with SingleTickerProviderStateMixin {
+class _ASupervisorState extends State<ASupervisor> with SingleTickerProviderStateMixin {
   final AAuthService _aAuthService = AAuthService();
   final AImportService _aImportService = AImportService();
   late FancyDrawerController _controllerDrawer;
@@ -36,7 +36,7 @@ class _ATeacherState extends State<ATeacher> with SingleTickerProviderStateMixin
       });
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<AImportProvider>(context, listen: false).getTeacher();
+      Provider.of<AImportProvider>(context, listen: false).getSupervisor();
     });
   }
 
@@ -56,7 +56,7 @@ class _ATeacherState extends State<ATeacher> with SingleTickerProviderStateMixin
         drawerItems: dataDrawer(context, _aAuthService),
         child: Scaffold(
           appBar: AppBar(
-            title: const Text("Daftar Guru"),
+            title: const Text("Daftar Pengawas"),
             elevation: 0,
             leading: IconButton(
               icon: const Icon(
@@ -84,7 +84,7 @@ class _ATeacherState extends State<ATeacher> with SingleTickerProviderStateMixin
                                 
                             if (result != null) {
                               File file = File(result.files.single.path.toString());
-                              _aImportService.teachersImport(file).then((value) {
+                              _aImportService.supervisorsImport(file).then((value) {
                                 loadingProvider.setLoading(false);
                                 value.fold(
                                   (errorMessage) {
@@ -97,7 +97,7 @@ class _ATeacherState extends State<ATeacher> with SingleTickerProviderStateMixin
                                     return;
                                   },
                                   (response) {
-                                    context.read<AImportProvider>().addTeacher(response);
+                                    context.read<AImportProvider>().addSupervisor(response);
                                     showTopSnackBar(
                                       Overlay.of(context),
                                       const CustomSnackBar.success(
@@ -148,7 +148,7 @@ class _ATeacherState extends State<ATeacher> with SingleTickerProviderStateMixin
                             return const Center(child: Text("Terjadi kesalahan pada server"));
                           }
               
-                          if(aImportProvider.teacherList.isEmpty) {
+                          if(aImportProvider.supervisorList.isEmpty) {
                             return const EmptyCondition();
                           }
 
@@ -160,7 +160,7 @@ class _ATeacherState extends State<ATeacher> with SingleTickerProviderStateMixin
                               DataColumn(label: Text("Username")),
                               DataColumn(label: Text("Aksi")),
                             ],
-                            rows: aImportProvider.teacherList.map((el) {
+                            rows: aImportProvider.supervisorList.map((el) {
                               return DataRow(
                                 cells: <DataCell>[
                                   DataCell(Text("${number++}")),
