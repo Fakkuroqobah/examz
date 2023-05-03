@@ -40,6 +40,9 @@ class Api {
   static const String aRefresh = "$aBaseUrl/refresh";
   static const String aLogout = "$aBaseUrl/logout";
 
+  static const String aExam = "$aBaseUrl/exam";
+  static const String aTrigger = "$aBaseUrl/exam/trigger";
+
   static const String aRooms = "$aBaseUrl/rooms";
   static const String aSchedules = "$aBaseUrl/schedules";
   static const String aStudentSchedule = "$aBaseUrl/student-schedule";

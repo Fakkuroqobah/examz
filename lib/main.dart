@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import 'provider/admin/a_exam_provider.dart';
 import 'provider/admin/a_import_provider.dart';
 import 'provider/auth/o_select_role_provider.dart';
 import 'provider/loading_provider.dart';
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<TIsCorrectAnswerProvider>(create: (_) => TIsCorrectAnswerProvider()),
         
         ChangeNotifierProvider<AImportProvider>(create: (_) => AImportProvider()),
+        ChangeNotifierProvider<AExamProvider>(create: (_) => AExamProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

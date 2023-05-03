@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../services/admin/a_auth_service.dart';
 import '../auth/login.dart';
+import 'a_exam.dart';
 import 'a_room.dart';
 import 'a_schedule.dart';
 import 'a_student.dart';
@@ -87,6 +88,20 @@ List<Widget> dataDrawer(BuildContext context, AAuthService aAuthService) {
       },
       child: const Text(
         "Daftar Jadwal Siswa",
+        style: TextStyle(
+          fontSize: 18,
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ),
+
+    GestureDetector(
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const AExam()));
+      },
+      child: const Text(
+        "Daftar Ujian",
         style: TextStyle(
           fontSize: 18,
           color: Colors.white,

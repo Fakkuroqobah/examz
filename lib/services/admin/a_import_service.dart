@@ -257,7 +257,7 @@ class AImportService {
       }
 
       return const Left('Terjadi kesalahan');
-    } on DioError catch (err) {
+    } on DioError catch (_) {
       return const Left('Terjadi kesalahan pada server');
     }
   }
