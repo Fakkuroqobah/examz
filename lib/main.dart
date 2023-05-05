@@ -1,3 +1,4 @@
+import 'package:examz/provider/supervisor/p_exam_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -41,6 +42,7 @@ class MyApp extends StatelessWidget {
         
         ChangeNotifierProvider<AImportProvider>(create: (_) => AImportProvider()),
         ChangeNotifierProvider<AExamProvider>(create: (_) => AExamProvider()),
+        ChangeNotifierProvider<PExamProvider>(create: (_) => PExamProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

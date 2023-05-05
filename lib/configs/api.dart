@@ -33,6 +33,11 @@ class Api {
   static const String pGetUser = "$pBaseUrl/get-user";
   static const String pRefresh = "$pBaseUrl/refresh";
   static const String pLogout = "$pBaseUrl/logout";
+  
+  static const String pExam = "$pBaseUrl/exam";
+  static const String pStart = "$pBaseUrl/exam/start";
+  static const String pStop = "$pBaseUrl/exam/stop";
+
 
   // ADMIN
   static const String aLogin = "$aBaseUrl/login";
