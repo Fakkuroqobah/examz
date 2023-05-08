@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../configs/api.dart';
 import '../../models/student/s_exam_model.dart';
-import '../../models/supervisor/p_exam_model.dart';
+import '../../models/student/s_question_model.dart';
 
 class SExamService {
   final Dio _dio = Dio();
@@ -37,19 +37,34 @@ class SExamService {
     return data;
   }
 
-  Future<Either<String, PExamModel>> triggerExam(int id) async {
+  Future<Either<String, List<SQuestionModel>>> token(int id, String token) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    final data = {
+      "token": token,
+    };
+
     try {
       _dio.options.headers['authorization'] = 'Bearer ${preferences.getString("token")}';
       _dio.options.headers['accept'] = 'application/json';
-      final response = await _dio.post("${Api.pStart}/$id");
+      final response = await _dio.post("${Api.sToken}/$id", 
+        data: data
+      );
 
       if (response.statusCode == 200) {
-        return Right(PExamModel.fromJson(response.data['data']));
+        List<SQuestionModel> data = <SQuestionModel>[];
+        response.data['data']['question'].forEach((val) {
+          data.add(SQuestionModel.fromJson(val));
+        });
+
+        return Right(data);
+      }
+      return const Left('Terjadi kesalahan');
+    } on DioError catch (err) {
+      if(err.response?.statusCode == 404) {
+        return const Left('Token yang kamu masukan salah');
       }
 
-      return const Left('Terjadi kesalahan');
-    } on DioError catch (_) {
       return const Left('Terjadi kesalahan pada server');
     }
   }

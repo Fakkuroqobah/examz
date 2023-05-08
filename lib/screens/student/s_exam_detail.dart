@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:provider/provider.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 import '../../configs/api.dart';
 import '../../configs/utils.dart';
 import '../../models/student/s_exam_model.dart';
 
+import '../../provider/loading_provider.dart';
+import '../../provider/student/s_exam_provider.dart';
+import '../../services/student/s_exam_service.dart';
 import 's_exam_question.dart';
 
 class SExamDetail extends StatefulWidget {
@@ -18,6 +24,7 @@ class SExamDetail extends StatefulWidget {
 
 class _SExamDetailState extends State<SExamDetail> {
   final Api _api = Api();
+  final SExamService _sExamService = SExamService();
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
   final TextEditingController txtToken = TextEditingController();
   
@@ -103,7 +110,11 @@ class _SExamDetailState extends State<SExamDetail> {
                             "body": Style(
                               padding: const EdgeInsets.all(0),
                               margin: const EdgeInsets.all(0),
-                            )
+                            ),
+                            "p": Style(
+                              padding: const EdgeInsets.all(0),
+                              margin: const EdgeInsets.all(0),
+                            ),
                           }
                         )
                         : Container(),
@@ -125,9 +136,6 @@ class _SExamDetailState extends State<SExamDetail> {
                               title: const Text('Token Ujian'),
                               content: TextField(
                                 onChanged: (value) {
-                                  setState(() {
-                                    
-                                  });
                                 },
                                 controller: txtToken,
                                 decoration: const InputDecoration(hintText: "Masukan Token Ujian"),
@@ -140,20 +148,56 @@ class _SExamDetailState extends State<SExamDetail> {
                                   ),
                                   child: const Text('Batal'),
                                   onPressed: () {
-                                    setState(() {
-                                      Navigator.pop(context);
-                                    });
+                                    Navigator.pop(context);
                                   },
                                 ),
-                                ElevatedButton(
-                                  style: const ButtonStyle(
-                                    backgroundColor: MaterialStatePropertyAll<Color>(Colors.green),
-                                    elevation: MaterialStatePropertyAll(0)
-                                  ),
-                                  child: const Text('Mulai Ujian'),
-                                  onPressed: () {
-                                    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const SExamQuestion()));
-                                  },
+                                Consumer<LoadingProvider>(
+                                  builder: (_, loadingProvider, __) {
+                                    return ElevatedButton(
+                                      style: const ButtonStyle(
+                                        backgroundColor: MaterialStatePropertyAll<Color>(Colors.green),
+                                        elevation: MaterialStatePropertyAll(0)
+                                      ),
+                                      child: Text((loadingProvider.isLoading) ? "Loading..." : 'Mulai Ujian'),
+                                      onPressed: () {
+                                        loadingProvider.setLoading(true);
+
+                                        _sExamService.token(widget.data.id, txtToken.text).then((value) {
+                                          loadingProvider.setLoading(false);
+                                          value.fold(
+                                            (errorMessage) {
+                                              showTopSnackBar(
+                                                Overlay.of(context),
+                                                CustomSnackBar.error(
+                                                  message: errorMessage,
+                                                )
+                                              );
+                                              return;
+                                            },
+                                            (response) {
+                                              context.read<SExamProvider>().token(response);
+                                              showTopSnackBar(
+                                                Overlay.of(context),
+                                                const CustomSnackBar.success(
+                                                  message: "Selamat Ujian",
+                                                )
+                                              );
+                                              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const SExamQuestion()));
+                                              return null;
+                                            },
+                                          );
+                                        }).catchError((err) {
+                                          loadingProvider.setLoading(false);
+                                          showTopSnackBar(
+                                            Overlay.of(context),
+                                            const CustomSnackBar.error(
+                                              message: "Terjadi kesalahan",
+                                            )
+                                          );
+                                        });
+                                      },
+                                    );
+                                  }
                                 ),
                               ],
                             );

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../models/student/s_question_model.dart';
+import '../../provider/student/s_exam_provider.dart';
 import 's_exam.dart';
 import 's_exam_question_body.dart';
 
@@ -12,14 +15,20 @@ class SExamQuestion extends StatefulWidget {
 
 class _SExamQuestionState extends State<SExamQuestion> {
   final PageController _pageController = PageController(initialPage: 0);
-
-  int _activePage = 0;
+  List<SQuestionModel> sqm = [];
   
-  final List<Widget> _pages = [
-    const SExamQuestionBody(title: "Apakah kamu tau",),
-    const SExamQuestionBody(title: "Kucing adalah",),
-    const SExamQuestionBody(title: "Hewan terimut di dunia",),
-  ];
+  final List<Widget> _pages = [];
+
+  @override
+  void initState() {
+    super.initState();
+    sqm = Provider.of<SExamProvider>(context, listen: false).questionList;
+    List initAnswer = Provider.of<SExamProvider>(context, listen: false).questionAnswer;
+    for (int i = 0; i < sqm.length; i++) {
+      _pages.add(SExamQuestionBody(data: sqm[i]));
+      initAnswer.add([sqm[i].id, 0]);
+    }
+  }
 
   @override
   void dispose() {
@@ -41,7 +50,11 @@ class _SExamQuestionState extends State<SExamQuestion> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("No. ${_activePage + 1}", style: const TextStyle(color: Colors.black54, fontSize: 18.0)),
+                Consumer<SExamProvider>(
+                  builder: (_, sExamProvider, __) {
+                    return Text("No. ${sExamProvider.activePage + 1}", style: const TextStyle(color: Colors.black54, fontSize: 18.0));
+                  }
+                ),
                 GestureDetector(
                   onTap: () {
                     showModalBottomSheet(
@@ -56,16 +69,8 @@ class _SExamQuestionState extends State<SExamQuestion> {
                                 Wrap(
                                   alignment: WrapAlignment.spaceBetween,
                                   children: <Widget>[
-                                    btnNumber(1),
-                                    btnNumber(2),
-                                    btnNumber(3),
-                                    btnNumber(4),
-                                    btnNumber(5),
-                                    btnNumber(6),
-                                    btnNumber(7),
-                                    btnNumber(8),
-                                    btnNumber(9),
-                                    btnNumber(10),
+                                    for (int i = 0; i < sqm.length; i++)
+                                      btnNumber(i + 1),
                                   ],
                                 ),
                                 SizedBox(
@@ -122,17 +127,19 @@ class _SExamQuestionState extends State<SExamQuestion> {
           ),
 
           Expanded(
-            child: PageView.builder(
-              controller: _pageController,
-              onPageChanged: (int page) {
-                setState(() {
-                  _activePage = page;
-                });
-              },
-              itemCount: _pages.length,
-              itemBuilder: (BuildContext context, int index) {
-                return _pages[index % _pages.length];
-              },
+            child: Consumer<SExamProvider>(
+              builder: (_, sExamProvider, __) {
+                return PageView.builder(
+                  controller: _pageController,
+                  onPageChanged: (int page) {
+                    sExamProvider.setActivePage(page);
+                  },
+                  itemCount: _pages.length,
+                  itemBuilder: (_, int index) {
+                    return _pages[index % _pages.length];
+                  },
+                );
+              }
             ),
           ),
         ],
@@ -143,11 +150,10 @@ class _SExamQuestionState extends State<SExamQuestion> {
   OutlinedButton btnNumber(int no) {
     return OutlinedButton(
       onPressed: () {
-        setState(() {
-          _pageController.animateToPage(no - 1,
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeIn);
-        });
+        Provider.of<SExamProvider>(context, listen: false).setActivePage(no - 1);
+        _pageController.animateToPage(no - 1,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeIn);
       },
       style: OutlinedButton.styleFrom(
         backgroundColor: Colors.white,
