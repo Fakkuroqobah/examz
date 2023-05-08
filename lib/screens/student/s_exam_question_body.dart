@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:provider/provider.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 import '../../models/student/s_question_model.dart';
 import '../../provider/student/s_exam_provider.dart';
+import '../../services/student/s_exam_service.dart';
 
 class SExamQuestionBody extends StatefulWidget {
   const SExamQuestionBody({super.key, required this.data});
@@ -15,6 +18,8 @@ class SExamQuestionBody extends StatefulWidget {
 }
 
 class _SExamQuestionBodyState extends State<SExamQuestionBody> {
+  final SExamService _sExamService = SExamService();
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,6 +76,29 @@ class _SExamQuestionBodyState extends State<SExamQuestionBody> {
           return OutlinedButton(
             onPressed: () {
               sExamProvider.answer(widget.data.id, value);
+              _sExamService.answer(widget.data.id, value.toString()).then((value) {
+                value.fold(
+                  (errorMessage) {
+                    showTopSnackBar(
+                      Overlay.of(context),
+                      CustomSnackBar.error(
+                        message: errorMessage,
+                      )
+                    );
+                    return;
+                  },
+                  (response) {
+                    return;
+                  },
+                );
+              }).catchError((err) {
+                showTopSnackBar(
+                  Overlay.of(context),
+                  const CustomSnackBar.error(
+                    message: "Terjadi kesalahan dalam menyimpan jawaban soal",
+                  )
+                );
+              });
             },
             style: OutlinedButton.styleFrom(
               backgroundColor: (sExamProvider.answerChecked(widget.data.id) == value) ? Colors.green : Colors.white,

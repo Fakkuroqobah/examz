@@ -82,4 +82,30 @@ class SExamService {
       return const Left('Terjadi kesalahan pada server');
     }
   }
+
+  Future<Either<String, String>> answer(int id, String answer) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    final data = {
+      "question_id": id,
+      "answer": answer,
+    };
+
+    print(data);
+
+    try {
+      _dio.options.headers['authorization'] = 'Bearer ${preferences.getString("token")}';
+      _dio.options.headers['accept'] = 'application/json';
+      final response = await _dio.post(Api.sAnswer, 
+        data: data
+      );
+
+      if (response.statusCode == 200) {
+        return const Right("Berhasil");
+      }
+      return const Left('Terjadi kesalahan');
+    } on DioError catch (_) {
+      return const Left('Terjadi kesalahan pada server');
+    }
+  }
 }
