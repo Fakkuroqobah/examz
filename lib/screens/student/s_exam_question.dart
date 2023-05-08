@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/student/s_exam_model.dart';
 import '../../models/student/s_question_model.dart';
 import '../../provider/student/s_exam_provider.dart';
 import 's_exam.dart';
 import 's_exam_question_body.dart';
 
 class SExamQuestion extends StatefulWidget {
-  const SExamQuestion({super.key});
+  const SExamQuestion({super.key, required this.data});
+
+  final Exam data;
 
   @override
   State<SExamQuestion> createState() => _SExamQuestionState();
@@ -40,7 +43,7 @@ class _SExamQuestionState extends State<SExamQuestion> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Ujian Bahasa Indonesia"),
+        title: Text(widget.data.name),
         elevation: 0,
       ),
       body: Column(
@@ -147,25 +150,29 @@ class _SExamQuestionState extends State<SExamQuestion> {
     );
   }
 
-  OutlinedButton btnNumber(int no) {
-    return OutlinedButton(
-      onPressed: () {
-        Provider.of<SExamProvider>(context, listen: false).setActivePage(no - 1);
-        _pageController.animateToPage(no - 1,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeIn);
-      },
-      style: OutlinedButton.styleFrom(
-        backgroundColor: Colors.white,
-        alignment: Alignment.center,
-        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),
-        ),
-      ),
-      child: Text(no.toString(),
-        style: const TextStyle(
-          color: Colors.black54,
-        ),
-      ),
+  Widget btnNumber(int no) {
+    return Consumer<SExamProvider>(
+      builder: (_, sExamProvider, __) {
+        return OutlinedButton(
+          onPressed: () {
+            sExamProvider.setActivePage(no - 1);
+            _pageController.animateToPage(no - 1,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeIn);
+          },
+          style: OutlinedButton.styleFrom(
+            backgroundColor: (sExamProvider.questionAnswer[no - 1][1] != 0) ? Colors.green : Colors.white,
+            alignment: Alignment.center,
+            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),
+            ),
+          ),
+          child: Text(no.toString(),
+            style: TextStyle(
+              color: (sExamProvider.questionAnswer[no - 1][1] != 0) ? Colors.white : Colors.black54,
+            ),
+          ),
+        );
+      }
     );
   }
 }

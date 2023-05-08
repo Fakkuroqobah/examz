@@ -60,9 +60,23 @@ class SExamService {
         return Right(data);
       }
       return const Left('Terjadi kesalahan');
-    } on DioError catch (err) {
-      if(err.response?.statusCode == 404) {
-        return const Left('Token yang kamu masukan salah');
+    } on DioError catch (e) {
+      if (e.response != null) {
+        if(e.response!.statusCode == 422) {
+          String errMsg = "";
+          int first = 0;
+          e.response!.data['errors'].forEach((key, val) {
+            if(first == 0) {errMsg += val[0];}
+            else {errMsg += val[0] + "\n";}
+            first++;
+          });
+
+          return Left(errMsg);
+        }
+
+        if(e.response!.statusCode == 404) {
+          return const Left('Token yang kamu masukan salah');
+        }
       }
 
       return const Left('Terjadi kesalahan pada server');

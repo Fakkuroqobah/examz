@@ -9,7 +9,7 @@ class SExamProvider extends ChangeNotifier {
   List<SExamModel> _examFinishedList = [];
   
   final List<SQuestionModel> _questionList = [];
-  List _questionAnswer = [];
+  final List _questionAnswer = [];
   int _activePage = 0;
 
   bool _isLoading = false;

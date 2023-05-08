@@ -36,14 +36,26 @@ class _SExamQuestionBodyState extends State<SExamQuestionBody> {
                   "p": Style(
                     padding: const EdgeInsets.all(0),
                     margin: const EdgeInsets.all(0),
+                    color: Colors.black54
                   ),
                 }
               ),
 
               const SizedBox(height: 22.0),
-
               for (int i = 0; i < widget.data.answerOption.length; i++)
                 btnAnswer(widget.data.answerOption[i].subject, i + 1),
+
+              const SizedBox(height: 22.0),
+              ElevatedButton(
+                style: const ButtonStyle(
+                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.grey),
+                  elevation: MaterialStatePropertyAll(0)
+                ),
+                child: const Text('Hapus jawaban soal ini'),
+                onPressed: () {
+                  Provider.of<SExamProvider>(context, listen: false).answer(widget.data.id, 0);
+                },
+              )
             ],
           ),
         ),
@@ -77,6 +89,7 @@ class _SExamQuestionBodyState extends State<SExamQuestionBody> {
                 "p": Style(
                   padding: const EdgeInsets.all(0),
                   margin: const EdgeInsets.all(0),
+                  color: (sExamProvider.answerChecked(widget.data.id) == value) ? Colors.white : Colors.black54
                 ),
               }
             ),

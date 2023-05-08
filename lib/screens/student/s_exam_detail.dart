@@ -103,6 +103,7 @@ class _SExamDetailState extends State<SExamDetail> {
                           ],
                         ),
         
+                        const SizedBox(height: 8.0),
                         exam.description != null ?
                         Html(
                           data: exam.description,
@@ -134,11 +135,10 @@ class _SExamDetailState extends State<SExamDetail> {
                           builder: (context) {
                             return AlertDialog(
                               title: const Text('Token Ujian'),
-                              content: TextField(
-                                onChanged: (value) {
-                                },
+                              content: TextFormField(
                                 controller: txtToken,
                                 decoration: const InputDecoration(hintText: "Masukan Token Ujian"),
+                                maxLength: 5,
                               ),
                               actions: <Widget>[
                                 ElevatedButton(
@@ -182,7 +182,7 @@ class _SExamDetailState extends State<SExamDetail> {
                                                   message: "Selamat Ujian",
                                                 )
                                               );
-                                              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const SExamQuestion()));
+                                              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => SExamQuestion(data: exam)), (_) => false);
                                               return null;
                                             },
                                           );
