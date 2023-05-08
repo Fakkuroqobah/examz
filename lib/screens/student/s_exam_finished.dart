@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../configs/api.dart';
-import '../../models/teacher/t_exam_model.dart';
-import '../../services/teacher/t_exam_service.dart';
+import '../../models/student/s_exam_model.dart';
+import '../../provider/student/s_exam_provider.dart';
 
+import '../../widgets/empty_condition.dart';
 import '../../widgets/s_exam_card.dart';
 
 class SExamFinished extends StatefulWidget {
@@ -14,18 +15,18 @@ class SExamFinished extends StatefulWidget {
 }
 
 class _SExamFinishedState extends State<SExamFinished> {
-  final Api _api = Api();
-  final TExamService _tExamService = TExamService();
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
   
   Future<void> _refresh() async {
-    setState(() {});
+    Provider.of<SExamProvider>(context, listen: false).getExamFinished();
   }
   
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _refreshIndicatorKey.currentState?.show());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<SExamProvider>(context, listen: false).getExamFinished();
+    });
   }
 
   @override
@@ -34,47 +35,45 @@ class _SExamFinishedState extends State<SExamFinished> {
       body: RefreshIndicator(
         key: _refreshIndicatorKey,
         onRefresh: _refresh,
-        child: FutureBuilder(
-          future: _tExamService.getExam(),
-          builder: (BuildContext ctx, AsyncSnapshot<TExamModel> snapshot) {
-            if (snapshot.hasError) {
-              return Center(child: Text("Something wrong with message: ${snapshot.error.toString()}"));
-            } else if (snapshot.connectionState == ConnectionState.done) {
-              List<Exam>? exam = snapshot.data?.examLaunched;
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 8.0),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Text("Jumlah ujian: ${snapshot.data?.sumExamLaunched}", 
-                      style: const TextStyle(fontSize: 18.0),
-                    ),
-                  ),
-                  
-                  const SizedBox(height: 8.0),
-                  Expanded(child: _buildListView(context, exam)),
-                ],
-              );
-            } else {
+        child: Consumer<SExamProvider>(
+          builder: (_, sExam, __) {
+            if(sExam.isLoading) {
               return const Center(child: CircularProgressIndicator());
             }
-          }
+          
+            if(sExam.hasError) {
+              return const Center(child: Text("Terjadi kesalahan pada server"));
+            }
+            
+            return (sExam.examFinishedList.isNotEmpty) ? Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                const SizedBox(height: 8.0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                  child: Text("Jumlah ujian: ${sExam.examFinishedList.length}", 
+                    style: const TextStyle(fontSize: 16.0, color: Colors.grey),
+                  ),
+                ),
+                const Divider(),
+                
+                const SizedBox(height: 8.0),
+                Expanded(child: _buildListView(context, sExam.examFinishedList)),
+              ],
+            ) : const EmptyCondition();
+          },
         ),
-      )
+      ),
     );
   }
 
-  ListView _buildListView(context, List<Exam>? exam) {
+  ListView _buildListView(context, List<SExamModel>? exam) {
     return ListView.builder(
       itemCount: exam?.length,
       itemBuilder: (ctx, index) {
-        Exam data = exam![index];
-        
-        String src = _api.tBaseUrlAsset + data.thumbnail;
-        data.thumbnail = src;
+        SExamModel data = exam![index];
 
-        return SExamCard(exam: data, type: "finished");
+        return SExamCard(exam: data);
       },
     );
   }

@@ -10,8 +10,8 @@ class AScheduleModel {
   int supervisorId;
   int examId;
   String? token;
-  DateTime createdAt;
-  DateTime updatedAt;
+  DateTime? createdAt;
+  DateTime? updatedAt;
   Room room;
   Supervisor supervisor;
   Exam exam;
@@ -35,8 +35,8 @@ class AScheduleModel {
     supervisorId: json["supervisor_id"],
     examId: json["exam_id"],
     token: json["token"],
-    createdAt: DateTime.parse(json["created_at"]),
-    updatedAt: DateTime.parse(json["updated_at"]),
+    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
     room: Room.fromJson(json["room"]),
     supervisor: Supervisor.fromJson(json["supervisor"]),
     exam: Exam.fromJson(json["exam"]),
@@ -48,8 +48,8 @@ class AScheduleModel {
     "supervisor_id": supervisorId,
     "exam_id": examId,
     "token": token,
-    "created_at": createdAt.toIso8601String(),
-    "updated_at": updatedAt.toIso8601String(),
+    "created_at": createdAt?.toIso8601String(),
+    "updated_at": updatedAt?.toIso8601String(),
     "room": room.toJson(),
     "supervisor": supervisor.toJson(),
     "exam": exam.toJson(),
@@ -63,10 +63,10 @@ class Exam {
   String status;
   int isRandom;
   String thumbnail;
-  String description;
+  String? description;
   int time;
-  DateTime createdAt;
-  DateTime updatedAt;
+  DateTime? createdAt;
+  DateTime? updatedAt;
 
   Exam({
     required this.id,
@@ -90,8 +90,8 @@ class Exam {
     thumbnail: json["thumbnail"],
     description: json["description"],
     time: json["time"],
-    createdAt: DateTime.parse(json["created_at"]),
-    updatedAt: DateTime.parse(json["updated_at"]),
+    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -103,16 +103,16 @@ class Exam {
     "thumbnail": thumbnail,
     "description": description,
     "time": time,
-    "created_at": createdAt.toIso8601String(),
-    "updated_at": updatedAt.toIso8601String(),
+    "created_at": createdAt?.toIso8601String(),
+    "updated_at": updatedAt?.toIso8601String(),
   };
 }
 
 class Room {
   int id;
   String name;
-  DateTime createdAt;
-  DateTime updatedAt;
+  DateTime? createdAt;
+  DateTime? updatedAt;
 
   Room({
     required this.id,
@@ -124,15 +124,15 @@ class Room {
   factory Room.fromJson(Map<String, dynamic> json) => Room(
     id: json["id"],
     name: json["name"],
-    createdAt: DateTime.parse(json["created_at"]),
-    updatedAt: DateTime.parse(json["updated_at"]),
+    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
     "name": name,
-    "created_at": createdAt.toIso8601String(),
-    "updated_at": updatedAt.toIso8601String(),
+    "created_at": createdAt?.toIso8601String(),
+    "updated_at": updatedAt?.toIso8601String(),
   };
 }
 
@@ -141,8 +141,8 @@ class Supervisor {
   String name;
   String username;
   String role;
-  DateTime createdAt;
-  DateTime updatedAt;
+  DateTime? createdAt;
+  DateTime? updatedAt;
 
   Supervisor({
     required this.id,
@@ -158,8 +158,8 @@ class Supervisor {
     name: json["name"],
     username: json["username"],
     role: json["role"],
-    createdAt: DateTime.parse(json["created_at"]),
-    updatedAt: DateTime.parse(json["updated_at"]),
+    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -167,7 +167,7 @@ class Supervisor {
     "name": name,
     "username": username,
     "role": role,
-    "created_at": createdAt.toIso8601String(),
-    "updated_at": updatedAt.toIso8601String(),
+    "created_at": createdAt?.toIso8601String(),
+    "updated_at": updatedAt?.toIso8601String(),
   };
 }

@@ -25,7 +25,7 @@ class TIsCorrectAnswerProvider with ChangeNotifier {
 
   void setCheckedEdit(List<AnswerOption> value) {
     for(int i = 0; i < value.length; i++) {
-      _isChecked[i] = (value[i].correct != null) ? true : false;
+      _isChecked[i] = (value[i].correct == 1) ? true : false;
     }
     notifyListeners();
   }

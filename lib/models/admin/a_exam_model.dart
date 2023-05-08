@@ -11,10 +11,10 @@ class AExamModel {
   String status;
   int isRandom;
   String thumbnail;
-  String description;
+  String? description;
   int time;
-  DateTime createdAt;
-  DateTime updatedAt;
+  DateTime? createdAt;
+  DateTime? updatedAt;
 
   AExamModel({
     required this.id,
@@ -38,8 +38,8 @@ class AExamModel {
     thumbnail: json["thumbnail"],
     description: json["description"],
     time: json["time"],
-    createdAt: DateTime.parse(json["created_at"]),
-    updatedAt: DateTime.parse(json["updated_at"]),
+    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -51,7 +51,7 @@ class AExamModel {
     "thumbnail": thumbnail,
     "description": description,
     "time": time,
-    "created_at": createdAt.toIso8601String(),
-    "updated_at": updatedAt.toIso8601String(),
+    "created_at": createdAt?.toIso8601String(),
+    "updated_at": updatedAt?.toIso8601String(),
   };
 }

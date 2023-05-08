@@ -1,10 +1,50 @@
 import 'dart:convert';
 
-List<PExamModel> pExamModelFromJson(String str) => List<PExamModel>.from(json.decode(str).map((x) => PExamModel.fromJson(x)));
+SExamModel sExamModelFromJson(String str) => SExamModel.fromJson(json.decode(str));
 
-String pExamModelToJson(List<PExamModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String sExamModelToJson(SExamModel data) => json.encode(data.toJson());
 
-class PExamModel {
+class SExamModel {
+  int id;
+  int roomId;
+  int studentId;
+  String? block;
+  DateTime? startTime;
+  DateTime? endTime;
+  Schedule schedule;
+
+  SExamModel({
+    required this.id,
+    required this.roomId,
+    required this.studentId,
+    required this.block,
+    required this.startTime,
+    required this.endTime,
+    required this.schedule,
+  });
+
+  factory SExamModel.fromJson(Map<String, dynamic> json) => SExamModel(
+    id: json["id"],
+    roomId: json["room_id"],
+    studentId: json["student_id"],
+    block: json["block"],
+    startTime: json["start_time"] == null ? null : DateTime.parse(json["start_time"]),
+    endTime: json["end_time"] == null ? null : DateTime.parse(json["end_time"]),
+    schedule: Schedule.fromJson(json["schedule"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "room_id": roomId,
+    "student_id": studentId,
+    "block": block,
+    "start_time": startTime,
+    "end_time": endTime,
+    "schedule": schedule.toJson(),
+  };
+}
+
+class Schedule {
   int id;
   int roomId;
   int supervisorId;
@@ -14,7 +54,7 @@ class PExamModel {
   DateTime? updatedAt;
   Exam exam;
 
-  PExamModel({
+  Schedule({
     required this.id,
     required this.roomId,
     required this.supervisorId,
@@ -25,14 +65,14 @@ class PExamModel {
     required this.exam,
   });
 
-  factory PExamModel.fromJson(Map<String, dynamic> json) => PExamModel(
+  factory Schedule.fromJson(Map<String, dynamic> json) => Schedule(
     id: json["id"],
     roomId: json["room_id"],
     supervisorId: json["supervisor_id"],
     examId: json["exam_id"],
     token: json["token"],
     createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+    updatedAt: json["updated_at"] == null ? null : json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
     exam: Exam.fromJson(json["exam"]),
   );
 
@@ -83,7 +123,7 @@ class Exam {
     description: json["description"],
     time: json["time"],
     createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+    updatedAt: json["updated_at"] == null ? null : json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
   );
 
   Map<String, dynamic> toJson() => {

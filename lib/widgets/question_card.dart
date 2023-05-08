@@ -62,7 +62,7 @@ class _QuestionCardState extends State<QuestionCard> {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      (answerOption.correct != null) ? const Text("+", style: TextStyle(color: Colors.green, fontSize: 24.0)) : const Text("-", style: TextStyle(fontSize: 24.0)),
+                      (answerOption.correct == 1) ? const Text("+", style: TextStyle(color: Colors.green, fontSize: 24.0)) : const Text("-", style: TextStyle(fontSize: 24.0)),
                       Html(
                         data: answerOption.subject,
                         style: {

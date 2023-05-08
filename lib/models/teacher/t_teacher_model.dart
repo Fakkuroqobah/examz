@@ -18,16 +18,16 @@ class TTeacherModel {
   String name;
   String username;
   String role;
-  DateTime createdAt;
-  DateTime updatedAt;
+  DateTime? createdAt;
+  DateTime? updatedAt;
 
   factory TTeacherModel.fromJson(Map<String, dynamic> json) => TTeacherModel(
     id: json["id"],
     name: json["name"],
     username: json["username"],
     role: json["role"],
-    createdAt: DateTime.parse(json["created_at"]),
-    updatedAt: DateTime.parse(json["updated_at"]),
+    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -35,7 +35,7 @@ class TTeacherModel {
     "name": name,
     "username": username,
     "role": role,
-    "created_at": createdAt.toIso8601String(),
-    "updated_at": updatedAt.toIso8601String(),
+    "created_at": createdAt?.toIso8601String(),
+    "updated_at": updatedAt?.toIso8601String(),
   };
 }

@@ -28,6 +28,12 @@ class Api {
   static const String sRefresh = "$sBaseUrl/refresh";
   static const String sLogout = "$sBaseUrl/logout";
 
+  static const String sExamLaunched = "$sBaseUrl/exam-launched";
+  static const String sExamFinished = "$sBaseUrl/exam-finished";
+  static const String sToken = "$sBaseUrl/token";
+  static const String sAnswer = "$sBaseUrl/answer";
+  static const String sEndExam = "$sBaseUrl/end-exam";
+
   // SUPERVISOR
   static const String pLogin = "$pBaseUrl/login";
   static const String pGetUser = "$pBaseUrl/get-user";

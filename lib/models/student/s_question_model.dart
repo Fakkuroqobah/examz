@@ -1,11 +1,18 @@
 import 'dart:convert';
 
-TQuestionModel tQuestionModelFromJson(String str) => TQuestionModel.fromJson(json.decode(str));
+List<SQuestionModel> sQuestionModelFromJson(String str) => List<SQuestionModel>.from(json.decode(str).map((x) => SQuestionModel.fromJson(x)));
 
-String tQuestionModelToJson(TQuestionModel data) => json.encode(data.toJson());
+String sQuestionModelToJson(List<SQuestionModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class TQuestionModel {
-  TQuestionModel({
+class SQuestionModel {
+  int id;
+  int examId;
+  String subject;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  List<AnswerOption> answerOption;
+
+  SQuestionModel({
     required this.id,
     required this.examId,
     required this.subject,
@@ -14,14 +21,7 @@ class TQuestionModel {
     required this.answerOption,
   });
 
-  int id;
-  int examId;
-  String subject;
-  DateTime? createdAt;
-  DateTime? updatedAt;
-  List<AnswerOption> answerOption;
-
-  factory TQuestionModel.fromJson(Map<String, dynamic> json) => TQuestionModel(
+  factory SQuestionModel.fromJson(Map<String, dynamic> json) => SQuestionModel(
     id: json["id"],
     examId: json["exam_id"],
     subject: json["subject"],
@@ -41,17 +41,17 @@ class TQuestionModel {
 }
 
 class AnswerOption {
+  int id;
+  int questionId;
+  String subject;
+  int correct;
+
   AnswerOption({
     required this.id,
     required this.questionId,
     required this.subject,
     required this.correct,
   });
-
-  int id;
-  int questionId;
-  String subject;
-  int correct;
 
   factory AnswerOption.fromJson(Map<String, dynamic> json) => AnswerOption(
     id: json["id"],

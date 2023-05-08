@@ -1,26 +1,30 @@
 import 'package:flutter/material.dart';
 
-import '../models/teacher/t_exam_model.dart';
+import '../configs/api.dart';
+import '../models/student/s_exam_model.dart';
 import '../screens/student/s_exam_detail.dart';
 
 class SExamCard extends StatefulWidget {
-  const SExamCard({super.key, required this.exam, required this.type});
+  const SExamCard({super.key, required this.exam});
 
-  final Exam exam;
-  final String type;
+  final SExamModel exam;
 
   @override
   State<SExamCard> createState() => _SExamCardState();
 }
 
 class _SExamCardState extends State<SExamCard> {
+  final Api _api = Api();
+  
   @override
   Widget build(BuildContext context) {
+    final exam = widget.exam.schedule.exam;
+
     return Card(
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: () {
-          if(widget.type == "launched") {
+          if(exam.status == "launched") {
             Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SExamDetail(data: widget.exam)));
           }
         },
@@ -28,21 +32,14 @@ class _SExamCardState extends State<SExamCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ListTile(
-              leading: Image.network(widget.exam.thumbnail),
-              title: Text(widget.exam.name),
-              subtitle: Text("Kelas ${widget.exam.examClass}",
+              leading: Image.network(_api.tBaseUrlAsset + exam.thumbnail),
+              title: Text(exam.name),
+              subtitle: Text("Kelas ${exam.examClass}",
                 style: TextStyle(color: Colors.black.withOpacity(0.6)),
               ),
             ),
-            widget.exam.description != null ?
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                child: Text(widget.exam.description ?? "",
-                  style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                ),
-              )
-            : Container(),
-            (widget.type == "finished") ? Padding(
+
+            (exam.status == "finished") ? Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Container(
                 padding: const EdgeInsets.all(6.0),
