@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 import '../../models/student/s_exam_model.dart';
 import '../../models/student/s_question_model.dart';
+import '../../provider/loading_provider.dart';
 import '../../provider/student/s_exam_provider.dart';
+import '../../services/student/s_exam_service.dart';
 import 's_exam.dart';
 import 's_exam_question_body.dart';
 
@@ -18,6 +22,7 @@ class SExamQuestion extends StatefulWidget {
 
 class _SExamQuestionState extends State<SExamQuestion> {
   final PageController _pageController = PageController(initialPage: 0);
+  final SExamService _sExamService = SExamService();
   List<SQuestionModel> sqm = [];
   
   final List<Widget> _pages = [];
@@ -87,23 +92,62 @@ class _SExamQuestionState extends State<SExamQuestion> {
                                             title: const Text("Peringatan"),
                                             content: const Text("Apakah kamu yakin ingin menyelesaikan ujian?"),
                                             actions: <Widget>[
+                                              Consumer<LoadingProvider>(
+                                                builder: (_, loadingProvider, __) {
+                                                  return ElevatedButton(
+                                                    style: const ButtonStyle(
+                                                      backgroundColor: MaterialStatePropertyAll<Color>(Colors.green),
+                                                      elevation: MaterialStatePropertyAll(0)
+                                                    ),
+                                                    onPressed: () {
+                                                      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const SExam()));
+                                                      _sExamService.endExam(widget.data.id).then((value) {
+                                                        loadingProvider.setLoading(true);
+                                                        value.fold(
+                                                          (errorMessage) {
+                                                            loadingProvider.setLoading(false);
+                                                            showTopSnackBar(
+                                                              Overlay.of(context),
+                                                              CustomSnackBar.error(
+                                                                message: errorMessage,
+                                                              )
+                                                            );
+                                                            return;
+                                                          },
+                                                          (response) {
+                                                            loadingProvider.setLoading(false);
+                                                            showTopSnackBar(
+                                                              Overlay.of(context),
+                                                              const CustomSnackBar.success(
+                                                                message: "Kamu berhasil menyelesaikan ujian",
+                                                              )
+                                                            );
+                                                            return;
+                                                          },
+                                                        );
+                                                      }).catchError((err) {
+                                                        loadingProvider.setLoading(false);
+                                                        showTopSnackBar(
+                                                          Overlay.of(context),
+                                                          const CustomSnackBar.error(
+                                                            message: "Terjadi kesalahan pada server",
+                                                          )
+                                                        );
+                                                      });
+                                                    },
+                                                    child: Text(loadingProvider.isLoading ? "Loading..." : "Iya"),
+                                                  );
+                                                }
+                                              ),
                                               ElevatedButton(
                                                 style: const ButtonStyle(
-                                                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
+                                                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.grey),
                                                   elevation: MaterialStatePropertyAll(0)
                                                 ),
                                                 onPressed: () {
-                                                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const SExam()));
-                                                  SnackBar snackBar = const SnackBar(content: Text("Kamu berhasil menyelesaikan ujian"));
-                                                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                                                },
-                                                child: const Text("Iya"),
-                                              ),
-                                              ElevatedButton(
-                                                child: const Text("Tidak"),
-                                                onPressed: () {
                                                   Navigator.pop(context);
                                                 },
+                                                child: const Text("Tidak"),
                                               )
                                             ],
                                           );
