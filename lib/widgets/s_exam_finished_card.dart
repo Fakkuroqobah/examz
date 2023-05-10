@@ -4,16 +4,16 @@ import '../configs/api.dart';
 import '../models/student/s_exam_model.dart';
 import '../screens/student/s_exam_detail.dart';
 
-class SExamCard extends StatefulWidget {
-  const SExamCard({super.key, required this.exam});
+class SExamFinishedCard extends StatefulWidget {
+  const SExamFinishedCard({super.key, required this.exam});
 
   final SExamModel exam;
 
   @override
-  State<SExamCard> createState() => _SExamCardState();
+  State<SExamFinishedCard> createState() => _SExamFinishedCardState();
 }
 
-class _SExamCardState extends State<SExamCard> {
+class _SExamFinishedCardState extends State<SExamFinishedCard> {
   final Api _api = Api();
   
   @override
@@ -24,9 +24,7 @@ class _SExamCardState extends State<SExamCard> {
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: () {
-          if(exam.status == "launched") {
-            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SExamDetail(data: widget.exam)));
-          }
+          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SExamDetail(data: widget.exam)));
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,14 +37,14 @@ class _SExamCardState extends State<SExamCard> {
               ),
             ),
 
-            (exam.status == "finished") ? Padding(
+            Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Container(
                 padding: const EdgeInsets.all(6.0),
                 decoration: BoxDecoration(border: Border.all(color: Colors.green)),
                 child: const Text("Nilai: 90", style: TextStyle(fontSize: 14.0, color: Colors.black54)),
               ),
-            ) : Container()
+            )
           ],
         ),
       ),

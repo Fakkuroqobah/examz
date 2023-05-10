@@ -33,6 +33,8 @@ class Api {
   static const String sToken = "$sBaseUrl/token";
   static const String sAnswer = "$sBaseUrl/answer";
   static const String sEndExam = "$sBaseUrl/end-exam";
+  static const String sBlock = "$sBaseUrl/block";
+  static const String sOpenBlock = "$sBaseUrl/open-block";
 
   // SUPERVISOR
   static const String pLogin = "$pBaseUrl/login";

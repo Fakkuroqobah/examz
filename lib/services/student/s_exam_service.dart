@@ -129,4 +129,57 @@ class SExamService {
       return const Left('Terjadi kesalahan pada server');
     }
   }
+
+  Future<Either<String, String>> block(int id) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    final data = {
+      "exam_id": id
+    };
+
+    try {
+      _dio.options.headers['authorization'] = 'Bearer ${preferences.getString("token")}';
+      _dio.options.headers['accept'] = 'application/json';
+      final response = await _dio.post(Api.sBlock, 
+        data: data
+      );
+
+      if (response.statusCode == 200) {
+        return const Right("Berhasil");
+      }
+      return const Left('Terjadi kesalahan');
+    } on DioError catch (_) {
+      return const Left('Terjadi kesalahan pada server');
+    }
+  }
+
+  Future<Either<String, String>> openBlock(int id, String block) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    final data = {
+      "exam_id": id,
+      "block": block
+    };
+
+    try {
+      _dio.options.headers['authorization'] = 'Bearer ${preferences.getString("token")}';
+      _dio.options.headers['accept'] = 'application/json';
+      final response = await _dio.post(Api.sOpenBlock, 
+        data: data
+      );
+
+      if (response.statusCode == 200) {
+        return const Right("Berhasil");
+      }
+      return const Left('Terjadi kesalahan');
+    } on DioError catch (e) {
+      if (e.response != null) {
+        if(e.response!.statusCode == 404) {
+          return const Left('Token akses tidak tepat');
+        }
+      }
+
+      return const Left('Terjadi kesalahan pada server');
+    }
+  }
 }

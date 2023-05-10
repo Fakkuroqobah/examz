@@ -5,7 +5,7 @@ import '../../models/student/s_exam_model.dart';
 import '../../provider/student/s_exam_provider.dart';
 
 import '../../widgets/empty_condition.dart';
-import '../../widgets/s_exam_card.dart';
+import '../../widgets/s_exam_launched_card.dart';
 
 class SExamLaunched extends StatefulWidget {
   const SExamLaunched({super.key});
@@ -73,7 +73,7 @@ class _SExamLaunchedState extends State<SExamLaunched> {
       itemBuilder: (ctx, index) {
         SExamModel data = exam![index];
 
-        return SExamCard(exam: data);
+        return SExamLaunchedCard(exam: data);
       },
     );
   }

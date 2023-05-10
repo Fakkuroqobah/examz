@@ -20,16 +20,18 @@ class SExamQuestion extends StatefulWidget {
   State<SExamQuestion> createState() => _SExamQuestionState();
 }
 
-class _SExamQuestionState extends State<SExamQuestion> {
+class _SExamQuestionState extends State<SExamQuestion> with WidgetsBindingObserver {
   final PageController _pageController = PageController(initialPage: 0);
   final SExamService _sExamService = SExamService();
-  List<SQuestionModel> sqm = [];
-  
+  final TextEditingController _txtBlock = TextEditingController();
   final List<Widget> _pages = [];
+  List<SQuestionModel> sqm = [];
+  bool _isBlock = false;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     sqm = Provider.of<SExamProvider>(context, listen: false).questionList;
     List initAnswer = Provider.of<SExamProvider>(context, listen: false).questionAnswer;
     for (int i = 0; i < sqm.length; i++) {
@@ -40,8 +42,94 @@ class _SExamQuestionState extends State<SExamQuestion> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _pageController.dispose();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      if(_isBlock) Navigator.of(context).pop();
+      _sExamService.block(widget.data.id).then((value) {
+        value.fold(
+          (errorMessage) {
+            return;
+          },
+          (response) {
+            return null;
+          },
+        );
+      }).catchError((_) {
+      });
+    }else if(state == AppLifecycleState.resumed) {
+      _showPrompt();
+      _isBlock = true;
+    }
+  }
+
+  void _showPrompt() {
+    showDialog(context: context, barrierDismissible: false, builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Ujian di blokir. Silahkan meminta kode akses kepada pengawas'),
+        content: TextFormField(
+          controller: _txtBlock,
+          decoration: const InputDecoration(hintText: "Masukan Token Akses"),
+          maxLength: 5,
+        ),
+        actions: <Widget>[
+          Consumer<LoadingProvider>(
+            builder: (_, loadingProvider, __) {
+              return ElevatedButton(
+                style: const ButtonStyle(
+                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.green),
+                  elevation: MaterialStatePropertyAll(0)
+                ),
+                child: Text((loadingProvider.isLoading) ? "Loading..." : 'Buka'),
+                onPressed: () {
+                  loadingProvider.setLoading(true);
+
+                  _sExamService.openBlock(widget.data.id, _txtBlock.text).then((value) {
+                    loadingProvider.setLoading(false);
+                    value.fold(
+                      (errorMessage) {
+                        showTopSnackBar(
+                          Overlay.of(context),
+                          CustomSnackBar.error(
+                            message: errorMessage,
+                          )
+                        );
+                        return;
+                      },
+                      (response) {
+                        showTopSnackBar(
+                          Overlay.of(context),
+                          const CustomSnackBar.success(
+                            message: "Selamat ujian kembali",
+                          )
+                        );
+                        _isBlock = false;
+                        _txtBlock.text = "";
+                        Navigator.of(context).pop();
+                        return null;
+                      },
+                    );
+                  }).catchError((err) {
+                    loadingProvider.setLoading(false);
+                    showTopSnackBar(
+                      Overlay.of(context),
+                      const CustomSnackBar.error(
+                        message: "Terjadi kesalahan",
+                      )
+                    );
+                  });
+                },
+              );
+            }
+          ),
+        ],
+      );
+    });
   }
 
   @override
@@ -100,7 +188,6 @@ class _SExamQuestionState extends State<SExamQuestion> {
                                                       elevation: MaterialStatePropertyAll(0)
                                                     ),
                                                     onPressed: () {
-                                                      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const SExam()));
                                                       _sExamService.endExam(widget.data.id).then((value) {
                                                         loadingProvider.setLoading(true);
                                                         value.fold(
@@ -122,6 +209,7 @@ class _SExamQuestionState extends State<SExamQuestion> {
                                                                 message: "Kamu berhasil menyelesaikan ujian",
                                                               )
                                                             );
+                                                            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => const SExam()), (_) => false);
                                                             return;
                                                           },
                                                         );
