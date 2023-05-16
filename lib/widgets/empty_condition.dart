@@ -8,16 +8,18 @@ class EmptyCondition extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return SizedBox(
+      width: double.infinity,
+      height: MediaQuery.of(context).size.height - 100.0,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset("${Constant.assetUrl}/empty.png", width: 200.0),
-
+    
           const SizedBox(height: 4.0),
           const Text("Belum ada data", style: TextStyle(fontSize: 16.0, color: Colors.grey))
         ],
-      )
+      ),
     );
   }
 }

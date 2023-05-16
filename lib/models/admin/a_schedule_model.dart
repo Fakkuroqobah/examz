@@ -65,6 +65,8 @@ class Exam {
   String thumbnail;
   String? description;
   int time;
+  int isRated;
+  int teacherId;
   DateTime? createdAt;
   DateTime? updatedAt;
 
@@ -77,6 +79,8 @@ class Exam {
     required this.thumbnail,
     required this.description,
     required this.time,
+    required this.isRated,
+    required this.teacherId,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -90,6 +94,8 @@ class Exam {
     thumbnail: json["thumbnail"],
     description: json["description"],
     time: json["time"],
+    isRated: json["is_rated"],
+    teacherId: json["teacher_id"],
     createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
     updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
   );
@@ -103,6 +109,8 @@ class Exam {
     "thumbnail": thumbnail,
     "description": description,
     "time": time,
+    "is_rated": isRated,
+    "teacher_id": teacherId,
     "created_at": createdAt?.toIso8601String(),
     "updated_at": updatedAt?.toIso8601String(),
   };

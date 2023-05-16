@@ -41,6 +41,8 @@ class AExamProvider extends ChangeNotifier {
       thumbnail: data.thumbnail, 
       description: data.description, 
       time: data.time,
+      isRated: data.isRated,
+      teacherId: data.teacherId,
       createdAt: data.createdAt, 
       updatedAt: data.updatedAt
     );

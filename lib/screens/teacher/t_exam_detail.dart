@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import '../../configs/api.dart';
 import '../../configs/utils.dart';
 import '../../models/teacher/t_exam_model.dart';
-
 import '../../models/teacher/t_question_model.dart';
 import '../../provider/teacher/t_question_provider.dart';
 import '../../widgets/empty_condition.dart';
@@ -158,7 +157,7 @@ class _TExamDetailState extends State<TExamDetail> {
                     return Column(
                       children: [
                         for (TQuestionModel val in tQuestionModel) 
-                          QuestionCard(question: val, number: number++),
+                          QuestionCard(exam: widget.data, question: val, number: number++),
                       ],
                     );
                   },

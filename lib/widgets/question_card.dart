@@ -4,14 +4,16 @@ import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
+import '../models/teacher/t_exam_model.dart';
 import '../models/teacher/t_question_model.dart';
 import '../provider/teacher/t_question_provider.dart';
 import '../screens/teacher/t_question_edit.dart';
 import '../services/teacher/t_question_service.dart';
 
 class QuestionCard extends StatefulWidget {
-  const QuestionCard({super.key, required this.question, required this.number});
+  const QuestionCard({super.key, required this.exam, required this.question, required this.number});
 
+  final Exam exam;
   final TQuestionModel question;
   final int number;
 
@@ -81,80 +83,84 @@ class _QuestionCardState extends State<QuestionCard> {
               ),
             ),
             
-            const Divider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+            (widget.exam.status == "inactive") ? Column(
               children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TQuestionEdit(data: widget.question)));
-                  },
-                  style: const ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll<Color>(Colors.orange),
-                    elevation: MaterialStatePropertyAll(0)
-                  ),
-                  child: const Text("Edit"),
-                ),
+                const Divider(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TQuestionEdit(data: widget.question)));
+                      },
+                      style: const ButtonStyle(
+                        backgroundColor: MaterialStatePropertyAll<Color>(Colors.orange),
+                        elevation: MaterialStatePropertyAll(0)
+                      ),
+                      child: const Text("Edit"),
+                    ),
 
-                const SizedBox(width: 8.0),
-                ElevatedButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (ctx) {
-                        return AlertDialog(
-                          title: const Text("Peringatan"),
-                          content: const Text("Apakah kamu yakin ingin menghapus pertanyaan ini?"),
-                          actions: <Widget>[
-                            ElevatedButton(
-                              style: const ButtonStyle(
-                                backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
-                                elevation: MaterialStatePropertyAll(0)
-                              ),
-                              onPressed: () {
-                                Navigator.pop(context);
-                                _tQuestionService.deleteQuestion(widget.question.id).then((value) {
-                                  Provider.of<TQuestionProvider>(context, listen: false).deleteQuestion(widget.question.id);
-                                  showTopSnackBar(
-                                    Overlay.of(context),
-                                    const CustomSnackBar.error(
-                                      message: "Pertanyaan berhasil dihapus",
-                                    )
-                                  );
-                                }).catchError((err) {
-                                  showTopSnackBar(
-                                    Overlay.of(context),
-                                    const CustomSnackBar.error(
-                                      message: "Terjadi kesalahan",
-                                    )
-                                  );
-                                });
-                              },
-                              child: const Text("Iya"),
-                            ),
-                            ElevatedButton(
-                              style: const ButtonStyle(
-                                backgroundColor: MaterialStatePropertyAll<Color>(Colors.grey),
-                                elevation: MaterialStatePropertyAll(0)
-                              ),
-                              child: const Text("Tidak"),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            )
-                          ],
+                    const SizedBox(width: 8.0),
+                    ElevatedButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (ctx) {
+                            return AlertDialog(
+                              title: const Text("Peringatan"),
+                              content: const Text("Apakah kamu yakin ingin menghapus pertanyaan ini?"),
+                              actions: <Widget>[
+                                ElevatedButton(
+                                  style: const ButtonStyle(
+                                    backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
+                                    elevation: MaterialStatePropertyAll(0)
+                                  ),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    _tQuestionService.deleteQuestion(widget.question.id).then((value) {
+                                      Provider.of<TQuestionProvider>(context, listen: false).deleteQuestion(widget.question.id);
+                                      showTopSnackBar(
+                                        Overlay.of(context),
+                                        const CustomSnackBar.error(
+                                          message: "Pertanyaan berhasil dihapus",
+                                        )
+                                      );
+                                    }).catchError((err) {
+                                      showTopSnackBar(
+                                        Overlay.of(context),
+                                        const CustomSnackBar.error(
+                                          message: "Terjadi kesalahan",
+                                        )
+                                      );
+                                    });
+                                  },
+                                  child: const Text("Iya"),
+                                ),
+                                ElevatedButton(
+                                  style: const ButtonStyle(
+                                    backgroundColor: MaterialStatePropertyAll<Color>(Colors.grey),
+                                    elevation: MaterialStatePropertyAll(0)
+                                  ),
+                                  child: const Text("Tidak"),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                )
+                              ],
+                            );
+                          }
                         );
-                      }
-                    );
-                  },
-                  style: const ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
-                    elevation: MaterialStatePropertyAll(0)
-                  ),
-                  child: const Text("Hapus"),
+                      },
+                      style: const ButtonStyle(
+                        backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
+                        elevation: MaterialStatePropertyAll(0)
+                      ),
+                      child: const Text("Hapus"),
+                    ),
+                  ],
                 ),
               ],
-            ),
+            ) : Container(),
           ],
         ),
       ),

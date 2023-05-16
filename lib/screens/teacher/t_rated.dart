@@ -1,38 +1,30 @@
 import 'package:fancy_drawer/fancy_drawer.dart';
 import 'package:flutter/material.dart';
 
+import '../../models/teacher/t_exam_model.dart';
 import '../../services/teacher/t_auth_service.dart';
+import '../../services/teacher/t_rated_service.dart';
+import '../../widgets/empty_condition.dart';
 import '../auth/login.dart';
-import 't_exam_finished.dart';
-import 't_exam_inactive.dart';
-import 't_exam_launched.dart';
-import 't_exam_add.dart';
-import 't_rated.dart';
+import 't_exam.dart';
+import 't_rated_student.dart';
 
-class TExam extends StatefulWidget {
-  const TExam({super.key});
+class TRated extends StatefulWidget {
+  const TRated({super.key});
 
   @override
-  State<TExam> createState() => _TExamState();
+  State<TRated> createState() => _TRatedState();
 }
 
-class _TExamState extends State<TExam> with SingleTickerProviderStateMixin {
+class _TRatedState extends State<TRated> with SingleTickerProviderStateMixin {
   final TAuthService _tAuthService = TAuthService();
+  final TRatedService _tRatedService = TRatedService();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
   late FancyDrawerController _controllerDrawer;
 
-  int _selectedIndex = 0;
-
-  void _changeSelectedIndex(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  Future<void> _refresh() async {
+    setState(() {});
   }
-
-  final _pageOptions = const [
-    TExamInactive(),
-    TExamLaunched(),
-    TExamFinished(),
-  ];
 
   @override
   void initState() {
@@ -104,7 +96,7 @@ class _TExamState extends State<TExam> with SingleTickerProviderStateMixin {
         ],
         child: Scaffold(
           appBar: AppBar(
-            title: const Text("Daftar Ujian"),
+            title: const Text("Daftar Siswa"),
             elevation: 0,
             leading: IconButton(
               icon: const Icon(
@@ -115,38 +107,38 @@ class _TExamState extends State<TExam> with SingleTickerProviderStateMixin {
                 _controllerDrawer.toggle();
               },
             ),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.add),
-                tooltip: 'Tambah Ujian',
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const TExamAdd()));
-                },
-              )
-            ],
           ),
-          body: _pageOptions[_selectedIndex],
-          bottomNavigationBar: BottomNavigationBar(
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.assignment),
-                label: 'Nonaktif',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.assignment_turned_in),
-                label: 'Berlangsung',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.done),
-                label: 'Selesai',
-              ),
-            ],
-            currentIndex: _selectedIndex,
-            onTap: _changeSelectedIndex,
-            selectedItemColor: Colors.green,
-            unselectedItemColor: Colors.grey,
-            showUnselectedLabels: true,
-            type: BottomNavigationBarType.fixed,
+          body: RefreshIndicator(
+            key: _refreshIndicatorKey,
+            onRefresh: _refresh,
+            child: FutureBuilder(
+              future: _tRatedService.getExam(),
+              builder: (_, AsyncSnapshot<List<Exam>> snapshot) {
+                if (snapshot.hasError) {
+                  return Center(child: Text("Something wrong with message: ${snapshot.error.toString()}"));
+                } else if (snapshot.connectionState == ConnectionState.done) {
+                  List<Exam>? exam = snapshot.data;
+                  return (snapshot.data!.isNotEmpty) ? ListView.builder(
+                    itemCount: exam?.length,
+                    itemBuilder: (ctx, index) {
+                      Exam data = exam![index];
+
+                      return ListTile(
+                        leading: const Icon(Icons.book),
+                        title: Text(data.name),
+                        subtitle: Text("Kelas ${data.examClass}"),
+                        trailing: const Icon(Icons.chevron_right),
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TRatedStudent(data: data)));
+                        },
+                      );
+                    },
+                  ) : const EmptyCondition();
+                } else {
+                  return const Center(child: CircularProgressIndicator());
+                }
+              }
+            ),
           ),
         ),
       ),

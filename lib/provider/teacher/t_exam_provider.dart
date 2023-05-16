@@ -21,7 +21,7 @@ class TExamProvider extends ChangeNotifier {
       _examList = await tExamService.getExam();
 
       _hasError = false;
-    } catch (e) {
+    } catch (_) {
       _hasError = true;
     }
 
@@ -45,6 +45,8 @@ class TExamProvider extends ChangeNotifier {
       thumbnail: data.thumbnail, 
       description: data.description, 
       time: data.time,
+      isRated: data.isRated,
+      teacherId: data.teacherId,
       createdAt: data.createdAt, 
       updatedAt: data.updatedAt
     );

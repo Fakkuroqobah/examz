@@ -1,5 +1,5 @@
 class Api {
-  static const String baseUrl = "http://192.168.43.148/examz/public";
+  static const String baseUrl = "http://192.168.43.147/examz/public";
   static const String tBaseUrl = "$baseUrl/api/teacher";
   static const String sBaseUrl = "$baseUrl/api/student";
   static const String pBaseUrl = "$baseUrl/api/supervisor";
@@ -21,6 +21,10 @@ class Api {
   static const String tQuestionEdit = "$tBaseUrl/exam/question/edit";
   static const String tQuestionAdd = "$tBaseUrl/exam/question/add";
   static const String tQuestionDelete = "$tBaseUrl/exam/question/delete";
+
+  static const String tRatedExam = "$tBaseUrl/rated";
+  static const String tRatedStudent = "$tBaseUrl/rated/student";
+  static const String tRatedStudentDetail = "$tBaseUrl/rated/student-detail";
 
   // STUDENT
   static const String sLogin = "$sBaseUrl/login";

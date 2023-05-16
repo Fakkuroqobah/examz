@@ -49,6 +49,8 @@ class PExamProvider extends ChangeNotifier {
         thumbnail: data.exam.thumbnail, 
         description: data.exam.description, 
         time: data.exam.time,
+        isRated: data.exam.isRated,
+        teacherId: data.exam.teacherId,
         createdAt: data.exam.createdAt, 
         updatedAt: data.exam.updatedAt
       )
