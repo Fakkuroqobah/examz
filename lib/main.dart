@@ -8,6 +8,7 @@ import 'provider/admin/a_import_provider.dart';
 import 'provider/auth/o_select_role_provider.dart';
 import 'provider/loading_provider.dart';
 import 'provider/student/s_exam_provider.dart';
+import 'provider/student/s_timer_provider.dart';
 import 'provider/teacher/t_exam_provider.dart';
 import 'provider/teacher/t_is_correct_answer_provider.dart';
 import 'provider/teacher/t_is_random_provider.dart';
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<AExamProvider>(create: (_) => AExamProvider()),
         ChangeNotifierProvider<PExamProvider>(create: (_) => PExamProvider()),
         ChangeNotifierProvider<SExamProvider>(create: (_) => SExamProvider()),
+        ChangeNotifierProvider<STimerProvider>(create: (_) => STimerProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

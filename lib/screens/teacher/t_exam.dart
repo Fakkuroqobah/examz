@@ -77,7 +77,7 @@ class _TExamState extends State<TExam> with SingleTickerProviderStateMixin {
               Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const TRated()));
             },
             child: const Text(
-              "Daftar Siswa",
+              "Penilaian",
               style: TextStyle(
                 fontSize: 18,
                 color: Colors.white,

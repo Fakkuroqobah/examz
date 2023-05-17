@@ -37,7 +37,7 @@ class SExamService {
     return data;
   }
 
-  Future<Either<String, List<SQuestionModel>>> token(int id, String token) async {
+  Future<Either<String, List<dynamic>>> token(int id, String token) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     final data = {
@@ -52,12 +52,13 @@ class SExamService {
       );
 
       if (response.statusCode == 200) {
+        int remainingTime = response.data['data']['remaining_time'];
         List<SQuestionModel> data = <SQuestionModel>[];
         response.data['data']['question'].forEach((val) {
           data.add(SQuestionModel.fromJson(val));
         });
 
-        return Right(data);
+        return Right([remainingTime, data]);
       }
       return const Left('Terjadi kesalahan');
     } on DioError catch (e) {
@@ -83,12 +84,12 @@ class SExamService {
     }
   }
 
-  Future<Either<String, String>> answer(int id, String answer) async {
+  Future<Either<String, String>> answer(int id, int answer) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     final data = {
       "question_id": id,
-      "answer": answer,
+      "answer_option_id": answer,
     };
 
     try {

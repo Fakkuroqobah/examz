@@ -69,7 +69,7 @@ class _TRatedState extends State<TRated> with SingleTickerProviderStateMixin {
               Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const TRated()));
             },
             child: const Text(
-              "Daftar Siswa",
+              "Penilaian",
               style: TextStyle(
                 fontSize: 18,
                 color: Colors.white,
@@ -96,7 +96,7 @@ class _TRatedState extends State<TRated> with SingleTickerProviderStateMixin {
         ],
         child: Scaffold(
           appBar: AppBar(
-            title: const Text("Daftar Siswa"),
+            title: const Text("Penilaian"),
             elevation: 0,
             leading: IconButton(
               icon: const Icon(
@@ -115,7 +115,7 @@ class _TRatedState extends State<TRated> with SingleTickerProviderStateMixin {
               future: _tRatedService.getExam(),
               builder: (_, AsyncSnapshot<List<Exam>> snapshot) {
                 if (snapshot.hasError) {
-                  return Center(child: Text("Something wrong with message: ${snapshot.error.toString()}"));
+                  return Center(child: Text("Terjadi kesalahan dengan pesan : ${snapshot.error.toString()}"));
                 } else if (snapshot.connectionState == ConnectionState.done) {
                   List<Exam>? exam = snapshot.data;
                   return (snapshot.data!.isNotEmpty) ? ListView.builder(

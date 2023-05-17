@@ -32,7 +32,7 @@ class _TRatedStudentState extends State<TRatedStudent> with SingleTickerProvider
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Daftar Siswa"),
+        title: const Text("Penilaian"),
         elevation: 0,
       ),
       body: RefreshIndicator(
@@ -42,7 +42,7 @@ class _TRatedStudentState extends State<TRatedStudent> with SingleTickerProvider
           future: _tRatedService.getStudent(widget.data.id, widget.data.examClass),
           builder: (_, AsyncSnapshot<List<TRatedModel>> snapshot) {
             if (snapshot.hasError) {
-              return Center(child: Text("Something wrong with message: ${snapshot.error.toString()}"));
+              return Center(child: Text("Terjadi kesalahan dengan pesan : ${snapshot.error.toString()}"));
             } else if (snapshot.connectionState == ConnectionState.done) {
               List<TRatedModel>? exam = snapshot.data;
               return (snapshot.data!.isNotEmpty) ? ListView.builder(

@@ -34,7 +34,7 @@ class _TRatedStudentDetailState extends State<TRatedStudentDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Detail Siswa"),
+        title: const Text("Penilaian"),
         elevation: 0,
       ),
       body: RefreshIndicator(
@@ -49,7 +49,7 @@ class _TRatedStudentDetailState extends State<TRatedStudentDetail> {
                 future: _tRatedService.getRated(widget.exam.id, widget.tRatedModel.studentId),
                 builder: (_, AsyncSnapshot<TRatedStudentModel> snapshot) {
                   if (snapshot.hasError) {
-                    return Center(child: Text("Something wrong with message: ${snapshot.error.toString()}"));
+                    return Center(child: Text("Terjadi kesalahan dengan pesan : ${snapshot.error.toString()}"));
                   } else if (snapshot.connectionState == ConnectionState.done) {
                     int number = 1;
                     int total = snapshot.data!.total;

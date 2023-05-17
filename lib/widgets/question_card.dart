@@ -60,22 +60,34 @@ class _QuestionCardState extends State<QuestionCard> {
                 itemCount: widget.question.answerOption.length,
                 itemBuilder: (ctx, index) {
                   AnswerOption answerOption = widget.question.answerOption[index];
+                  List<String> al = ['A', 'B', 'C', 'D', 'E'];
                   
-                  return Column(
+                  return Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      (answerOption.correct == 1) ? const Text("+", style: TextStyle(color: Colors.green, fontSize: 24.0)) : const Text("-", style: TextStyle(fontSize: 24.0)),
-                      Html(
-                        data: answerOption.subject,
-                        style: {
-                          "body": Style(
-                            padding: const EdgeInsets.all(0),
-                            margin: const EdgeInsets.all(0),
-                          ),
-                          "p": Style(
-                            margin: const EdgeInsets.only(top: 0, bottom: 10),
-                          ),
-                        }
+                      Flexible(
+                        fit: FlexFit.loose,
+                        child: (answerOption.correct == 1) 
+                          ? Text(al[index], style: const TextStyle(color: Colors.green))
+                          : Text(al[index])
+                      ),
+                      
+                      const SizedBox(width: 8.0),
+                      Expanded(
+                        flex: 20,
+                        child: Html(
+                          data: answerOption.subject,
+                          style: {
+                            "body": Style(
+                              padding: const EdgeInsets.all(0),
+                              margin: const EdgeInsets.all(0),
+                            ),
+                            "p": Style(
+                              margin: const EdgeInsets.only(top: 0, bottom: 10),
+                            ),
+                          }
+                        ),
                       ),
                     ],
                   );

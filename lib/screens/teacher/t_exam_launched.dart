@@ -36,7 +36,7 @@ class _TExamLaunchedState extends State<TExamLaunched> {
           future: _tExamService.getExam(),
           builder: (BuildContext ctx, AsyncSnapshot<TExamModel> snapshot) {
             if (snapshot.hasError) {
-              return Center(child: Text("Something wrong with message: ${snapshot.error.toString()}"));
+              return Center(child: Text("Terjadi kesalahan dengan pesan : ${snapshot.error.toString()}"));
             } else if (snapshot.connectionState == ConnectionState.done) {
               List<Exam>? exam = snapshot.data?.examLaunched;
               return (snapshot.data!.sumExamLaunched > 0) ? Column(

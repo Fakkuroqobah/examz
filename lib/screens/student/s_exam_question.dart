@@ -7,14 +7,16 @@ import '../../models/student/s_exam_model.dart';
 import '../../models/student/s_question_model.dart';
 import '../../provider/loading_provider.dart';
 import '../../provider/student/s_exam_provider.dart';
+import '../../provider/student/s_timer_provider.dart';
 import '../../services/student/s_exam_service.dart';
 import 's_exam.dart';
 import 's_exam_question_body.dart';
 
 class SExamQuestion extends StatefulWidget {
-  const SExamQuestion({super.key, required this.data});
+  const SExamQuestion({super.key, required this.data, required this.remainingTime});
 
   final Exam data;
+  final int remainingTime;
 
   @override
   State<SExamQuestion> createState() => _SExamQuestionState();
@@ -32,6 +34,7 @@ class _SExamQuestionState extends State<SExamQuestion> with WidgetsBindingObserv
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    Provider.of<STimerProvider>(context, listen: false).startTimer(widget.remainingTime, showTimeoutDialog);
     sqm = Provider.of<SExamProvider>(context, listen: false).questionList;
     List initAnswer = Provider.of<SExamProvider>(context, listen: false).questionAnswer;
     for (int i = 0; i < sqm.length; i++) {
@@ -132,6 +135,65 @@ class _SExamQuestionState extends State<SExamQuestion> with WidgetsBindingObserv
     });
   }
 
+  void showTimeoutDialog() {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Waktu habis'),
+          content: const Text('Terima kasih sudah mengikuti ujian'),
+          actions: <Widget>[
+            Consumer<LoadingProvider>(
+              builder: (_, loadingProvider, __) {
+                return TextButton(
+                  child: Text(loadingProvider.isLoading ? "Loading..." : 'OK'),
+                  onPressed: () {
+                    _sExamService.endExam(widget.data.id).then((value) {
+                      loadingProvider.setLoading(true);
+                      value.fold(
+                        (errorMessage) {
+                          loadingProvider.setLoading(false);
+                          showTopSnackBar(
+                            Overlay.of(context),
+                            CustomSnackBar.error(
+                              message: errorMessage,
+                            )
+                          );
+                          return;
+                        },
+                        (response) {
+                          loadingProvider.setLoading(false);
+                          showTopSnackBar(
+                            Overlay.of(context),
+                            const CustomSnackBar.success(
+                              message: "Kamu berhasil menyelesaikan ujian",
+                            )
+                          );
+                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => const SExam()), (_) => false);
+                          return;
+                        },
+                      );
+                    }).catchError((err) {
+                      loadingProvider.setLoading(false);
+                      showTopSnackBar(
+                        Overlay.of(context),
+                        const CustomSnackBar.error(
+                          message: "Terjadi kesalahan pada server",
+                        )
+                      );
+                    });
+                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => const SExam()), (_) => false);
+                  },
+                );
+              }
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -149,6 +211,14 @@ class _SExamQuestionState extends State<SExamQuestion> with WidgetsBindingObserv
                 Consumer<SExamProvider>(
                   builder: (_, sExamProvider, __) {
                     return Text("No. ${sExamProvider.activePage + 1}", style: const TextStyle(color: Colors.black54, fontSize: 18.0));
+                  }
+                ),
+                Consumer<STimerProvider>(
+                  builder: (_, sTimerProvider, __) {
+                    return Text(
+                      "${sTimerProvider.remainingMinutes.toString().padLeft(2, '0')}:${sTimerProvider.remainingSeconds.toString().padLeft(2, '0')}", 
+                      style: const TextStyle(color: Colors.black54, fontSize: 18.0)
+                    );
                   }
                 ),
                 GestureDetector(

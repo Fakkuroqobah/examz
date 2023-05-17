@@ -175,14 +175,14 @@ class _SExamDetailState extends State<SExamDetail> {
                                               return;
                                             },
                                             (response) {
-                                              context.read<SExamProvider>().token(response);
+                                              context.read<SExamProvider>().token(response[1]);
                                               showTopSnackBar(
                                                 Overlay.of(context),
                                                 const CustomSnackBar.success(
                                                   message: "Selamat Ujian",
                                                 )
                                               );
-                                              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => SExamQuestion(data: exam)), (_) => false);
+                                              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => SExamQuestion(data: exam, remainingTime: response[0])), (_) => false);
                                               return null;
                                             },
                                           );

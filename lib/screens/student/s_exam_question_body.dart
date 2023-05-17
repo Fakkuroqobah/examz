@@ -48,7 +48,7 @@ class _SExamQuestionBodyState extends State<SExamQuestionBody> {
 
               const SizedBox(height: 22.0),
               for (int i = 0; i < widget.data.answerOption.length; i++)
-                btnAnswer(widget.data.answerOption[i].subject, i + 1),
+                btnAnswer(widget.data.answerOption[i].subject, widget.data.answerOption[i].id),
 
               const SizedBox(height: 22.0),
               ElevatedButton(
@@ -76,7 +76,7 @@ class _SExamQuestionBodyState extends State<SExamQuestionBody> {
           return OutlinedButton(
             onPressed: () {
               sExamProvider.answer(widget.data.id, value);
-              _sExamService.answer(widget.data.id, value.toString()).then((value) {
+              _sExamService.answer(widget.data.id, value).then((value) {
                 value.fold(
                   (errorMessage) {
                     showTopSnackBar(
