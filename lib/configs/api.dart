@@ -40,6 +40,8 @@ class Api {
   static const String sBlock = "$sBaseUrl/block";
   static const String sOpenBlock = "$sBaseUrl/open-block";
 
+  static const String sRated = "$sBaseUrl/rated";
+
   // SUPERVISOR
   static const String pLogin = "$pBaseUrl/login";
   static const String pGetUser = "$pBaseUrl/get-user";

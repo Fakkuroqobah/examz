@@ -2,9 +2,9 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../configs/api.dart';
+import '../../models/rated_model.dart';
 import '../../models/teacher/t_exam_model.dart';
 import '../../models/teacher/t_rated_model.dart';
-import '../../models/teacher/t_rated_student_model.dart';
 
 class TRatedService {
   final Dio _dio = Dio();
@@ -37,12 +37,12 @@ class TRatedService {
     return data;
   }
 
-  Future<TRatedStudentModel> getRated(int studentId, int examId) async {
+  Future<RatedModel> getRated(int studentId, int examId) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     _dio.options.headers['authorization'] = 'Bearer ${preferences.getString("token")}';
     final response = await _dio.get("${Api.tRatedStudentDetail}/$studentId/$examId");
 
-    return TRatedStudentModel.fromJson(response.data['data']);
+    return RatedModel.fromJson(response.data['data']);
   }
 }

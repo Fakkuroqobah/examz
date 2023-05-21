@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../configs/api.dart';
 import '../models/student/s_exam_model.dart';
-import '../screens/student/s_exam_detail.dart';
+import '../screens/student/s_rated.dart';
 
 class SExamFinishedCard extends StatefulWidget {
   const SExamFinishedCard({super.key, required this.exam});
@@ -24,7 +24,7 @@ class _SExamFinishedCardState extends State<SExamFinishedCard> {
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: () {
-          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SExamDetail(data: widget.exam)));
+          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SRated(exam: exam)));
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,15 +34,6 @@ class _SExamFinishedCardState extends State<SExamFinishedCard> {
               title: Text(exam.name),
               subtitle: Text("Kelas ${exam.examClass}",
                 style: TextStyle(color: Colors.black.withOpacity(0.6)),
-              ),
-            ),
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              child: Container(
-                padding: const EdgeInsets.all(6.0),
-                decoration: BoxDecoration(border: Border.all(color: Colors.green)),
-                child: const Text("Nilai: 90", style: TextStyle(fontSize: 14.0, color: Colors.black54)),
               ),
             )
           ],

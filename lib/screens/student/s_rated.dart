@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
 
+
+import '../../models/student/s_exam_model.dart';
 import '../../models/rated_model.dart';
-import '../../models/teacher/t_exam_model.dart';
-import '../../models/teacher/t_rated_model.dart';
-import '../../services/teacher/t_rated_service.dart';
+import '../../services/student/s_rated_service.dart';
 import '../../widgets/empty_condition.dart';
 import '../../widgets/question_card_student.dart';
 
-class TRatedStudentDetail extends StatefulWidget {
-  const TRatedStudentDetail({super.key, required this.exam, required this.tRatedModel});
+class SRated extends StatefulWidget {
+  const SRated({super.key, required this.exam});
 
   final Exam exam;
-  final TRatedModel tRatedModel;
 
   @override
-  State<TRatedStudentDetail> createState() => _TRatedStudentDetailState();
+  State<SRated> createState() => _SRatedState();
 }
 
-class _TRatedStudentDetailState extends State<TRatedStudentDetail> {
+class _SRatedState extends State<SRated> {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
-  final TRatedService _tRatedService = TRatedService();
+  final SRatedService _sRatedService = SRatedService();
   
   Future<void> _refresh() async {
     setState(() {});
@@ -46,7 +45,7 @@ class _TRatedStudentDetailState extends State<TRatedStudentDetail> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: FutureBuilder(
-                future: _tRatedService.getRated(widget.exam.id, widget.tRatedModel.studentId),
+                future: _sRatedService.getRated(widget.exam.id),
                 builder: (_, AsyncSnapshot<RatedModel> snapshot) {
                   if (snapshot.hasError) {
                     return Center(child: Text("Terjadi kesalahan dengan pesan : ${snapshot.error.toString()}"));
@@ -64,7 +63,7 @@ class _TRatedStudentDetailState extends State<TRatedStudentDetail> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                Text(widget.tRatedModel.student.name, style: const TextStyle(fontSize: 20.0)),
+                                Text(widget.exam.name, style: const TextStyle(fontSize: 20.0)),
                           
                                 const SizedBox(height: 6.0),
                                 Text("Nilai $total/$totalQuestion", style: const TextStyle(fontSize: 16.0)),

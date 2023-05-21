@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 
-import '../models/teacher/t_rated_student_model.dart';
+import '../models/rated_model.dart';
 
 class QuestionCardStudent extends StatefulWidget {
   const QuestionCardStudent({super.key, required this.data, required this.number});

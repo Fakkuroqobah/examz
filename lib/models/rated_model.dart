@@ -1,21 +1,21 @@
 import 'dart:convert';
 
-TRatedStudentModel tRatedStudentModelFromJson(String str) => TRatedStudentModel.fromJson(json.decode(str));
+RatedModel ratedModelFromJson(String str) => RatedModel.fromJson(json.decode(str));
 
-String tRatedStudentModelToJson(TRatedStudentModel data) => json.encode(data.toJson());
+String ratedModelToJson(RatedModel data) => json.encode(data.toJson());
 
-class TRatedStudentModel {
+class RatedModel {
   int total;
   List<AnswerStudent> answerStudent;
   List<Question> questions;
 
-  TRatedStudentModel({
+  RatedModel({
     required this.total,
     required this.answerStudent,
     required this.questions,
   });
 
-  factory TRatedStudentModel.fromJson(Map<String, dynamic> json) => TRatedStudentModel(
+  factory RatedModel.fromJson(Map<String, dynamic> json) => RatedModel(
     total: json["total"],
     answerStudent: List<AnswerStudent>.from(json["answer_student"].map((x) => AnswerStudent.fromJson(x))),
     questions: List<Question>.from(json["questions"].map((x) => Question.fromJson(x))),
