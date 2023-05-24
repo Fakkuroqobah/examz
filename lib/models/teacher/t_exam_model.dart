@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import '../exam_model.dart';
+
 TExamModel tExamModelFromJson(String str) => TExamModel.fromJson(json.decode(str));
 
 String tExamModelToJson(TExamModel data) => json.encode(data.toJson());
@@ -14,17 +16,17 @@ class TExamModel {
     required this.sumExamFinished,
   });
 
-  List<Exam> examInActive;
-  List<Exam> examLaunched;
-  List<Exam> examFinished;
+  List<ExamModel> examInActive;
+  List<ExamModel> examLaunched;
+  List<ExamModel> examFinished;
   int sumExamInActive;
   int sumExamLaunched;
   int sumExamFinished;
 
   factory TExamModel.fromJson(Map<String, dynamic> json) => TExamModel(
-    examInActive: List<Exam>.from(json["examInActive"].map((x) => Exam.fromJson(x))),
-    examLaunched: List<Exam>.from(json["examLaunched"].map((x) => Exam.fromJson(x))),
-    examFinished: List<Exam>.from(json["examFinished"].map((x) => Exam.fromJson(x))),
+    examInActive: List<ExamModel>.from(json["examInActive"].map((x) => ExamModel.fromJson(x))),
+    examLaunched: List<ExamModel>.from(json["examLaunched"].map((x) => ExamModel.fromJson(x))),
+    examFinished: List<ExamModel>.from(json["examFinished"].map((x) => ExamModel.fromJson(x))),
     sumExamInActive: json["sumExamInActive"],
     sumExamLaunched: json["sumExamLaunched"],
     sumExamFinished: json["sumExamFinished"],
@@ -37,65 +39,5 @@ class TExamModel {
     "sumExamInActive": sumExamInActive,
     "sumExamLaunched": sumExamLaunched,
     "sumExamFinished": sumExamFinished,
-  };
-}
-
-class Exam {
-  Exam({
-    required this.id,
-    required this.examClass,
-    required this.name,
-    required this.status,
-    required this.isRandom,
-    required this.thumbnail,
-    required this.description,
-    required this.time,
-    required this.isRated,
-    required this.teacherId,
-    required this.createdAt,
-    required this.updatedAt,
-  });
-
-  int id;
-  String examClass;
-  String name;
-  String status;
-  int isRandom;
-  String thumbnail;
-  String? description;
-  int? time;
-  int isRated;
-  int teacherId;
-  DateTime? createdAt;
-  DateTime? updatedAt;
-
-  factory Exam.fromJson(Map<String, dynamic> json) => Exam(
-    id: json["id"],
-    examClass: json["class"],
-    name: json["name"],
-    status: json["status"],
-    isRandom: json["is_random"],
-    thumbnail: json["thumbnail"],
-    description: json["description"],
-    time: json["time"],
-    isRated: json["is_rated"],
-    teacherId: json["teacher_id"],
-    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "class": examClass,
-    "name": name,
-    "status": status,
-    "is_random": isRandom,
-    "thumbnail": thumbnail,
-    "description": description,
-    "time": time,
-    "is_rated": isRated,
-    "teacher_id": teacherId,
-    "created_at": createdAt?.toIso8601String(),
-    "updated_at": updatedAt?.toIso8601String(),
   };
 }

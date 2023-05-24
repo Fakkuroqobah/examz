@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-import '../../models/admin/a_exam_model.dart';
+import '../../models/exam_model.dart';
 import '../../services/admin/a_exam_service.dart';
 
 class AExamProvider extends ChangeNotifier {
-  List<AExamModel> _examList = [];
+  List<ExamModel> _examList = [];
 
   bool _isLoading = false;
   bool _hasError = false;
   
-  List<AExamModel> get examList => _examList;
+  List<ExamModel> get examList => _examList;
 
   bool get isLoading => _isLoading;
   bool get hasError => _hasError;
@@ -31,10 +31,10 @@ class AExamProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void triggerExam(AExamModel data) {
-    AExamModel el = AExamModel(
+  void triggerExam(ExamModel data) {
+    ExamModel el = ExamModel(
       id: data.id, 
-      aExamModelClass: data.aExamModelClass,
+      examClass: data.examClass,
       name: data.name, 
       status: data.status, 
       isRandom: data.isRandom, 

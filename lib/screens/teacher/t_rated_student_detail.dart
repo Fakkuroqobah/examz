@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../models/exam_model.dart';
+import '../../models/question_model.dart';
 import '../../models/rated_model.dart';
-import '../../models/teacher/t_exam_model.dart';
-import '../../models/teacher/t_rated_model.dart';
+import '../../models/student_schedule_model.dart';
 import '../../services/teacher/t_rated_service.dart';
 import '../../widgets/empty_condition.dart';
 import '../../widgets/question_card_student.dart';
@@ -10,8 +11,8 @@ import '../../widgets/question_card_student.dart';
 class TRatedStudentDetail extends StatefulWidget {
   const TRatedStudentDetail({super.key, required this.exam, required this.tRatedModel});
 
-  final Exam exam;
-  final TRatedModel tRatedModel;
+  final ExamModel exam;
+  final StudentScheduleModel tRatedModel;
 
   @override
   State<TRatedStudentDetail> createState() => _TRatedStudentDetailState();
@@ -46,7 +47,7 @@ class _TRatedStudentDetailState extends State<TRatedStudentDetail> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: FutureBuilder(
-                future: _tRatedService.getRated(widget.exam.id, widget.tRatedModel.studentId),
+                future: _tRatedService.getRated(widget.tRatedModel.studentId, widget.exam.id),
                 builder: (_, AsyncSnapshot<RatedModel> snapshot) {
                   if (snapshot.hasError) {
                     return Center(child: Text("Terjadi kesalahan dengan pesan : ${snapshot.error.toString()}"));
@@ -54,7 +55,7 @@ class _TRatedStudentDetailState extends State<TRatedStudentDetail> {
                     int number = 1;
                     int total = snapshot.data!.total;
                     int totalQuestion = snapshot.data!.questions.length;
-                    List<Question> questionList = snapshot.data!.questions;
+                    List<QuestionModel> questionList = snapshot.data!.questions;
           
                     return (snapshot.data!.answerStudent.isNotEmpty) ? Column(
                       children: [
@@ -92,7 +93,7 @@ class _TRatedStudentDetailState extends State<TRatedStudentDetail> {
                         const SizedBox(height: 8.0),
                         Column(
                           children: [
-                            for (Question val in questionList) 
+                            for (QuestionModel val in questionList) 
                               QuestionCardStudent(data: val, number: number++)
                           ],
                         )

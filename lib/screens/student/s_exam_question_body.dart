@@ -4,14 +4,14 @@ import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
-import '../../models/student/s_question_model.dart';
+import '../../models/question_model.dart';
 import '../../provider/student/s_exam_provider.dart';
 import '../../services/student/s_exam_service.dart';
 
 class SExamQuestionBody extends StatefulWidget {
   const SExamQuestionBody({super.key, required this.data});
 
-  final SQuestionModel data;
+  final QuestionModel data;
 
   @override
   State<SExamQuestionBody> createState() => _SExamQuestionBodyState();

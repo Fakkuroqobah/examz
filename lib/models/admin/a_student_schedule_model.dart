@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import '../room_model.dart';
+
 List<AStudentScheduleModel> aStudentScheduleModelFromJson(String str) => List<AStudentScheduleModel>.from(json.decode(str).map((x) => AStudentScheduleModel.fromJson(x)));
 
 String aStudentScheduleModelToJson(List<AStudentScheduleModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
@@ -12,7 +14,7 @@ class AStudentScheduleModel {
   int block;
   DateTime? startTime;
   DateTime? endTime;
-  Room room;
+  RoomModel room;
   Student student;
 
   AStudentScheduleModel({
@@ -21,8 +23,8 @@ class AStudentScheduleModel {
     required this.studentId,
     required this.status,
     required this.block,
-    this.startTime,
-    this.endTime,
+    required this.startTime,
+    required this.endTime,
     required this.room,
     required this.student,
   });
@@ -35,7 +37,7 @@ class AStudentScheduleModel {
     block: json["block"],
     startTime: json["start_time"] == null ? null : DateTime.parse(json["start_time"]),
     endTime: json["end_time"] == null ? null : DateTime.parse(json["end_time"]),
-    room: Room.fromJson(json["room"]),
+    room: RoomModel.fromJson(json["room"]),
     student: Student.fromJson(json["student"]),
   );
 
@@ -49,34 +51,6 @@ class AStudentScheduleModel {
     "end_time": endTime?.toIso8601String(),
     "room": room.toJson(),
     "student": student.toJson(),
-  };
-}
-
-class Room {
-  int id;
-  String name;
-  DateTime? createdAt;
-  DateTime? updatedAt;
-
-  Room({
-    required this.id,
-    required this.name,
-    required this.createdAt,
-    required this.updatedAt,
-  });
-
-  factory Room.fromJson(Map<String, dynamic> json) => Room(
-    id: json["id"],
-    name: json["name"],
-    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-    "created_at": createdAt?.toIso8601String(),
-    "updated_at": updatedAt?.toIso8601String(),
   };
 }
 

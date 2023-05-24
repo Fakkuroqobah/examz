@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../configs/api.dart';
+import '../../models/exam_model.dart';
 import '../../models/teacher/t_exam_model.dart';
 
 class TExamService {
@@ -19,7 +20,7 @@ class TExamService {
     return data;
   }
 
-  Future<Either<String, Exam>> addExam(String txtName, String txtClass, String txtDescription, String thumbnailByte, String thumbnailExtension, bool? isRandom, int time) async {
+  Future<Either<String, ExamModel>> addExam(String txtName, String txtClass, String txtDescription, String thumbnailByte, String thumbnailExtension, bool? isRandom, int time) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     final data = {
@@ -39,7 +40,7 @@ class TExamService {
       );
 
       if (response.statusCode == 201) {
-        return Right(Exam.fromJson(response.data['data']));
+        return Right(ExamModel.fromJson(response.data['data']));
       }
 
       return const Left('Terjadi kesalahan');
@@ -59,7 +60,7 @@ class TExamService {
     }
   }
 
-  Future<Either<String, Exam>> editExam(int id, String txtName, String txtClass, String txtDescription, String? thumbnailByte, String? thumbnailExtension, bool? isRandom, int time) async {
+  Future<Either<String, ExamModel>> editExam(int id, String txtName, String txtClass, String txtDescription, String? thumbnailByte, String? thumbnailExtension, bool? isRandom, int time) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     Map<String, dynamic> data = {};
@@ -90,7 +91,7 @@ class TExamService {
       );
 
       if (response.statusCode == 200) {
-        return Right(Exam.fromJson(response.data['data']));
+        return Right(ExamModel.fromJson(response.data['data']));
       }
       return const Left('Terjadi kesalahan');
     } on DioError catch (e) {

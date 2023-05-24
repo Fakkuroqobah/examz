@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 
-import '../../models/student/s_exam_model.dart';
+import '../../models/exam_model.dart';
+import '../../models/question_model.dart';
 import '../../models/rated_model.dart';
 import '../../services/student/s_rated_service.dart';
 import '../../widgets/empty_condition.dart';
@@ -10,7 +11,7 @@ import '../../widgets/question_card_student.dart';
 class SRated extends StatefulWidget {
   const SRated({super.key, required this.exam});
 
-  final Exam exam;
+  final ExamModel exam;
 
   @override
   State<SRated> createState() => _SRatedState();
@@ -53,7 +54,7 @@ class _SRatedState extends State<SRated> {
                     int number = 1;
                     int total = snapshot.data!.total;
                     int totalQuestion = snapshot.data!.questions.length;
-                    List<Question> questionList = snapshot.data!.questions;
+                    List<QuestionModel> questionList = snapshot.data!.questions;
           
                     return (snapshot.data!.answerStudent.isNotEmpty) ? Column(
                       children: [
@@ -91,7 +92,7 @@ class _SRatedState extends State<SRated> {
                         const SizedBox(height: 8.0),
                         Column(
                           children: [
-                            for (Question val in questionList) 
+                            for (QuestionModel val in questionList) 
                               QuestionCardStudent(data: val, number: number++)
                           ],
                         )

@@ -2,7 +2,7 @@ import 'package:fancy_drawer/fancy_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/supervisor/p_exam_model.dart';
+import '../../models/schedule_model.dart';
 
 import '../../provider/supervisor/p_exam_provider.dart';
 import '../../services/supervisor/p_auth_service.dart';
@@ -105,11 +105,11 @@ class _PExamState extends State<PExam> with SingleTickerProviderStateMixin {
     );
   }
 
-  ListView _buildListView(context, List<PExamModel> exam) {
+  ListView _buildListView(context, List<ScheduleModel> exam) {
     return ListView.builder(
       itemCount: exam.length,
       itemBuilder: (ctx, index) {
-        PExamModel data = exam[index];
+        ScheduleModel data = exam[index];
 
         return PExamCard(exam: data);
       },

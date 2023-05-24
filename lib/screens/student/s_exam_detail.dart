@@ -6,7 +6,7 @@ import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 import '../../configs/api.dart';
 import '../../configs/utils.dart';
-import '../../models/student/s_exam_model.dart';
+import '../../models/schedule_model.dart';
 
 import '../../provider/loading_provider.dart';
 import '../../provider/student/s_exam_provider.dart';
@@ -16,7 +16,7 @@ import 's_exam_question.dart';
 class SExamDetail extends StatefulWidget {
   const SExamDetail({super.key, required this.data});
 
-  final SExamModel data;
+  final ScheduleModel data;
 
   @override
   State<SExamDetail> createState() => _SExamDetailState();
@@ -39,7 +39,7 @@ class _SExamDetailState extends State<SExamDetail> {
 
   @override
   Widget build(BuildContext context) {
-    final exam = widget.data.schedule.exam;
+    final exam = widget.data.exam;
 
     return Scaffold(
       appBar: AppBar(

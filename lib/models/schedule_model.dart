@@ -1,14 +1,12 @@
 import 'dart:convert';
 
-import '../exam_model.dart';
-import '../room_model.dart';
-import '../supervisor_model.dart';
+import 'exam_model.dart';
 
-List<AScheduleModel> aScheduleModelFromJson(String str) => List<AScheduleModel>.from(json.decode(str).map((x) => AScheduleModel.fromJson(x)));
+List<ScheduleModel> scheduleModelFromJson(String str) => List<ScheduleModel>.from(json.decode(str).map((x) => ScheduleModel.fromJson(x)));
 
-String aScheduleModelToJson(List<AScheduleModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String scheduleModelToJson(List<ScheduleModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class AScheduleModel {
+class ScheduleModel {
   int id;
   int roomId;
   int supervisorId;
@@ -16,11 +14,9 @@ class AScheduleModel {
   String? token;
   DateTime? createdAt;
   DateTime? updatedAt;
-  RoomModel room;
-  SupervisorModel supervisor;
   ExamModel exam;
 
-  AScheduleModel({
+  ScheduleModel({
     required this.id,
     required this.roomId,
     required this.supervisorId,
@@ -28,12 +24,10 @@ class AScheduleModel {
     required this.token,
     required this.createdAt,
     required this.updatedAt,
-    required this.room,
-    required this.supervisor,
     required this.exam,
   });
 
-  factory AScheduleModel.fromJson(Map<String, dynamic> json) => AScheduleModel(
+  factory ScheduleModel.fromJson(Map<String, dynamic> json) => ScheduleModel(
     id: json["id"],
     roomId: json["room_id"],
     supervisorId: json["supervisor_id"],
@@ -41,8 +35,6 @@ class AScheduleModel {
     token: json["token"],
     createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
     updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
-    room: RoomModel.fromJson(json["room"]),
-    supervisor: SupervisorModel.fromJson(json["supervisor"]),
     exam: ExamModel.fromJson(json["exam"]),
   );
 
@@ -54,8 +46,6 @@ class AScheduleModel {
     "token": token,
     "created_at": createdAt?.toIso8601String(),
     "updated_at": updatedAt?.toIso8601String(),
-    "room": room.toJson(),
-    "supervisor": supervisor.toJson(),
     "exam": exam.toJson(),
   };
 }

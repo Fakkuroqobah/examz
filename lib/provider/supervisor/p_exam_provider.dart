@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 
-import '../../models/supervisor/p_exam_model.dart';
+import '../../models/exam_model.dart';
+import '../../models/schedule_model.dart';
 import '../../services/supervisor/p_exam_service.dart';
 
 class PExamProvider extends ChangeNotifier {
-  List<PExamModel> _examList = [];
+  List<ScheduleModel> _examList = [];
 
   bool _isLoading = false;
   bool _hasError = false;
   
-  List<PExamModel> get examList => _examList;
+  List<ScheduleModel> get examList => _examList;
 
   bool get isLoading => _isLoading;
   bool get hasError => _hasError;
@@ -31,8 +32,8 @@ class PExamProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void triggerExam(PExamModel data) {
-    PExamModel el = PExamModel(
+  void triggerExam(ScheduleModel data) {
+    ScheduleModel el = ScheduleModel(
       id: data.id, 
       roomId: data.roomId, 
       supervisorId: data.supervisorId, 
@@ -40,7 +41,7 @@ class PExamProvider extends ChangeNotifier {
       token: data.token,
       createdAt: data.createdAt, 
       updatedAt: data.updatedAt, 
-      exam: Exam(
+      exam: ExamModel(
         id: data.exam.id, 
         examClass: data.exam.examClass, 
         name: data.exam.name, 

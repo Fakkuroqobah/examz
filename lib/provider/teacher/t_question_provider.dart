@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-import '../../models/teacher/t_question_model.dart';
+import '../../models/question_model.dart';
 import '../../services/teacher/t_question_service.dart';
 
 class TQuestionProvider extends ChangeNotifier {
-  List<TQuestionModel> _questionList = [];
+  List<QuestionModel> _questionList = [];
   bool _isLoading = false;
   bool _hasError = false;
   
-  List<TQuestionModel> get questionList => _questionList;
+  List<QuestionModel> get questionList => _questionList;
   bool get isLoading => _isLoading;
   bool get hasError => _hasError;
 
@@ -29,13 +29,13 @@ class TQuestionProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addQuestion(TQuestionModel data) {
+  void addQuestion(QuestionModel data) {
     _questionList.add(data);
     notifyListeners();
   }
 
-  void updateQuestion(TQuestionModel data) {
-    TQuestionModel el = TQuestionModel(
+  void updateQuestion(QuestionModel data) {
+    QuestionModel el = QuestionModel(
       id: data.id, 
       examId: data.examId, 
       subject: data.subject, 

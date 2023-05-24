@@ -3,26 +3,26 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../configs/api.dart';
-import '../../models/supervisor/p_exam_model.dart';
+import '../../models/schedule_model.dart';
 
 class PExamService {
   final Dio _dio = Dio();
 
-  Future<List<PExamModel>> getExam() async {
+  Future<List<ScheduleModel>> getExam() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     _dio.options.headers['authorization'] = 'Bearer ${preferences.getString("token")}';
     final response = await _dio.get(Api.pExam);
     
-    List<PExamModel> data = <PExamModel>[];
+    List<ScheduleModel> data = <ScheduleModel>[];
     response.data['data'].forEach((val) {
-      data.add(PExamModel.fromJson(val));
+      data.add(ScheduleModel.fromJson(val));
     });
 
     return data;
   }
 
-  Future<Either<String, PExamModel>> triggerExam(int id) async {
+  Future<Either<String, ScheduleModel>> triggerExam(int id) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     try {
       _dio.options.headers['authorization'] = 'Bearer ${preferences.getString("token")}';
@@ -30,7 +30,7 @@ class PExamService {
       final response = await _dio.post("${Api.pStart}/$id");
 
       if (response.statusCode == 200) {
-        return Right(PExamModel.fromJson(response.data['data']));
+        return Right(ScheduleModel.fromJson(response.data['data']));
       }
 
       return const Left('Terjadi kesalahan');

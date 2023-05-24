@@ -3,35 +3,35 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../configs/api.dart';
-import '../../models/student/s_exam_model.dart';
-import '../../models/student/s_question_model.dart';
+import '../../models/question_model.dart';
+import '../../models/schedule_model.dart';
 
 class SExamService {
   final Dio _dio = Dio();
 
-  Future<List<SExamModel>> getExamLaunched() async {
+  Future<List<ScheduleModel>> getExamLaunched() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     _dio.options.headers['authorization'] = 'Bearer ${preferences.getString("token")}';
     final response = await _dio.get(Api.sExamLaunched);
     
-    List<SExamModel> data = <SExamModel>[];
+    List<ScheduleModel> data = <ScheduleModel>[];
     response.data['data'].forEach((val) {
-      data.add(SExamModel.fromJson(val));
+      data.add(ScheduleModel.fromJson(val));
     });
 
     return data;
   }
 
-  Future<List<SExamModel>> getExamFinished() async {
+  Future<List<ScheduleModel>> getExamFinished() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     _dio.options.headers['authorization'] = 'Bearer ${preferences.getString("token")}';
     final response = await _dio.get(Api.sExamFinished);
     
-    List<SExamModel> data = <SExamModel>[];
+    List<ScheduleModel> data = <ScheduleModel>[];
     response.data['data'].forEach((val) {
-      data.add(SExamModel.fromJson(val));
+      data.add(ScheduleModel.fromJson(val));
     });
 
     return data;
@@ -53,9 +53,9 @@ class SExamService {
 
       if (response.statusCode == 200) {
         int remainingTime = response.data['data']['remaining_time'];
-        List<SQuestionModel> data = <SQuestionModel>[];
+        List<QuestionModel> data = <QuestionModel>[];
         response.data['data']['question'].forEach((val) {
-          data.add(SQuestionModel.fromJson(val));
+          data.add(QuestionModel.fromJson(val));
         });
 
         return Right([remainingTime, data]);

@@ -1,7 +1,7 @@
 import 'package:fancy_drawer/fancy_drawer.dart';
 import 'package:flutter/material.dart';
 
-import '../../models/teacher/t_exam_model.dart';
+import '../../models/exam_model.dart';
 import '../../services/teacher/t_auth_service.dart';
 import '../../services/teacher/t_rated_service.dart';
 import '../../widgets/empty_condition.dart';
@@ -113,15 +113,15 @@ class _TRatedState extends State<TRated> with SingleTickerProviderStateMixin {
             onRefresh: _refresh,
             child: FutureBuilder(
               future: _tRatedService.getExam(),
-              builder: (_, AsyncSnapshot<List<Exam>> snapshot) {
+              builder: (_, AsyncSnapshot<List<ExamModel>> snapshot) {
                 if (snapshot.hasError) {
                   return Center(child: Text("Terjadi kesalahan dengan pesan : ${snapshot.error.toString()}"));
                 } else if (snapshot.connectionState == ConnectionState.done) {
-                  List<Exam>? exam = snapshot.data;
+                  List<ExamModel>? exam = snapshot.data;
                   return (snapshot.data!.isNotEmpty) ? ListView.builder(
                     itemCount: exam?.length,
                     itemBuilder: (ctx, index) {
-                      Exam data = exam![index];
+                      ExamModel data = exam![index];
 
                       return ListTile(
                         leading: const Icon(Icons.book),

@@ -4,8 +4,8 @@ import 'package:provider/provider.dart';
 
 import '../../configs/api.dart';
 import '../../configs/utils.dart';
-import '../../models/teacher/t_exam_model.dart';
-import '../../models/teacher/t_question_model.dart';
+import '../../models/exam_model.dart';
+import '../../models/question_model.dart';
 import '../../provider/teacher/t_question_provider.dart';
 import '../../widgets/empty_condition.dart';
 import '../../widgets/question_card.dart';
@@ -14,7 +14,7 @@ import 't_question_add.dart';
 class TExamDetail extends StatefulWidget {
   const TExamDetail({super.key, required this.data});
 
-  final Exam data;
+  final ExamModel data;
 
   @override
   State<TExamDetail> createState() => _TExamDetailState();
@@ -139,7 +139,7 @@ class _TExamDetailState extends State<TExamDetail> {
                 const SizedBox(height: 8.0),
                 Consumer<TQuestionProvider>(
                   builder: (_, tQuestion, __) {
-                    List<TQuestionModel>? tQuestionModel = tQuestion.questionList;
+                    List<QuestionModel>? tQuestionModel = tQuestion.questionList;
                     int number = 1;
         
                     if(tQuestion.isLoading) {
@@ -156,7 +156,7 @@ class _TExamDetailState extends State<TExamDetail> {
         
                     return Column(
                       children: [
-                        for (TQuestionModel val in tQuestionModel) 
+                        for (QuestionModel val in tQuestionModel) 
                           QuestionCard(exam: widget.data, question: val, number: number++),
                       ],
                     );

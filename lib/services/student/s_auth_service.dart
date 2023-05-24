@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../configs/api.dart';
 import '../../models/login_model.dart';
-import '../../models/student/s_student_model.dart';
+import '../../models/student_model.dart';
 
 class SAuthService {
   final Dio _dio = Dio();
@@ -23,13 +23,13 @@ class SAuthService {
     _dio.options.headers['authorization'] = 'Bearer ${loginModel.accessToken}';
     final getUser = await _dio.get(Api.sGetUser);
 
-    SStudentModel studentModel = SStudentModel.fromJson(getUser.data);
+    StudentModel studentModel = StudentModel.fromJson(getUser.data);
 
     preferences.setString("token", loginModel.accessToken);
     preferences.setInt("id", studentModel.id);
     preferences.setString("name", studentModel.name);
     preferences.setString("username", studentModel.username);
-    preferences.setString("sStudentModelClass", studentModel.sStudentModelClass);
+    preferences.setString("studentModelClass", studentModel.studentModelClass);
     preferences.setString("role", studentModel.role);
 
     return true;

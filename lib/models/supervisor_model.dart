@@ -1,32 +1,23 @@
-import 'dart:convert';
+class SupervisorModel {
+  int id;
+  String name;
+  String username;
+  String role;
+  DateTime? createdAt;
+  DateTime? updatedAt;
 
-SStudentModel? sStudentModelFromJson(String str) => SStudentModel.fromJson(json.decode(str));
-
-String sStudentModelToJson(SStudentModel? data) => json.encode(data!.toJson());
-
-class SStudentModel {
-  SStudentModel({
+  SupervisorModel({
     required this.id,
     required this.name,
-    required this.sStudentModelClass,
     required this.username,
     required this.role,
     required this.createdAt,
     required this.updatedAt,
   });
 
-  int id;
-  String name;
-  String sStudentModelClass;
-  String username;
-  String role;
-  DateTime? createdAt;
-  DateTime? updatedAt;
-
-  factory SStudentModel.fromJson(Map<String, dynamic> json) => SStudentModel(
+  factory SupervisorModel.fromJson(Map<String, dynamic> json) => SupervisorModel(
     id: json["id"],
     name: json["name"],
-    sStudentModelClass: json["class"],
     username: json["username"],
     role: json["role"],
     createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
@@ -36,7 +27,6 @@ class SStudentModel {
   Map<String, dynamic> toJson() => {
     "id": id,
     "name": name,
-    "class": sStudentModelClass,
     "username": username,
     "role": role,
     "created_at": createdAt?.toIso8601String(),

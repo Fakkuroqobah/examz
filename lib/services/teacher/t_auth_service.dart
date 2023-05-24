@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../configs/api.dart';
 import '../../models/login_model.dart';
-import '../../models/teacher/t_teacher_model.dart';
+import '../../models/teacher_model.dart';
 
 class TAuthService {
   final Dio _dio = Dio();
@@ -23,7 +23,7 @@ class TAuthService {
     _dio.options.headers['authorization'] = 'Bearer ${loginModel.accessToken}';
     final getUser = await _dio.get(Api.tGetUser);
 
-    TTeacherModel teacherModel = TTeacherModel.fromJson(getUser.data);
+    TeacherModel teacherModel = TeacherModel.fromJson(getUser.data);
 
     preferences.setString("token", loginModel.accessToken);
     preferences.setInt("id", teacherModel.id);

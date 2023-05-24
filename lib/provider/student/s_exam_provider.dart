@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 
-import '../../models/student/s_exam_model.dart';
-import '../../models/student/s_question_model.dart';
+import '../../models/question_model.dart';
+import '../../models/schedule_model.dart';
 import '../../services/student/s_exam_service.dart';
 
 class SExamProvider extends ChangeNotifier {
-  List<SExamModel> _examLaunchedList = [];
-  List<SExamModel> _examFinishedList = [];
+  List<ScheduleModel> _examLaunchedList = [];
+  List<ScheduleModel> _examFinishedList = [];
   
-  final List<SQuestionModel> _questionList = [];
+  final List<QuestionModel> _questionList = [];
   final List _questionAnswer = [];
   int _activePage = 0;
 
   bool _isLoading = false;
   bool _hasError = false;
   
-  List<SExamModel> get examLaunchedList => _examLaunchedList;
-  List<SExamModel> get examFinishedList => _examFinishedList;
+  List<ScheduleModel> get examLaunchedList => _examLaunchedList;
+  List<ScheduleModel> get examFinishedList => _examFinishedList;
   int get activePage => _activePage;
 
-  List<SQuestionModel> get questionList => _questionList;
+  List<QuestionModel> get questionList => _questionList;
   List get questionAnswer => _questionAnswer;
 
   bool get isLoading => _isLoading;
@@ -59,7 +59,7 @@ class SExamProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void token(List<SQuestionModel> data) {
+  void token(List<QuestionModel> data) {
     _questionList.addAll(data);
     notifyListeners();
   }

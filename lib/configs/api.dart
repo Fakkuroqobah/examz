@@ -52,6 +52,8 @@ class Api {
   static const String pStart = "$pBaseUrl/exam/start";
   static const String pStop = "$pBaseUrl/exam/stop";
 
+  static const String pStudent = "$pBaseUrl/student";
+
 
   // ADMIN
   static const String aLogin = "$aBaseUrl/login";

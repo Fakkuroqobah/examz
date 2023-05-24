@@ -2,36 +2,36 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../configs/api.dart';
+import '../../models/exam_model.dart';
 import '../../models/rated_model.dart';
-import '../../models/teacher/t_exam_model.dart';
-import '../../models/teacher/t_rated_model.dart';
+import '../../models/student_schedule_model.dart';
 
 class TRatedService {
   final Dio _dio = Dio();
 
-  Future<List<Exam>> getExam() async {
+  Future<List<ExamModel>> getExam() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     _dio.options.headers['authorization'] = 'Bearer ${preferences.getString("token")}';
     final response = await _dio.get(Api.tRatedExam);
 
-    List<Exam> data = <Exam>[];
+    List<ExamModel> data = <ExamModel>[];
     response.data['data'].forEach((val) {
-      data.add(Exam.fromJson(val));
+      data.add(ExamModel.fromJson(val));
     });
 
     return data;
   }
 
-  Future<List<TRatedModel>> getStudent(int examId, String classExam) async {
+  Future<List<StudentScheduleModel>> getStudent(int examId, String classExam) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     _dio.options.headers['authorization'] = 'Bearer ${preferences.getString("token")}';
     final response = await _dio.get("${Api.tRatedStudent}/$examId/$classExam");
 
-    List<TRatedModel> data = <TRatedModel>[];
+    List<StudentScheduleModel> data = <StudentScheduleModel>[];
     response.data['data'].forEach((val) {
-      data.add(TRatedModel.fromJson(val));
+      data.add(StudentScheduleModel.fromJson(val));
     });
 
     return data;

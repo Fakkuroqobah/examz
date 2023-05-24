@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../configs/api.dart';
 import '../../models/login_model.dart';
-import '../../models/supervisor/p_supervisor_model.dart';
+import '../../models/supervisor_model.dart';
 
 class PAuthService {
   final Dio _dio = Dio();
@@ -23,7 +23,7 @@ class PAuthService {
     _dio.options.headers['authorization'] = 'Bearer ${loginModel.accessToken}';
     final getUser = await _dio.get(Api.pGetUser);
 
-    PSupervisorModel supervisorModel = PSupervisorModel.fromJson(getUser.data);
+    SupervisorModel supervisorModel = SupervisorModel.fromJson(getUser.data);
 
     preferences.setString("token", loginModel.accessToken);
     preferences.setInt("id", supervisorModel.id);

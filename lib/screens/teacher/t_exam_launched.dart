@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../models/exam_model.dart';
 import '../../models/teacher/t_exam_model.dart';
 import '../../services/teacher/t_exam_service.dart';
 
@@ -38,7 +39,7 @@ class _TExamLaunchedState extends State<TExamLaunched> {
             if (snapshot.hasError) {
               return Center(child: Text("Terjadi kesalahan dengan pesan : ${snapshot.error.toString()}"));
             } else if (snapshot.connectionState == ConnectionState.done) {
-              List<Exam>? exam = snapshot.data?.examLaunched;
+              List<ExamModel>? exam = snapshot.data?.examLaunched;
               return (snapshot.data!.sumExamLaunched > 0) ? Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
@@ -64,11 +65,11 @@ class _TExamLaunchedState extends State<TExamLaunched> {
     );
   }
 
-  ListView _buildListView(context, List<Exam>? exam) {
+  ListView _buildListView(context, List<ExamModel>? exam) {
     return ListView.builder(
       itemCount: exam?.length,
       itemBuilder: (ctx, index) {
-        Exam data = exam![index];
+        ExamModel data = exam![index];
 
         return TExamCard(exam: data);
       },

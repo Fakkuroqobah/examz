@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-import '../../models/admin/a_room_model.dart';
 import '../../models/admin/a_schedule_model.dart';
 import '../../models/admin/a_student_model.dart';
 import '../../models/admin/a_student_schedule_model.dart';
 import '../../models/admin/a_supervisor_model.dart';
 import '../../models/admin/a_teacher_model.dart';
+import '../../models/room_model.dart';
 import '../../services/admin/a_import_service.dart';
 
 class AImportProvider extends ChangeNotifier {
-  List<ARoomModel> _roomList = [];
+  List<RoomModel> _roomList = [];
   List<ATeacherModel> _teacherList = [];
   List<AStudentModel> _studentList = [];
   List<ASupervisorModel> _supervisorList = [];
@@ -19,7 +19,7 @@ class AImportProvider extends ChangeNotifier {
   bool _isLoading = false;
   bool _hasError = false;
   
-  List<ARoomModel> get roomList => _roomList;
+  List<RoomModel> get roomList => _roomList;
   List<ATeacherModel> get teacherList => _teacherList;
   List<AStudentModel> get studentList => _studentList;
   List<ASupervisorModel> get supervisorList => _supervisorList;
@@ -46,7 +46,7 @@ class AImportProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addRoom(List<ARoomModel> data) {
+  void addRoom(List<RoomModel> data) {
     _roomList.addAll(data);
     notifyListeners();
   }

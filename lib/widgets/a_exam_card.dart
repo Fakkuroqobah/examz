@@ -4,7 +4,7 @@ import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 import '../configs/api.dart';
-import '../models/admin/a_exam_model.dart';
+import '../models/exam_model.dart';
 import '../provider/admin/a_exam_provider.dart';
 import '../provider/loading_provider.dart';
 import '../services/admin/a_exam_service.dart';
@@ -12,7 +12,7 @@ import '../services/admin/a_exam_service.dart';
 class AExamCard extends StatefulWidget {
   const AExamCard({super.key, required this.exam});
 
-  final AExamModel exam;
+  final ExamModel exam;
 
   @override
   State<AExamCard> createState() => _AExamCardState();
@@ -37,7 +37,7 @@ class _AExamCardState extends State<AExamCard> {
               ListTile(
                 leading: Image.network(_api.tBaseUrlAsset + widget.exam.thumbnail),
                 title: Text(widget.exam.name),
-                subtitle: Text("Kelas ${widget.exam.aExamModelClass}",
+                subtitle: Text("Kelas ${widget.exam.examClass}",
                   style: TextStyle(color: Colors.black.withOpacity(0.6)),
                 ),
               ),

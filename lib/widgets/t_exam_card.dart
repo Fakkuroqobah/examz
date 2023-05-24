@@ -4,7 +4,7 @@ import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 import '../configs/api.dart';
-import '../models/teacher/t_exam_model.dart';
+import '../models/exam_model.dart';
 import '../provider/teacher/t_exam_provider.dart';
 import '../screens/teacher/t_exam_edit.dart';
 import '../screens/teacher/t_exam_detail.dart';
@@ -13,7 +13,7 @@ import '../services/teacher/t_exam_service.dart';
 class TExamCard extends StatefulWidget {
   const TExamCard({super.key, required this.exam});
 
-  final Exam exam;
+  final ExamModel exam;
 
   @override
   State<TExamCard> createState() => _TExamCardState();

@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
-import '../../models/student/s_exam_model.dart';
-import '../../models/student/s_question_model.dart';
+import '../../models/exam_model.dart';
+import '../../models/question_model.dart';
 import '../../provider/loading_provider.dart';
 import '../../provider/student/s_exam_provider.dart';
 import '../../provider/student/s_timer_provider.dart';
@@ -15,7 +15,7 @@ import 's_exam_question_body.dart';
 class SExamQuestion extends StatefulWidget {
   const SExamQuestion({super.key, required this.data, required this.remainingTime});
 
-  final Exam data;
+  final ExamModel data;
   final int remainingTime;
 
   @override
@@ -27,7 +27,7 @@ class _SExamQuestionState extends State<SExamQuestion> with WidgetsBindingObserv
   final SExamService _sExamService = SExamService();
   final TextEditingController _txtBlock = TextEditingController();
   final List<Widget> _pages = [];
-  List<SQuestionModel> sqm = [];
+  List<QuestionModel> sqm = [];
   bool _isBlock = false;
 
   @override

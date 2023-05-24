@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../models/exam_model.dart';
 import '../../models/teacher/t_exam_model.dart';
 import '../../services/teacher/t_exam_service.dart';
 
@@ -29,14 +30,14 @@ class TExamProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addExamInactive(Exam data) {
+  void addExamInactive(ExamModel data) {
     _examList.examInActive.add(data);
     _examList.sumExamInActive++;
     notifyListeners();
   }
 
-  void updateExamInactive(Exam data) {
-    Exam el = Exam(
+  void updateExamInactive(ExamModel data) {
+    ExamModel el = ExamModel(
       id: data.id, 
       examClass: data.examClass, 
       name: data.name, 

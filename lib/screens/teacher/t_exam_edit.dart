@@ -9,7 +9,7 @@ import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 import '../../configs/api.dart';
-import '../../models/teacher/t_exam_model.dart';
+import '../../models/exam_model.dart';
 import '../../provider/loading_provider.dart';
 import '../../provider/teacher/t_exam_provider.dart';
 import '../../provider/teacher/t_is_random_provider.dart';
@@ -20,7 +20,7 @@ import '../../services/teacher/t_exam_service.dart';
 class TExamEdit extends StatefulWidget {
   const TExamEdit({super.key, required this.data});
 
-  final Exam data;
+  final ExamModel data;
 
   @override
   State<TExamEdit> createState() => _TExamEditState();

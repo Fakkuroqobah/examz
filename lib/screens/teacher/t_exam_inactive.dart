@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/teacher/t_exam_model.dart';
+import '../../models/exam_model.dart';
 import '../../provider/teacher/t_exam_provider.dart';
 
 import '../../widgets/empty_condition.dart';
@@ -67,11 +67,11 @@ class _TExamInactiveState extends State<TExamInactive> {
     );
   }
 
-  ListView _buildListView(context, List<Exam> exam) {
+  ListView _buildListView(context, List<ExamModel> exam) {
     return ListView.builder(
       itemCount: exam.length,
       itemBuilder: (ctx, index) {
-        Exam data = exam[index];
+        ExamModel data = exam[index];
 
         return TExamCard(exam: data);
       },

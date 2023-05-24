@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 
-import '../models/rated_model.dart';
+import '../models/answer_option_model.dart';
+import '../models/question_model.dart';
 
 class QuestionCardStudent extends StatefulWidget {
   const QuestionCardStudent({super.key, required this.data, required this.number});
 
-  final Question data;
+  final QuestionModel data;
   final int number;
 
   @override
@@ -49,7 +50,7 @@ class _QuestionCardStudentState extends State<QuestionCardStudent> {
               child: ListView.builder(
                 itemCount: widget.data.answerOption.length,
                 itemBuilder: (_, index) {
-                  AnswerOption answerOption = widget.data.answerOption[index];
+                  AnswerOptionModel answerOption = widget.data.answerOption[index];
                   List<String> al = ['A', 'B', 'C', 'D', 'E'];
                   Text option;
 

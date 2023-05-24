@@ -1,12 +1,6 @@
-import 'dart:convert';
-
-List<AExamModel> aExamModelFromJson(String str) => List<AExamModel>.from(json.decode(str).map((x) => AExamModel.fromJson(x)));
-
-String aExamModelToJson(List<AExamModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
-
-class AExamModel {
+class ExamModel {
   int id;
-  String aExamModelClass;
+  String examClass;
   String name;
   String status;
   int isRandom;
@@ -18,9 +12,9 @@ class AExamModel {
   DateTime? createdAt;
   DateTime? updatedAt;
 
-  AExamModel({
+  ExamModel({
     required this.id,
-    required this.aExamModelClass,
+    required this.examClass,
     required this.name,
     required this.status,
     required this.isRandom,
@@ -33,9 +27,9 @@ class AExamModel {
     required this.updatedAt,
   });
 
-  factory AExamModel.fromJson(Map<String, dynamic> json) => AExamModel(
+  factory ExamModel.fromJson(Map<String, dynamic> json) => ExamModel(
     id: json["id"],
-    aExamModelClass: json["class"],
+    examClass: json["class"],
     name: json["name"],
     status: json["status"],
     isRandom: json["is_random"],
@@ -50,7 +44,7 @@ class AExamModel {
 
   Map<String, dynamic> toJson() => {
     "id": id,
-    "class": aExamModelClass,
+    "class": examClass,
     "name": name,
     "status": status,
     "is_random": isRandom,

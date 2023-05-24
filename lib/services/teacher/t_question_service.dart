@@ -3,26 +3,26 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../configs/api.dart';
-import '../../models/teacher/t_question_model.dart';
+import '../../models/question_model.dart';
 
 class TQuestionService {
   final Dio _dio = Dio();
 
-  Future<List<TQuestionModel>> getQuestion(int id) async {
+  Future<List<QuestionModel>> getQuestion(int id) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     _dio.options.headers['authorization'] = 'Bearer ${preferences.getString("token")}';
     final response = await _dio.get("${Api.tQuestion}/$id");
 
-    List<TQuestionModel> data = <TQuestionModel>[];
+    List<QuestionModel> data = <QuestionModel>[];
     response.data['data'].forEach((val) {
-      data.add(TQuestionModel.fromJson(val));
+      data.add(QuestionModel.fromJson(val));
     });
 
     return data;
   }
 
-  Future<Either<String, TQuestionModel>> addOrEditQuestion(int id, String txtSubject, Map<String, dynamic> answer, String type, {int? examId}) async {
+  Future<Either<String, QuestionModel>> addOrEditQuestion(int id, String txtSubject, Map<String, dynamic> answer, String type, {int? examId}) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     final data = {
@@ -40,7 +40,7 @@ class TQuestionService {
       );
 
       if (response.statusCode == 201) {
-        return Right(TQuestionModel.fromJson(response.data['data']));
+        return Right(QuestionModel.fromJson(response.data['data']));
       }
 
       return const Left('Terjadi kesalahan');

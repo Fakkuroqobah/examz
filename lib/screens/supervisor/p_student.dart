@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
 
-import '../../models/exam_model.dart';
 import '../../models/student_schedule_model.dart';
-import '../../services/teacher/t_rated_service.dart';
+import '../../services/supervisor/p_student_service.dart';
 import '../../widgets/empty_condition.dart';
-import 't_rated_student_detail.dart';
 
-class TRatedStudent extends StatefulWidget {
-  const TRatedStudent({super.key, required this.data});
+class PStudent extends StatefulWidget {
+  const PStudent({super.key, required this.id});
 
-  final ExamModel data;
+  final int id;
 
   @override
-  State<TRatedStudent> createState() => _TRatedStudentState();
+  State<PStudent> createState() => _PStudentState();
 }
 
-class _TRatedStudentState extends State<TRatedStudent> with SingleTickerProviderStateMixin {
-  final TRatedService _tRatedService = TRatedService();
+class _PStudentState extends State<PStudent> with SingleTickerProviderStateMixin {
+  final PStudentService _pStudentService = PStudentService();
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   Future<void> _refresh() async {
@@ -32,14 +30,14 @@ class _TRatedStudentState extends State<TRatedStudent> with SingleTickerProvider
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Penilaian"),
+        title: const Text("Daftar Siswa"),
         elevation: 0,
       ),
       body: RefreshIndicator(
         key: _refreshIndicatorKey,
         onRefresh: _refresh,
         child: FutureBuilder(
-          future: _tRatedService.getStudent(widget.data.id, widget.data.examClass),
+          future: _pStudentService.getStudent(widget.id),
           builder: (_, AsyncSnapshot<List<StudentScheduleModel>> snapshot) {
             if (snapshot.hasError) {
               return Center(child: Text("Terjadi kesalahan dengan pesan : ${snapshot.error.toString()}"));
@@ -53,10 +51,7 @@ class _TRatedStudentState extends State<TRatedStudent> with SingleTickerProvider
                   return ListTile(
                     leading: const Icon(Icons.person),
                     title: Text(data.student.name),
-                    trailing: const Icon(Icons.chevron_right),
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TRatedStudentDetail(exam: widget.data, tRatedModel: data)));
-                    },
+                    subtitle: Text(data.block ?? 'Kosong'),
                   );
                 },
               ) : const EmptyCondition();

@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-PSupervisorModel? pSupervisorModelFromJson(String str) => PSupervisorModel.fromJson(json.decode(str));
+TeacherModel teacherModelFromJson(String str) => TeacherModel.fromJson(json.decode(str));
 
-String pSupervisorModelToJson(PSupervisorModel? data) => json.encode(data!.toJson());
+String teacherModelToJson(TeacherModel data) => json.encode(data.toJson());
 
-class PSupervisorModel {
-  PSupervisorModel({
+class TeacherModel {
+  TeacherModel({
     required this.id,
     required this.name,
     required this.username,
@@ -21,7 +21,7 @@ class PSupervisorModel {
   DateTime? createdAt;
   DateTime? updatedAt;
 
-  factory PSupervisorModel.fromJson(Map<String, dynamic> json) => PSupervisorModel(
+  factory TeacherModel.fromJson(Map<String, dynamic> json) => TeacherModel(
     id: json["id"],
     name: json["name"],
     username: json["username"],

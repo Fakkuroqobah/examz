@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
-import '../../models/teacher/t_question_model.dart';
+import '../../models/question_model.dart';
 import '../../provider/loading_provider.dart';
 import '../../provider/teacher/t_is_correct_answer_provider.dart';
 import '../../provider/teacher/t_question_provider.dart';
@@ -14,7 +14,7 @@ import '../../services/teacher/t_question_service.dart';
 class TQuestionEdit extends StatefulWidget {
   const TQuestionEdit({super.key, required this.data});
 
-  final TQuestionModel data;
+  final QuestionModel data;
 
   @override
   State<TQuestionEdit> createState() => _TQuestionEditState();

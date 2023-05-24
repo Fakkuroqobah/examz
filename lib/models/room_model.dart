@@ -1,23 +1,17 @@
-import 'dart:convert';
-
-List<ARoomModel> aRoomModelFromJson(String str) => List<ARoomModel>.from(json.decode(str).map((x) => ARoomModel.fromJson(x)));
-
-String aRoomModelToJson(List<ARoomModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
-
-class ARoomModel {
+class RoomModel {
   int id;
   String name;
   DateTime? createdAt;
   DateTime? updatedAt;
 
-  ARoomModel({
+  RoomModel({
     required this.id,
     required this.name,
     required this.createdAt,
     required this.updatedAt,
   });
 
-  factory ARoomModel.fromJson(Map<String, dynamic> json) => ARoomModel(
+  factory RoomModel.fromJson(Map<String, dynamic> json) => RoomModel(
     id: json["id"],
     name: json["name"],
     createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),

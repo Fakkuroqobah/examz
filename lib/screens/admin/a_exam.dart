@@ -2,7 +2,7 @@ import 'package:fancy_drawer/fancy_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/admin/a_exam_model.dart';
+import '../../models/exam_model.dart';
 import '../../provider/admin/a_exam_provider.dart';
 
 import '../../services/admin/a_auth_service.dart';
@@ -105,11 +105,11 @@ class _AExamState extends State<AExam> with SingleTickerProviderStateMixin {
     );
   }
 
-  ListView _buildListView(context, List<AExamModel> exam) {
+  ListView _buildListView(context, List<ExamModel> exam) {
     return ListView.builder(
       itemCount: exam.length,
       itemBuilder: (ctx, index) {
-        AExamModel data = exam[index];
+        ExamModel data = exam[index];
 
         return AExamCard(exam: data);
       },

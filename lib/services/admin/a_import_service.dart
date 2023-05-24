@@ -5,12 +5,12 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../configs/api.dart';
-import '../../models/admin/a_room_model.dart';
 import '../../models/admin/a_schedule_model.dart';
 import '../../models/admin/a_student_model.dart';
 import '../../models/admin/a_student_schedule_model.dart';
 import '../../models/admin/a_supervisor_model.dart';
 import '../../models/admin/a_teacher_model.dart';
+import '../../models/room_model.dart';
 
 
 class AImportService {
@@ -58,15 +58,15 @@ class AImportService {
     return data;
   }
 
-  Future<List<ARoomModel>> getRoom() async {
+  Future<List<RoomModel>> getRoom() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     _dio.options.headers['authorization'] = 'Bearer ${preferences.getString("token")}';
     final response = await _dio.get(Api.aRooms);
     
-    List<ARoomModel> data = <ARoomModel>[];
+    List<RoomModel> data = <RoomModel>[];
     response.data['data'].forEach((val) {
-      data.add(ARoomModel.fromJson(val));
+      data.add(RoomModel.fromJson(val));
     });
 
     return data;
@@ -100,7 +100,7 @@ class AImportService {
     return data;
   }
 
-  Future<Either<String, List<ARoomModel>>> roomsImport(File excel) async {
+  Future<Either<String, List<RoomModel>>> roomsImport(File excel) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     
     FormData data = FormData.fromMap({
@@ -114,9 +114,9 @@ class AImportService {
       );
 
       if (response.statusCode == 201) {
-        List<ARoomModel> data = <ARoomModel>[];
+        List<RoomModel> data = <RoomModel>[];
         response.data['data'].forEach((val) {
-          data.add(ARoomModel.fromJson(val));
+          data.add(RoomModel.fromJson(val));
         });
         return Right(data);
       }

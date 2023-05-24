@@ -5,15 +5,16 @@ import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 import '../configs/api.dart';
-import '../models/supervisor/p_exam_model.dart';
+import '../models/schedule_model.dart';
 import '../provider/loading_provider.dart';
 import '../provider/supervisor/p_exam_provider.dart';
+import '../screens/supervisor/p_student.dart';
 import '../services/supervisor/p_exam_service.dart';
 
 class PExamCard extends StatefulWidget {
   const PExamCard({super.key, required this.exam});
 
-  final PExamModel exam;
+  final ScheduleModel exam;
 
   @override
   State<PExamCard> createState() => _PExamCardState();
@@ -29,7 +30,7 @@ class _PExamCardState extends State<PExamCard> {
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: () {
-          
+          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => PStudent(id: widget.exam.id)));
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

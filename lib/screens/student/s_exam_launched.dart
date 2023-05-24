@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/student/s_exam_model.dart';
+import '../../models/schedule_model.dart';
 import '../../provider/student/s_exam_provider.dart';
 
 import '../../widgets/empty_condition.dart';
@@ -67,11 +67,11 @@ class _SExamLaunchedState extends State<SExamLaunched> {
     );
   }
 
-  ListView _buildListView(context, List<SExamModel>? exam) {
+  ListView _buildListView(context, List<ScheduleModel>? exam) {
     return ListView.builder(
       itemCount: exam?.length,
       itemBuilder: (ctx, index) {
-        SExamModel data = exam![index];
+        ScheduleModel data = exam![index];
 
         return SExamLaunchedCard(exam: data);
       },

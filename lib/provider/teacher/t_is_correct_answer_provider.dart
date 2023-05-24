@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../models/teacher/t_question_model.dart';
+import '../../models/answer_option_model.dart';
 
 class TIsCorrectAnswerProvider with ChangeNotifier {
   List<bool> _isChecked = [false, false, false, false, false];
@@ -23,7 +23,7 @@ class TIsCorrectAnswerProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setCheckedEdit(List<AnswerOption> value) {
+  void setCheckedEdit(List<AnswerOptionModel> value) {
     for(int i = 0; i < value.length; i++) {
       _isChecked[i] = (value[i].correct == 1) ? true : false;
     }

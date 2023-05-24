@@ -4,8 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
-import '../models/teacher/t_exam_model.dart';
-import '../models/teacher/t_question_model.dart';
+import '../models/answer_option_model.dart';
+import '../models/exam_model.dart';
+import '../models/question_model.dart';
 import '../provider/teacher/t_question_provider.dart';
 import '../screens/teacher/t_question_edit.dart';
 import '../services/teacher/t_question_service.dart';
@@ -13,8 +14,8 @@ import '../services/teacher/t_question_service.dart';
 class QuestionCard extends StatefulWidget {
   const QuestionCard({super.key, required this.exam, required this.question, required this.number});
 
-  final Exam exam;
-  final TQuestionModel question;
+  final ExamModel exam;
+  final QuestionModel question;
   final int number;
 
   @override
@@ -59,7 +60,7 @@ class _QuestionCardState extends State<QuestionCard> {
               child: ListView.builder(
                 itemCount: widget.question.answerOption.length,
                 itemBuilder: (ctx, index) {
-                  AnswerOption answerOption = widget.question.answerOption[index];
+                  AnswerOptionModel answerOption = widget.question.answerOption[index];
                   List<String> al = ['A', 'B', 'C', 'D', 'E'];
                   
                   return Row(
