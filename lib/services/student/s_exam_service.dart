@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../configs/api.dart';
 import '../../models/question_model.dart';
 import '../../models/schedule_model.dart';
+import '../../models/student_schedule_model.dart';
 
 class SExamService {
   final Dio _dio = Dio();
@@ -23,15 +24,15 @@ class SExamService {
     return data;
   }
 
-  Future<List<ScheduleModel>> getExamFinished() async {
+  Future<List<StudentScheduleModel>> getExamFinished() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     _dio.options.headers['authorization'] = 'Bearer ${preferences.getString("token")}';
     final response = await _dio.get(Api.sExamFinished);
     
-    List<ScheduleModel> data = <ScheduleModel>[];
+    List<StudentScheduleModel> data = <StudentScheduleModel>[];
     response.data['data'].forEach((val) {
-      data.add(ScheduleModel.fromJson(val));
+      data.add(StudentScheduleModel.fromJson(val));
     });
 
     return data;

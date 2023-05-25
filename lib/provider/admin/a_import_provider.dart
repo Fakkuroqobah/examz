@@ -1,30 +1,30 @@
 import 'package:flutter/material.dart';
 
-import '../../models/admin/a_schedule_model.dart';
-import '../../models/admin/a_student_model.dart';
-import '../../models/admin/a_student_schedule_model.dart';
-import '../../models/admin/a_supervisor_model.dart';
-import '../../models/admin/a_teacher_model.dart';
 import '../../models/room_model.dart';
+import '../../models/schedule_model.dart';
+import '../../models/student_model.dart';
+import '../../models/student_schedule_model.dart';
+import '../../models/supervisor_model.dart';
+import '../../models/teacher_model.dart';
 import '../../services/admin/a_import_service.dart';
 
 class AImportProvider extends ChangeNotifier {
   List<RoomModel> _roomList = [];
-  List<ATeacherModel> _teacherList = [];
-  List<AStudentModel> _studentList = [];
-  List<ASupervisorModel> _supervisorList = [];
-  List<AScheduleModel> _scheduleList = [];
-  List<AStudentScheduleModel> _studentScheduleList = [];
+  List<TeacherModel> _teacherList = [];
+  List<StudentModel> _studentList = [];
+  List<SupervisorModel> _supervisorList = [];
+  List<ScheduleModel> _scheduleList = [];
+  List<StudentScheduleModel> _studentScheduleList = [];
 
   bool _isLoading = false;
   bool _hasError = false;
   
   List<RoomModel> get roomList => _roomList;
-  List<ATeacherModel> get teacherList => _teacherList;
-  List<AStudentModel> get studentList => _studentList;
-  List<ASupervisorModel> get supervisorList => _supervisorList;
-  List<AScheduleModel> get scheduleList => _scheduleList;
-  List<AStudentScheduleModel> get studentScheduleList => _studentScheduleList;
+  List<TeacherModel> get teacherList => _teacherList;
+  List<StudentModel> get studentList => _studentList;
+  List<SupervisorModel> get supervisorList => _supervisorList;
+  List<ScheduleModel> get scheduleList => _scheduleList;
+  List<StudentScheduleModel> get studentScheduleList => _studentScheduleList;
 
   bool get isLoading => _isLoading;
   bool get hasError => _hasError;
@@ -69,7 +69,7 @@ class AImportProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addTeacher(List<ATeacherModel> data) {
+  void addTeacher(List<TeacherModel> data) {
     _teacherList.addAll(data);
     notifyListeners();
   }
@@ -92,7 +92,7 @@ class AImportProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addStudent(List<AStudentModel> data) {
+  void addStudent(List<StudentModel> data) {
     _studentList.addAll(data);
     notifyListeners();
   }
@@ -115,7 +115,7 @@ class AImportProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addSupervisor(List<ASupervisorModel> data) {
+  void addSupervisor(List<SupervisorModel> data) {
     _supervisorList.addAll(data);
     notifyListeners();
   }
@@ -138,7 +138,7 @@ class AImportProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addSchedule(List<AScheduleModel> data) {
+  void addSchedule(List<ScheduleModel> data) {
     _scheduleList.addAll(data);
     notifyListeners();
   }
@@ -161,7 +161,7 @@ class AImportProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addStudentSchedule(List<AStudentScheduleModel> data) {
+  void addStudentSchedule(List<StudentScheduleModel> data) {
     _studentScheduleList.addAll(data);
     notifyListeners();
   }

@@ -11,7 +11,6 @@ import '../../provider/admin/a_import_provider.dart';
 import '../../provider/loading_provider.dart';
 import '../../services/admin/a_auth_service.dart';
 import '../../services/admin/a_import_service.dart';
-import '../../widgets/empty_condition.dart';
 import 'a_data_drawer.dart';
 
 class ATeacher extends StatefulWidget {
@@ -149,7 +148,7 @@ class _ATeacherState extends State<ATeacher> with SingleTickerProviderStateMixin
                           }
               
                           if(aImportProvider.teacherList.isEmpty) {
-                            return const EmptyCondition();
+                            return const Center(child: Text("Data masih kosong"));
                           }
 
                           return DataTable(

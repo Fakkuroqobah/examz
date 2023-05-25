@@ -11,8 +11,8 @@ class AnswerStudentModel {
     required this.studentId,
     required this.questionId,
     required this.answerOptionId,
-    this.createdAt,
-    this.updatedAt,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   factory AnswerStudentModel.fromJson(Map<String, dynamic> json) => AnswerStudentModel(

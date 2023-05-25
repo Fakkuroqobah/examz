@@ -11,7 +11,6 @@ import '../../provider/admin/a_import_provider.dart';
 import '../../provider/loading_provider.dart';
 import '../../services/admin/a_auth_service.dart';
 import '../../services/admin/a_import_service.dart';
-import '../../widgets/empty_condition.dart';
 import 'a_data_drawer.dart';
 
 class AStudentSchedule extends StatefulWidget {
@@ -148,8 +147,8 @@ class _AStudentScheduleState extends State<AStudentSchedule> with SingleTickerPr
                             return const Center(child: Text("Terjadi kesalahan pada server"));
                           }
               
-                          if(aImportProvider.scheduleList.isEmpty) {
-                            return const EmptyCondition();
+                          if(aImportProvider.studentScheduleList.isEmpty) {
+                            return const Center(child: Text("Data masih kosong"));
                           }
 
                           return DataTable(
@@ -164,8 +163,8 @@ class _AStudentScheduleState extends State<AStudentSchedule> with SingleTickerPr
                               return DataRow(
                                 cells: <DataCell>[
                                   DataCell(Text("${number++}")),
-                                  DataCell(Text(el.room.name)),
-                                  DataCell(Text(el.student.name)),
+                                  DataCell(Text(el.schedule!.room!.name)),
+                                  DataCell(Text(el.student!.name)),
                                   DataCell(ElevatedButton(
                                     onPressed: () {
                                       showDialog(

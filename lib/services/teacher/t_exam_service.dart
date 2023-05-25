@@ -3,19 +3,19 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../configs/api.dart';
+import '../../models/exam_group_model.dart';
 import '../../models/exam_model.dart';
-import '../../models/teacher/t_exam_model.dart';
 
 class TExamService {
   final Dio _dio = Dio();
 
-  Future<TExamModel> getExam() async {
+  Future<ExamGroupModel> getExam() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     _dio.options.headers['authorization'] = 'Bearer ${preferences.getString("token")}';
     final response = await _dio.get(Api.tExam);
 
-    TExamModel data = TExamModel.fromJson(response.data['data']);
+    ExamGroupModel data = ExamGroupModel.fromJson(response.data['data']);
 
     return data;
   }

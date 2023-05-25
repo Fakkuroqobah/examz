@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'exam_model.dart';
+import 'room_model.dart';
+import 'supervisor_model.dart';
 
 List<ScheduleModel> scheduleModelFromJson(String str) => List<ScheduleModel>.from(json.decode(str).map((x) => ScheduleModel.fromJson(x)));
 
@@ -14,6 +16,8 @@ class ScheduleModel {
   String? token;
   DateTime? createdAt;
   DateTime? updatedAt;
+  RoomModel? room;
+  SupervisorModel? supervisor;
   ExamModel exam;
 
   ScheduleModel({
@@ -24,6 +28,8 @@ class ScheduleModel {
     required this.token,
     required this.createdAt,
     required this.updatedAt,
+    this.room,
+    this.supervisor,
     required this.exam,
   });
 
@@ -35,6 +41,8 @@ class ScheduleModel {
     token: json["token"],
     createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
     updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+    room: json["room"] == null ? null : RoomModel.fromJson(json["room"]),
+    supervisor: json["supervisor"] == null ? null : SupervisorModel.fromJson(json["supervisor"]),
     exam: ExamModel.fromJson(json["exam"]),
   );
 
@@ -46,6 +54,8 @@ class ScheduleModel {
     "token": token,
     "created_at": createdAt?.toIso8601String(),
     "updated_at": updatedAt?.toIso8601String(),
+    "room": room?.toJson(),
+    "supervisor": supervisor?.toJson(),
     "exam": exam.toJson(),
   };
 }

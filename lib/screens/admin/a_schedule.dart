@@ -11,7 +11,6 @@ import '../../provider/admin/a_import_provider.dart';
 import '../../provider/loading_provider.dart';
 import '../../services/admin/a_auth_service.dart';
 import '../../services/admin/a_import_service.dart';
-import '../../widgets/empty_condition.dart';
 import 'a_data_drawer.dart';
 
 class ASchedule extends StatefulWidget {
@@ -149,7 +148,7 @@ class _AScheduleState extends State<ASchedule> with SingleTickerProviderStateMix
                           }
               
                           if(aImportProvider.scheduleList.isEmpty) {
-                            return const EmptyCondition();
+                            return const Center(child: Text("Data masih kosong"));
                           }
 
                           return DataTable(
@@ -165,8 +164,8 @@ class _AScheduleState extends State<ASchedule> with SingleTickerProviderStateMix
                               return DataRow(
                                 cells: <DataCell>[
                                   DataCell(Text("${number++}")),
-                                  DataCell(Text(el.room.name)),
-                                  DataCell(Text(el.supervisor.name)),
+                                  DataCell(Text(el.room!.name)),
+                                  DataCell(Text(el.supervisor!.name)),
                                   DataCell(Text(el.exam.name)),
                                   DataCell(ElevatedButton(
                                     onPressed: () {

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'schedule_model.dart';
 import 'student_model.dart';
 
 StudentScheduleModel studentScheduleModelFromJson(String str) => StudentScheduleModel.fromJson(json.decode(str));
@@ -13,7 +14,8 @@ class StudentScheduleModel {
   String? block;
   DateTime? startTime;
   DateTime? endTime;
-  StudentModel student;
+  ScheduleModel? schedule;
+  StudentModel? student;
 
   StudentScheduleModel({
     required this.id,
@@ -22,6 +24,7 @@ class StudentScheduleModel {
     required this.block,
     required this.startTime,
     required this.endTime,
+    required this.schedule,
     required this.student,
   });
 
@@ -32,7 +35,8 @@ class StudentScheduleModel {
     block: json["block"],
     startTime: json["start_time"] == null ? null : DateTime.parse(json["start_time"]),
     endTime: json["end_time"] == null ? null : DateTime.parse(json["end_time"]),
-    student: StudentModel.fromJson(json["student"]),
+    schedule: json["schedule"] == null ? null : ScheduleModel.fromJson(json["schedule"]),
+    student: json["student"] == null ? null : StudentModel.fromJson(json["student"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -42,6 +46,7 @@ class StudentScheduleModel {
     "block": block,
     "start_time": startTime?.toIso8601String(),
     "end_time": endTime?.toIso8601String(),
-    "student": student.toJson(),
+    "schedule": schedule?.toJson(),
+    "student": student?.toJson(),
   };
 }

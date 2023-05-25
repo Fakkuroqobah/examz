@@ -144,6 +144,16 @@ class _AExamCardState extends State<AExamCard> {
                         ),
                         child: const Text("Selesai"),
                       ) : Container(),
+                      ElevatedButton(
+                        onPressed: () {
+                          
+                        },
+                        style: const ButtonStyle(
+                          backgroundColor: MaterialStatePropertyAll<Color>(Colors.orange),
+                          elevation: MaterialStatePropertyAll(0)
+                        ),
+                        child: const Text("Penilaian"),
+                      )
                     ],
                   );
                 }

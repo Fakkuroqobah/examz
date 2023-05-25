@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
+import '../../models/exam_group_model.dart';
 import '../../models/exam_model.dart';
-import '../../models/teacher/t_exam_model.dart';
 import '../../services/teacher/t_exam_service.dart';
 
 class TExamProvider extends ChangeNotifier {
-  TExamModel _examList = TExamModel(examInActive: [], examLaunched: [], examFinished: [], sumExamInActive: 0, sumExamLaunched: 0, sumExamFinished: 0);
+  ExamGroupModel _examList = ExamGroupModel(examInActive: [], examLaunched: [], examFinished: [], sumExamInActive: 0, sumExamLaunched: 0, sumExamFinished: 0);
   bool _isLoading = false;
   bool _hasError = false;
   
-  TExamModel get examList => _examList;
+  ExamGroupModel get examList => _examList;
   bool get isLoading => _isLoading;
   bool get hasError => _hasError;
 

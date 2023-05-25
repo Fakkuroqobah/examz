@@ -52,7 +52,7 @@ class _TRatedStudentState extends State<TRatedStudent> with SingleTickerProvider
 
                   return ListTile(
                     leading: const Icon(Icons.person),
-                    title: Text(data.student.name),
+                    title: Text(data.student!.name),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () {
                       Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TRatedStudentDetail(exam: widget.data, tRatedModel: data)));

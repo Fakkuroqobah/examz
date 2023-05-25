@@ -11,7 +11,6 @@ import '../../provider/admin/a_import_provider.dart';
 import '../../provider/loading_provider.dart';
 import '../../services/admin/a_auth_service.dart';
 import '../../services/admin/a_import_service.dart';
-import '../../widgets/empty_condition.dart';
 import 'a_data_drawer.dart';
 
 class ARoom extends StatefulWidget {
@@ -149,7 +148,7 @@ class _ARoomState extends State<ARoom> with SingleTickerProviderStateMixin {
                           }
               
                           if(aImportProvider.roomList.isEmpty) {
-                            return const EmptyCondition();
+                            return const Center(child: Text("Data masih kosong"));
                           }
 
                           return DataTable(

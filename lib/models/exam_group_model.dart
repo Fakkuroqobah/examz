@@ -1,13 +1,13 @@
 import 'dart:convert';
 
-import '../exam_model.dart';
+import 'exam_model.dart';
 
-TExamModel tExamModelFromJson(String str) => TExamModel.fromJson(json.decode(str));
+ExamGroupModel examGroupModelFromJson(String str) => ExamGroupModel.fromJson(json.decode(str));
 
-String tExamModelToJson(TExamModel data) => json.encode(data.toJson());
+String examGroupModelToJson(ExamGroupModel data) => json.encode(data.toJson());
 
-class TExamModel {
-  TExamModel({
+class ExamGroupModel {
+  ExamGroupModel({
     required this.examInActive,
     required this.examLaunched,
     required this.examFinished,
@@ -23,7 +23,7 @@ class TExamModel {
   int sumExamLaunched;
   int sumExamFinished;
 
-  factory TExamModel.fromJson(Map<String, dynamic> json) => TExamModel(
+  factory ExamGroupModel.fromJson(Map<String, dynamic> json) => ExamGroupModel(
     examInActive: List<ExamModel>.from(json["examInActive"].map((x) => ExamModel.fromJson(x))),
     examLaunched: List<ExamModel>.from(json["examLaunched"].map((x) => ExamModel.fromJson(x))),
     examFinished: List<ExamModel>.from(json["examFinished"].map((x) => ExamModel.fromJson(x))),

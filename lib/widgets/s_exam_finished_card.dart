@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../configs/api.dart';
-import '../models/schedule_model.dart';
+import '../models/student_schedule_model.dart';
 import '../screens/student/s_rated.dart';
 
 class SExamFinishedCard extends StatefulWidget {
   const SExamFinishedCard({super.key, required this.exam});
 
-  final ScheduleModel exam;
+  final StudentScheduleModel exam;
 
   @override
   State<SExamFinishedCard> createState() => _SExamFinishedCardState();
@@ -18,7 +18,7 @@ class _SExamFinishedCardState extends State<SExamFinishedCard> {
   
   @override
   Widget build(BuildContext context) {
-    final exam = widget.exam.exam;
+    final exam = widget.exam.schedule!.exam;
 
     return Card(
       clipBehavior: Clip.antiAlias,

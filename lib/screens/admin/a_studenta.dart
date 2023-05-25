@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import '../../services/admin/a_auth_service.dart';
 import 'a_data_drawer.dart';
 
-class AStudent extends StatefulWidget {
-  const AStudent({super.key});
+class AStudenta extends StatefulWidget {
+  const AStudenta({super.key});
 
   @override
-  State<AStudent> createState() => _AStudentState();
+  State<AStudenta> createState() => _AStudentaState();
 }
 
-class _AStudentState extends State<AStudent> with SingleTickerProviderStateMixin {
+class _AStudentaState extends State<AStudenta> with SingleTickerProviderStateMixin {
   final AAuthService _aAuthService = AAuthService();
   late FancyDrawerController _controllerDrawer;
 

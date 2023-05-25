@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 
 import '../../models/question_model.dart';
 import '../../models/schedule_model.dart';
+import '../../models/student_schedule_model.dart';
 import '../../services/student/s_exam_service.dart';
 
 class SExamProvider extends ChangeNotifier {
   List<ScheduleModel> _examLaunchedList = [];
-  List<ScheduleModel> _examFinishedList = [];
+  List<StudentScheduleModel> _examFinishedList = [];
   
   final List<QuestionModel> _questionList = [];
   final List _questionAnswer = [];
@@ -16,7 +17,7 @@ class SExamProvider extends ChangeNotifier {
   bool _hasError = false;
   
   List<ScheduleModel> get examLaunchedList => _examLaunchedList;
-  List<ScheduleModel> get examFinishedList => _examFinishedList;
+  List<StudentScheduleModel> get examFinishedList => _examFinishedList;
   int get activePage => _activePage;
 
   List<QuestionModel> get questionList => _questionList;

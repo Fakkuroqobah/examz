@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-AAdminModel? aAdminModelFromJson(String str) => AAdminModel.fromJson(json.decode(str));
+AdminModel? adminModelFromJson(String str) => AdminModel.fromJson(json.decode(str));
 
-String aAdminModelToJson(AAdminModel? data) => json.encode(data!.toJson());
+String adminModelToJson(AdminModel? data) => json.encode(data!.toJson());
 
-class AAdminModel {
-  AAdminModel({
+class AdminModel {
+  AdminModel({
     required this.id,
     required this.username,
     required this.role,
@@ -19,7 +19,7 @@ class AAdminModel {
   DateTime? createdAt;
   DateTime? updatedAt;
 
-  factory AAdminModel.fromJson(Map<String, dynamic> json) => AAdminModel(
+  factory AdminModel.fromJson(Map<String, dynamic> json) => AdminModel(
     id: json["id"],
     username: json["username"],
     role: json["role"],

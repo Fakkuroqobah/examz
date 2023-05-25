@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../models/exam_group_model.dart';
 import '../../models/exam_model.dart';
-import '../../models/teacher/t_exam_model.dart';
 import '../../services/teacher/t_exam_service.dart';
 
 import '../../widgets/empty_condition.dart';
@@ -35,7 +35,7 @@ class _TExamFinishedState extends State<TExamFinished> {
         onRefresh: _refresh,
         child: FutureBuilder(
           future: _tExamService.getExam(),
-          builder: (BuildContext ctx, AsyncSnapshot<TExamModel> snapshot) {
+          builder: (BuildContext ctx, AsyncSnapshot<ExamGroupModel> snapshot) {
             if (snapshot.hasError) {
               return Center(child: Text("Terjadi kesalahan dengan pesan : ${snapshot.error.toString()}"));
             } else if (snapshot.connectionState == ConnectionState.done) {

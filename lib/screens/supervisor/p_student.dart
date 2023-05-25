@@ -50,7 +50,7 @@ class _PStudentState extends State<PStudent> with SingleTickerProviderStateMixin
 
                   return ListTile(
                     leading: const Icon(Icons.person),
-                    title: Text(data.student.name),
+                    title: Text(data.student!.name),
                     subtitle: Text(data.block ?? 'Kosong'),
                   );
                 },

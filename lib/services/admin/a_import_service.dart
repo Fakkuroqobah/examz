@@ -5,54 +5,54 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../configs/api.dart';
-import '../../models/admin/a_schedule_model.dart';
-import '../../models/admin/a_student_model.dart';
-import '../../models/admin/a_student_schedule_model.dart';
-import '../../models/admin/a_supervisor_model.dart';
-import '../../models/admin/a_teacher_model.dart';
 import '../../models/room_model.dart';
+import '../../models/schedule_model.dart';
+import '../../models/student_model.dart';
+import '../../models/student_schedule_model.dart';
+import '../../models/supervisor_model.dart';
+import '../../models/teacher_model.dart';
 
 
 class AImportService {
   final Dio _dio = Dio();
   
-  Future<List<ATeacherModel>> getTeacher() async {
+  Future<List<TeacherModel>> getTeacher() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     _dio.options.headers['authorization'] = 'Bearer ${preferences.getString("token")}';
     final response = await _dio.get(Api.aTeachers);
     
-    List<ATeacherModel> data = <ATeacherModel>[];
+    List<TeacherModel> data = <TeacherModel>[];
     response.data['data'].forEach((val) {
-      data.add(ATeacherModel.fromJson(val));
+      data.add(TeacherModel.fromJson(val));
     });
 
     return data;
   }
   
-  Future<List<AStudentModel>> getStudent() async {
+  Future<List<StudentModel>> getStudent() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     _dio.options.headers['authorization'] = 'Bearer ${preferences.getString("token")}';
     final response = await _dio.get(Api.aStudents);
     
-    List<AStudentModel> data = <AStudentModel>[];
+    List<StudentModel> data = <StudentModel>[];
     response.data['data'].forEach((val) {
-      data.add(AStudentModel.fromJson(val));
+      data.add(StudentModel.fromJson(val));
     });
 
     return data;
   }
 
-  Future<List<ASupervisorModel>> getSupervisor() async {
+  Future<List<SupervisorModel>> getSupervisor() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     _dio.options.headers['authorization'] = 'Bearer ${preferences.getString("token")}';
     final response = await _dio.get(Api.aSupervisors);
     
-    List<ASupervisorModel> data = <ASupervisorModel>[];
+    List<SupervisorModel> data = <SupervisorModel>[];
     response.data['data'].forEach((val) {
-      data.add(ASupervisorModel.fromJson(val));
+      data.add(SupervisorModel.fromJson(val));
     });
 
     return data;
@@ -72,29 +72,29 @@ class AImportService {
     return data;
   }
 
-  Future<List<AScheduleModel>> getSchedule() async {
+  Future<List<ScheduleModel>> getSchedule() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     _dio.options.headers['authorization'] = 'Bearer ${preferences.getString("token")}';
     final response = await _dio.get(Api.aSchedules);
     
-    List<AScheduleModel> data = <AScheduleModel>[];
+    List<ScheduleModel> data = <ScheduleModel>[];
     response.data['data'].forEach((val) {
-      data.add(AScheduleModel.fromJson(val));
+      data.add(ScheduleModel.fromJson(val));
     });
 
     return data;
   }
 
-  Future<List<AStudentScheduleModel>> getStudentSchedule() async {
+  Future<List<StudentScheduleModel>> getStudentSchedule() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     _dio.options.headers['authorization'] = 'Bearer ${preferences.getString("token")}';
     final response = await _dio.get(Api.aStudentSchedule);
     
-    List<AStudentScheduleModel> data = <AStudentScheduleModel>[];
+    List<StudentScheduleModel> data = <StudentScheduleModel>[];
     response.data['data'].forEach((val) {
-      data.add(AStudentScheduleModel.fromJson(val));
+      data.add(StudentScheduleModel.fromJson(val));
     });
 
     return data;
@@ -127,7 +127,7 @@ class AImportService {
     }
   }
 
-  Future<Either<String, List<ATeacherModel>>> teachersImport(File excel) async {
+  Future<Either<String, List<TeacherModel>>> teachersImport(File excel) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     
     FormData data = FormData.fromMap({
@@ -141,9 +141,9 @@ class AImportService {
       );
 
       if (response.statusCode == 201) {
-        List<ATeacherModel> data = <ATeacherModel>[];
+        List<TeacherModel> data = <TeacherModel>[];
         response.data['data'].forEach((val) {
-          data.add(ATeacherModel.fromJson(val));
+          data.add(TeacherModel.fromJson(val));
         });
         return Right(data);
       }
@@ -154,7 +154,7 @@ class AImportService {
     }
   }
   
-  Future<Either<String, List<AStudentModel>>> studentsImport(File excel) async {
+  Future<Either<String, List<StudentModel>>> studentsImport(File excel) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     
     FormData data = FormData.fromMap({
@@ -168,9 +168,9 @@ class AImportService {
       );
 
       if (response.statusCode == 201) {
-        List<AStudentModel> data = <AStudentModel>[];
+        List<StudentModel> data = <StudentModel>[];
         response.data['data'].forEach((val) {
-          data.add(AStudentModel.fromJson(val));
+          data.add(StudentModel.fromJson(val));
         });
         return Right(data);
       }
@@ -181,7 +181,7 @@ class AImportService {
     }
   }
 
-  Future<Either<String, List<ASupervisorModel>>> supervisorsImport(File excel) async {
+  Future<Either<String, List<SupervisorModel>>> supervisorsImport(File excel) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     
     FormData data = FormData.fromMap({
@@ -195,9 +195,9 @@ class AImportService {
       );
 
       if (response.statusCode == 201) {
-        List<ASupervisorModel> data = <ASupervisorModel>[];
+        List<SupervisorModel> data = <SupervisorModel>[];
         response.data['data'].forEach((val) {
-          data.add(ASupervisorModel.fromJson(val));
+          data.add(SupervisorModel.fromJson(val));
         });
         return Right(data);
       }
@@ -208,7 +208,7 @@ class AImportService {
     }
   }
 
-  Future<Either<String, List<AScheduleModel>>> schedulesImport(File excel) async {
+  Future<Either<String, List<ScheduleModel>>> schedulesImport(File excel) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     
     FormData data = FormData.fromMap({
@@ -222,9 +222,9 @@ class AImportService {
       );
 
       if (response.statusCode == 201) {
-        List<AScheduleModel> data = <AScheduleModel>[];
+        List<ScheduleModel> data = <ScheduleModel>[];
         response.data['data'].forEach((val) {
-          data.add(AScheduleModel.fromJson(val));
+          data.add(ScheduleModel.fromJson(val));
         });
         return Right(data);
       }
@@ -235,7 +235,7 @@ class AImportService {
     }
   }
 
-  Future<Either<String, List<AStudentScheduleModel>>> studentScheduleImport(File excel) async {
+  Future<Either<String, List<StudentScheduleModel>>> studentScheduleImport(File excel) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     
     FormData data = FormData.fromMap({
@@ -249,9 +249,9 @@ class AImportService {
       );
 
       if (response.statusCode == 201) {
-        List<AStudentScheduleModel> data = <AStudentScheduleModel>[];
+        List<StudentScheduleModel> data = <StudentScheduleModel>[];
         response.data['data'].forEach((val) {
-          data.add(AStudentScheduleModel.fromJson(val));
+          data.add(StudentScheduleModel.fromJson(val));
         });
         return Right(data);
       }

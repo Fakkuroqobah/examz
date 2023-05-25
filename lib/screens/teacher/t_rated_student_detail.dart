@@ -65,7 +65,7 @@ class _TRatedStudentDetailState extends State<TRatedStudentDetail> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                Text(widget.tRatedModel.student.name, style: const TextStyle(fontSize: 20.0)),
+                                Text(widget.tRatedModel.student!.name, style: const TextStyle(fontSize: 20.0)),
                           
                                 const SizedBox(height: 6.0),
                                 Text("Nilai $total/$totalQuestion", style: const TextStyle(fontSize: 16.0)),

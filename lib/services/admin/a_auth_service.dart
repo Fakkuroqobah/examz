@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../configs/api.dart';
 import '../../models/login_model.dart';
-import '../../models/admin/a_admin_model.dart';
+import '../../models/admin_model.dart';
 
 class AAuthService {
   final Dio _dio = Dio();
@@ -23,7 +23,7 @@ class AAuthService {
     _dio.options.headers['authorization'] = 'Bearer ${loginModel.accessToken}';
     final getUser = await _dio.get(Api.aGetUser);
 
-    AAdminModel adminModel = AAdminModel.fromJson(getUser.data);
+    AdminModel adminModel = AdminModel.fromJson(getUser.data);
 
     preferences.setString("token", loginModel.accessToken);
     preferences.setInt("id", adminModel.id);
