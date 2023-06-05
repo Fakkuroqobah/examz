@@ -78,4 +78,9 @@ class Api {
   static const String aStudentsImport = "$aBaseUrl/import/students";
   static const String aSupervisorsImport = "$aBaseUrl/import/supervisors";
   static const String aTeachersImport = "$aBaseUrl/import/teachers";
+
+  static const String aEditTeacher = "$aBaseUrl/edit/teacher";
+  static const String aEditStudent = "$aBaseUrl/edit/student";
+  static const String aEditSupervisor = "$aBaseUrl/edit/supervisor";
+  static const String aEditRoom = "$aBaseUrl/edit/room";
 }

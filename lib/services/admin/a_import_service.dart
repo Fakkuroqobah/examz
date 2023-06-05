@@ -3,15 +3,15 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:universal_html/html.dart' as html;
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 import '../../configs/api.dart';
 import '../../models/room_model.dart';
 import '../../models/schedule_model.dart';
 import '../../models/student_model.dart';
-import '../../models/student_schedule_model.dart';
 import '../../models/supervisor_model.dart';
 import '../../models/teacher_model.dart';
-
 
 class AImportService {
   final Dio _dio = Dio();
@@ -81,20 +81,6 @@ class AImportService {
     List<ScheduleModel> data = <ScheduleModel>[];
     response.data['data'].forEach((val) {
       data.add(ScheduleModel.fromJson(val));
-    });
-
-    return data;
-  }
-
-  Future<List<StudentScheduleModel>> getStudentSchedule() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-
-    _dio.options.headers['authorization'] = 'Bearer ${preferences.getString("token")}';
-    final response = await _dio.get(Api.aStudentSchedule);
-    
-    List<StudentScheduleModel> data = <StudentScheduleModel>[];
-    response.data['data'].forEach((val) {
-      data.add(StudentScheduleModel.fromJson(val));
     });
 
     return data;
@@ -235,29 +221,18 @@ class AImportService {
     }
   }
 
-  Future<Either<String, List<StudentScheduleModel>>> studentScheduleImport(File excel) async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    
-    FormData data = FormData.fromMap({
-      "excel": await MultipartFile.fromFile(excel.path, filename: "file.xlsx"),
-    });
-
+  Future<Either<String, String>> downloadFormat(String type) async {
     try {
-      _dio.options.headers['authorization'] = 'Bearer ${preferences.getString("token")}';
-      final response = await _dio.post(Api.aStudentScheduleImport, 
-        data: data,
-      );
+      if (kIsWeb) {
+        html.AnchorElement(href: "${Api.baseUrl}/import/$type.xlsx")
+            ..setAttribute('download', '$type.xlsx')
+            ..click();
 
-      if (response.statusCode == 201) {
-        List<StudentScheduleModel> data = <StudentScheduleModel>[];
-        response.data['data'].forEach((val) {
-          data.add(StudentScheduleModel.fromJson(val));
-        });
-        return Right(data);
+        return const Right("Download format import berhasil");
+      } else {
+        return const Right("Download hanya tersedia pada web");
       }
-
-      return const Left('Terjadi kesalahan');
-    } on DioError catch (_) {
+    } catch (e) {
       return const Left('Terjadi kesalahan pada server');
     }
   }

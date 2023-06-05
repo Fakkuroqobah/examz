@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../models/room_model.dart';
 import '../../models/schedule_model.dart';
 import '../../models/student_model.dart';
-import '../../models/student_schedule_model.dart';
 import '../../models/supervisor_model.dart';
 import '../../models/teacher_model.dart';
 import '../../services/admin/a_import_service.dart';
@@ -14,7 +13,6 @@ class AImportProvider extends ChangeNotifier {
   List<StudentModel> _studentList = [];
   List<SupervisorModel> _supervisorList = [];
   List<ScheduleModel> _scheduleList = [];
-  List<StudentScheduleModel> _studentScheduleList = [];
 
   bool _isLoading = false;
   bool _hasError = false;
@@ -24,7 +22,6 @@ class AImportProvider extends ChangeNotifier {
   List<StudentModel> get studentList => _studentList;
   List<SupervisorModel> get supervisorList => _supervisorList;
   List<ScheduleModel> get scheduleList => _scheduleList;
-  List<StudentScheduleModel> get studentScheduleList => _studentScheduleList;
 
   bool get isLoading => _isLoading;
   bool get hasError => _hasError;
@@ -143,26 +140,60 @@ class AImportProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Edit
+  void updateTeacher(TeacherModel data) {
+    TeacherModel el = TeacherModel(
+      id: data.id, 
+      name: data.name, 
+      username: data.username, 
+      role: data.role, 
+      createdAt: data.createdAt, 
+      updatedAt: data.updatedAt
+    );
 
-  Future<void> getStudentSchedule() async {
-    _isLoading = true;
-    notifyListeners();
-
-    try {
-      AImportService aImportService = AImportService();
-      _studentScheduleList = await aImportService.getStudentSchedule();
-
-      _hasError = false;
-    } catch (e) {
-      _hasError = true;
-    }
-
-    _isLoading = false;
+    _teacherList[_teacherList.indexWhere((el) => el.id == data.id)] = el;
     notifyListeners();
   }
 
-  void addStudentSchedule(List<StudentScheduleModel> data) {
-    _studentScheduleList.addAll(data);
+  void updateStudent(StudentModel data) {
+    StudentModel el = StudentModel(
+      id: data.id, 
+      name: data.name, 
+      studentModelClass: data.studentModelClass, 
+      username: data.username, 
+      role: data.role, 
+      roomId: data.roomId, 
+      createdAt: data.createdAt, 
+      updatedAt: data.updatedAt
+    );
+
+    _studentList[_studentList.indexWhere((el) => el.id == data.id)] = el;
+    notifyListeners();
+  }
+
+  void updateSupervisor(SupervisorModel data) {
+    SupervisorModel el = SupervisorModel(
+      id: data.id, 
+      name: data.name, 
+      username: data.username, 
+      role: data.role, 
+      createdAt: data.createdAt, 
+      updatedAt: data.updatedAt
+    );
+
+    _supervisorList[_supervisorList.indexWhere((el) => el.id == data.id)] = el;
+    notifyListeners();
+  }
+
+  void updateRoom(RoomModel data) {
+    RoomModel el = RoomModel(
+      id: data.id, 
+      name: data.name, 
+      createdAt: data.createdAt, 
+      updatedAt: data.updatedAt
+    );
+
+    _roomList[_roomList.indexWhere((el) => el.id == data.id)] = el;
     notifyListeners();
   }
 }

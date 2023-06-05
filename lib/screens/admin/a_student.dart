@@ -12,6 +12,7 @@ import '../../provider/loading_provider.dart';
 import '../../services/admin/a_auth_service.dart';
 import '../../services/admin/a_import_service.dart';
 import 'a_data_drawer.dart';
+import 'a_student_edit.dart';
 
 class AStudent extends StatefulWidget {
   const AStudent({super.key});
@@ -126,6 +127,45 @@ class _AStudentState extends State<AStudent> with SingleTickerProviderStateMixin
                         );
                       }
                     ),
+
+                    const SizedBox(width: 10.0),
+                    ElevatedButton(
+                      onPressed: () async {
+                        await _aImportService.downloadFormat('siswa').then((value) {
+                          value.fold(
+                            (errorMessage) {
+                              showTopSnackBar(
+                                Overlay.of(context),
+                                CustomSnackBar.error(
+                                  message: errorMessage,
+                                )
+                              );
+                              return;
+                            },
+                            (response) {
+                              showTopSnackBar(
+                                Overlay.of(context),
+                                CustomSnackBar.success(
+                                  message: response,
+                                )
+                              );
+                              return null;
+                            },
+                          );
+                        }).catchError((err) {
+                          showTopSnackBar(
+                            Overlay.of(context),
+                            const CustomSnackBar.error(
+                              message: "Terjadi kesalahan",
+                            )
+                          );
+                        });
+                      },
+                      style: const ButtonStyle(
+                        elevation: MaterialStatePropertyAll(0)
+                      ),
+                      child: const Text("Download Format")
+                    )
                   ],
                 ),
 
@@ -156,6 +196,7 @@ class _AStudentState extends State<AStudent> with SingleTickerProviderStateMixin
                             columns: const <DataColumn>[
                               DataColumn(label: Text("No")),
                               DataColumn(label: Text("Nama")),
+                              DataColumn(label: Text("Kelas")),
                               DataColumn(label: Text("Username")),
                               DataColumn(label: Text("Aksi")),
                             ],
@@ -164,42 +205,17 @@ class _AStudentState extends State<AStudent> with SingleTickerProviderStateMixin
                                 cells: <DataCell>[
                                   DataCell(Text("${number++}")),
                                   DataCell(Text(el.name)),
+                                  DataCell(Text(el.studentModelClass)),
                                   DataCell(Text(el.username)),
                                   DataCell(ElevatedButton(
                                     onPressed: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (ctx) {
-                                          return AlertDialog(
-                                            title: const Text("Peringatan"),
-                                            content: const Text("Apakah kamu yakin ingin menghapus guru ini?"),
-                                            actions: <Widget>[
-                                              ElevatedButton(
-                                                style: const ButtonStyle(
-                                                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
-                                                  elevation: MaterialStatePropertyAll(0)
-                                                ),
-                                                onPressed: () {
-                                                  
-                                                },
-                                                child: const Text("Iya"),
-                                              ),
-                                              ElevatedButton(
-                                                child: const Text("Tidak"),
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                },
-                                              )
-                                            ],
-                                          );
-                                        }
-                                      );
+                                      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => AStudentEdit(data: el)));
                                     }, 
                                     style: const ButtonStyle(
-                                      backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
+                                      backgroundColor: MaterialStatePropertyAll<Color>(Colors.orange),
                                       elevation: MaterialStatePropertyAll(0)
                                     ),
-                                    child: const Text("Hapus")
+                                    child: const Text("Edit")
                                   )),
                                 ]
                               );

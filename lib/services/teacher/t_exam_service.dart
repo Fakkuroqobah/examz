@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http_parser/http_parser.dart';
 
 import '../../configs/api.dart';
 import '../../models/exam_group_model.dart';
@@ -20,21 +21,26 @@ class TExamService {
     return data;
   }
 
-  Future<Either<String, ExamModel>> addExam(String txtName, String txtClass, String txtDescription, String thumbnailByte, String thumbnailExtension, bool? isRandom, int time) async {
+  Future<Either<String, ExamModel>> addExam(String txtName, String txtClass, String txtDescription, List<int> thumbnailByte, String thumbnailExtension, bool? isRandom, int time) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
-    final data = {
+    final data = FormData.fromMap({
       "name": txtName,
       "class": txtClass,
       "description": txtDescription,
-      "thumbnail": {"extension": thumbnailExtension, "byte": thumbnailByte},
+      "thumbnail": MultipartFile.fromBytes(
+        thumbnailByte,
+        filename: "image",
+        contentType: MediaType('image', thumbnailExtension)
+      ),
       "is_random": isRandom,
       "time": time,
-    };
+    });
 
     try {
       _dio.options.headers['authorization'] = 'Bearer ${preferences.getString("token")}';
       _dio.options.headers['accept'] = 'application/json';
+      _dio.options.headers['Content-Type'] = 'multipart/form-data';
       final response = await _dio.post(Api.tExamAdd, 
         data: data,
       );
@@ -60,32 +66,37 @@ class TExamService {
     }
   }
 
-  Future<Either<String, ExamModel>> editExam(int id, String txtName, String txtClass, String txtDescription, String? thumbnailByte, String? thumbnailExtension, bool? isRandom, int time) async {
+  Future<Either<String, ExamModel>> editExam(int id, String txtName, String txtClass, String txtDescription, List<int>? thumbnailByte, String? thumbnailExtension, bool? isRandom, int time) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
-    Map<String, dynamic> data = {};
+    FormData data;
     if(thumbnailByte == null) {
-      data = {
+      data = FormData.fromMap({
         "name": txtName,
         "class": txtClass,
         "description": txtDescription,
         "is_random": isRandom,
         "time": time,
-      };
+      });
     }else{
-      data = {
+      data = FormData.fromMap({
         "name": txtName,
         "class": txtClass,
         "description": txtDescription,
-        "thumbnail": {"extension": thumbnailExtension, "byte": thumbnailByte},
+        "thumbnail": MultipartFile.fromBytes(
+          thumbnailByte,
+          filename: "image",
+          contentType: MediaType('image', thumbnailExtension!)
+        ),
         "is_random": isRandom,
         "time": time,
-      };
+      });
     }
 
     try {
       _dio.options.headers['authorization'] = 'Bearer ${preferences.getString("token")}';
       _dio.options.headers['accept'] = 'application/json';
+      _dio.options.headers['Content-Type'] = 'multipart/form-data';
       final response = await _dio.post("${Api.tExamEdit}/$id", 
         data: data,
       );

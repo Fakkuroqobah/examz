@@ -158,7 +158,6 @@ class _AScheduleState extends State<ASchedule> with SingleTickerProviderStateMix
                               DataColumn(label: Text("Ruangan")),
                               DataColumn(label: Text("Pengawas")),
                               DataColumn(label: Text("Ujian")),
-                              DataColumn(label: Text("Aksi")),
                             ],
                             rows: aImportProvider.scheduleList.map((el) {
                               return DataRow(
@@ -167,42 +166,6 @@ class _AScheduleState extends State<ASchedule> with SingleTickerProviderStateMix
                                   DataCell(Text(el.room!.name)),
                                   DataCell(Text(el.supervisor!.name)),
                                   DataCell(Text(el.exam.name)),
-                                  DataCell(ElevatedButton(
-                                    onPressed: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (ctx) {
-                                          return AlertDialog(
-                                            title: const Text("Peringatan"),
-                                            content: const Text("Apakah kamu yakin ingin menghapus guru ini?"),
-                                            actions: <Widget>[
-                                              ElevatedButton(
-                                                style: const ButtonStyle(
-                                                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
-                                                  elevation: MaterialStatePropertyAll(0)
-                                                ),
-                                                onPressed: () {
-                                                  
-                                                },
-                                                child: const Text("Iya"),
-                                              ),
-                                              ElevatedButton(
-                                                child: const Text("Tidak"),
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                },
-                                              )
-                                            ],
-                                          );
-                                        }
-                                      );
-                                    }, 
-                                    style: const ButtonStyle(
-                                      backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
-                                      elevation: MaterialStatePropertyAll(0)
-                                    ),
-                                    child: const Text("Hapus")
-                                  )),
                                 ]
                               );
                             }).toList(),

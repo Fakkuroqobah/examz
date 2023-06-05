@@ -1,5 +1,4 @@
-import 'dart:convert';
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -164,19 +163,22 @@ class _TExamAddState extends State<TExamAdd> {
                             final result = await FilePicker.platform.pickFiles(type: FileType.image, withData: true);
                             
                             if (result != null) {
-                              final bytes = result.files.single.bytes!;
-                              final extensions = result.files.single.extension!;
+                              PlatformFile file = result.files.first;
+                              Uint8List? fileBytes = file.bytes;
 
-                              File file = File(result.files.single.path.toString());
-                              Map<String, dynamic> thumbnail = {};
+                              if (fileBytes != null) {
+                                String extensions = file.extension!;
 
-                              thumbnail = {
-                                "file": file,
-                                "byte": base64.encode(bytes),
-                                "extension": extensions
-                              };
+                                Map<String, dynamic> thumbnail = {};
 
-                              tThumbnailProvider.setItem(thumbnail);
+                                thumbnail = {
+                                  "file": file,
+                                  "byte": fileBytes,
+                                  "extension": extensions
+                                };
+
+                                tThumbnailProvider.setItem(thumbnail);
+                              }
                             }
                           },
                           child: const Text("Pilih Gambar"),
@@ -184,9 +186,10 @@ class _TExamAddState extends State<TExamAdd> {
                       ),
 
                       const SizedBox(height: 12.0),
-                      tThumbnailProvider.thumbnails['file'] != null ?
-                      Image.file(
-                        File(tThumbnailProvider.thumbnails['file']!.path),
+                      
+                      tThumbnailProvider.thumbnails['byte'] != null ?
+                      Image.memory(
+                        tThumbnailProvider.thumbnails['byte']!,
                         fit: BoxFit.fill,
                         width: MediaQuery.of(context).size.width,
                         height: 300,

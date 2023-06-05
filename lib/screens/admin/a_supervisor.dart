@@ -12,6 +12,7 @@ import '../../provider/loading_provider.dart';
 import '../../services/admin/a_auth_service.dart';
 import '../../services/admin/a_import_service.dart';
 import 'a_data_drawer.dart';
+import 'a_supervisor_edit.dart';
 
 class ASupervisor extends StatefulWidget {
   const ASupervisor({super.key});
@@ -126,6 +127,45 @@ class _ASupervisorState extends State<ASupervisor> with SingleTickerProviderStat
                         );
                       }
                     ),
+
+                    const SizedBox(width: 10.0),
+                    ElevatedButton(
+                      onPressed: () async {
+                        await _aImportService.downloadFormat('pengawas').then((value) {
+                          value.fold(
+                            (errorMessage) {
+                              showTopSnackBar(
+                                Overlay.of(context),
+                                CustomSnackBar.error(
+                                  message: errorMessage,
+                                )
+                              );
+                              return;
+                            },
+                            (response) {
+                              showTopSnackBar(
+                                Overlay.of(context),
+                                CustomSnackBar.success(
+                                  message: response,
+                                )
+                              );
+                              return null;
+                            },
+                          );
+                        }).catchError((err) {
+                          showTopSnackBar(
+                            Overlay.of(context),
+                            const CustomSnackBar.error(
+                              message: "Terjadi kesalahan",
+                            )
+                          );
+                        });
+                      },
+                      style: const ButtonStyle(
+                        elevation: MaterialStatePropertyAll(0)
+                      ),
+                      child: const Text("Download Format")
+                    )
                   ],
                 ),
 
@@ -167,39 +207,13 @@ class _ASupervisorState extends State<ASupervisor> with SingleTickerProviderStat
                                   DataCell(Text(el.username)),
                                   DataCell(ElevatedButton(
                                     onPressed: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (ctx) {
-                                          return AlertDialog(
-                                            title: const Text("Peringatan"),
-                                            content: const Text("Apakah kamu yakin ingin menghapus guru ini?"),
-                                            actions: <Widget>[
-                                              ElevatedButton(
-                                                style: const ButtonStyle(
-                                                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
-                                                  elevation: MaterialStatePropertyAll(0)
-                                                ),
-                                                onPressed: () {
-                                                  
-                                                },
-                                                child: const Text("Iya"),
-                                              ),
-                                              ElevatedButton(
-                                                child: const Text("Tidak"),
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                },
-                                              )
-                                            ],
-                                          );
-                                        }
-                                      );
+                                      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => ASupervisorEdit(data: el)));
                                     }, 
                                     style: const ButtonStyle(
-                                      backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
+                                      backgroundColor: MaterialStatePropertyAll<Color>(Colors.orange),
                                       elevation: MaterialStatePropertyAll(0)
                                     ),
-                                    child: const Text("Hapus")
+                                    child: const Text("Edit")
                                   )),
                                 ]
                               );
