@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import '../../provider/admin/a_import_provider.dart';
 import '../../provider/loading_provider.dart';
 import '../../services/admin/a_auth_service.dart';
+import '../../services/admin/a_delete.service.dart';
 import '../../services/admin/a_import_service.dart';
 import 'a_data_drawer.dart';
 
@@ -23,6 +24,7 @@ class ASchedule extends StatefulWidget {
 class _AScheduleState extends State<ASchedule> with SingleTickerProviderStateMixin {
   final AAuthService _aAuthService = AAuthService();
   final AImportService _aImportService = AImportService();
+  final ADeleteService _aDeleteService = ADeleteService();
   late FancyDrawerController _controllerDrawer;
 
   @override
@@ -158,6 +160,7 @@ class _AScheduleState extends State<ASchedule> with SingleTickerProviderStateMix
                               DataColumn(label: Text("Ruangan")),
                               DataColumn(label: Text("Pengawas")),
                               DataColumn(label: Text("Ujian")),
+                              DataColumn(label: Text("Aksi")),
                             ],
                             rows: aImportProvider.scheduleList.map((el) {
                               return DataRow(
@@ -166,6 +169,76 @@ class _AScheduleState extends State<ASchedule> with SingleTickerProviderStateMix
                                   DataCell(Text(el.room!.name)),
                                   DataCell(Text(el.supervisor!.name)),
                                   DataCell(Text(el.exam.name)),
+                                  DataCell(ElevatedButton(
+                                    onPressed: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (_) {
+                                          return AlertDialog(
+                                            title: const Text("Peringatan"),
+                                            content: const Text("Apakah kamu yakin ingin menghapus jadwal ini"),
+                                            actions: <Widget>[
+                                              ElevatedButton(
+                                                style: const ButtonStyle(
+                                                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
+                                                  elevation: MaterialStatePropertyAll(0)
+                                                ),
+                                                onPressed: () async {
+                                                  Navigator.pop(context);
+                                                  await _aDeleteService.deleteData(el.id, 'schedule').then((value) {
+                                                    value.fold(
+                                                      (errorMessage) {
+                                                        showTopSnackBar(
+                                                          Overlay.of(context),
+                                                          CustomSnackBar.error(
+                                                            message: errorMessage,
+                                                          )
+                                                        );
+                                                        return;
+                                                      },
+                                                      (response) {
+                                                        Provider.of<AImportProvider>(context, listen: false).deleteSchedule(el.id);
+                                                        showTopSnackBar(
+                                                          Overlay.of(context),
+                                                          CustomSnackBar.success(
+                                                            message: response,
+                                                          )
+                                                        );
+                                                        return null;
+                                                      },
+                                                    );
+                                                  }).catchError((err) {
+                                                    showTopSnackBar(
+                                                      Overlay.of(context),
+                                                      const CustomSnackBar.error(
+                                                        message: "Terjadi kesalahan",
+                                                      )
+                                                    );
+                                                  });
+                                                },
+                                                child: const Text("Iya"),
+                                              ),
+                                              ElevatedButton(
+                                                style: const ButtonStyle(
+                                                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.grey),
+                                                  elevation: MaterialStatePropertyAll(0)
+                                                ),
+                                                child: const Text("Tidak"),
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                              )
+                                            ],
+                                          );
+                                        }
+                                      );
+                                    },
+                                    style: const ButtonStyle(
+                                      backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
+                                      elevation: MaterialStatePropertyAll(0)
+                                    ),
+                                    child: const Text("Hapus"),
+                                  ))
                                 ]
                               );
                             }).toList(),

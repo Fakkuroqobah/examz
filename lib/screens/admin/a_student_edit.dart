@@ -63,6 +63,7 @@ class _AStudentEditState extends State<AStudentEdit> {
                 ),
               ),
 
+              const SizedBox(height: 12.0),
               TextField(
                 controller: _controllerClass,
                 keyboardType: TextInputType.text,

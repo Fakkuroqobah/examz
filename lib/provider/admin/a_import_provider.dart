@@ -196,4 +196,29 @@ class AImportProvider extends ChangeNotifier {
     _roomList[_roomList.indexWhere((el) => el.id == data.id)] = el;
     notifyListeners();
   }
+
+  void deleteTeacher(int id) {
+    _teacherList.removeWhere((el) => el.id == id);
+    notifyListeners();
+  }
+
+  void deleteStudent(int id) {
+    _studentList.removeWhere((el) => el.id == id);
+    notifyListeners();
+  }
+
+  void deleteSupervisor(int id) {
+    _supervisorList.removeWhere((el) => el.id == id);
+    notifyListeners();
+  }
+
+  void deleteRoom(int id) {
+    _roomList.removeWhere((el) => el.id == id);
+    notifyListeners();
+  }
+
+  void deleteSchedule(int id) {
+    _scheduleList.removeWhere((el) => el.id == id);
+    notifyListeners();
+  }
 }

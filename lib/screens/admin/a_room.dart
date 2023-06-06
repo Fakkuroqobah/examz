@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import '../../provider/admin/a_import_provider.dart';
 import '../../provider/loading_provider.dart';
 import '../../services/admin/a_auth_service.dart';
+import '../../services/admin/a_delete.service.dart';
 import '../../services/admin/a_import_service.dart';
 import 'a_data_drawer.dart';
 import 'a_room_edit.dart';
@@ -24,6 +25,7 @@ class ARoom extends StatefulWidget {
 class _ARoomState extends State<ARoom> with SingleTickerProviderStateMixin {
   final AAuthService _aAuthService = AAuthService();
   final AImportService _aImportService = AImportService();
+  final ADeleteService _aDeleteService = ADeleteService();
   late FancyDrawerController _controllerDrawer;
 
   @override
@@ -203,15 +205,92 @@ class _ARoomState extends State<ARoom> with SingleTickerProviderStateMixin {
                                 cells: <DataCell>[
                                   DataCell(Text("${number++}")),
                                   DataCell(Text(el.name)),
-                                  DataCell(ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => ARoomEdit(data: el)));
-                                    }, 
-                                    style: const ButtonStyle(
-                                      backgroundColor: MaterialStatePropertyAll<Color>(Colors.orange),
-                                      elevation: MaterialStatePropertyAll(0)
-                                    ),
-                                    child: const Text("Edit")
+                                  DataCell(Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => ARoomEdit(data: el)));
+                                        }, 
+                                        style: const ButtonStyle(
+                                          backgroundColor: MaterialStatePropertyAll<Color>(Colors.orange),
+                                          elevation: MaterialStatePropertyAll(0)
+                                        ),
+                                        child: const Text("Edit")
+                                      ),
+
+                                      const SizedBox(width: 10.0),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (_) {
+                                              return AlertDialog(
+                                                title: const Text("Peringatan"),
+                                                content: const Text("Apakah kamu yakin ingin menghapus ruangan ini"),
+                                                actions: <Widget>[
+                                                  ElevatedButton(
+                                                    style: const ButtonStyle(
+                                                      backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
+                                                      elevation: MaterialStatePropertyAll(0)
+                                                    ),
+                                                    onPressed: () async {
+                                                      Navigator.pop(context);
+                                                      await _aDeleteService.deleteData(el.id, 'room').then((value) {
+                                                        value.fold(
+                                                          (errorMessage) {
+                                                            showTopSnackBar(
+                                                              Overlay.of(context),
+                                                              CustomSnackBar.error(
+                                                                message: errorMessage,
+                                                              )
+                                                            );
+                                                            return;
+                                                          },
+                                                          (response) {
+                                                            Provider.of<AImportProvider>(context, listen: false).deleteRoom(el.id);
+                                                            showTopSnackBar(
+                                                              Overlay.of(context),
+                                                              CustomSnackBar.success(
+                                                                message: response,
+                                                              )
+                                                            );
+                                                            return null;
+                                                          },
+                                                        );
+                                                      }).catchError((err) {
+                                                        showTopSnackBar(
+                                                          Overlay.of(context),
+                                                          const CustomSnackBar.error(
+                                                            message: "Terjadi kesalahan",
+                                                          )
+                                                        );
+                                                      });
+                                                    },
+                                                    child: const Text("Iya"),
+                                                  ),
+                                                  ElevatedButton(
+                                                    style: const ButtonStyle(
+                                                      backgroundColor: MaterialStatePropertyAll<Color>(Colors.grey),
+                                                      elevation: MaterialStatePropertyAll(0)
+                                                    ),
+                                                    child: const Text("Tidak"),
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                  )
+                                                ],
+                                              );
+                                            }
+                                          );
+                                        },
+                                        style: const ButtonStyle(
+                                          backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
+                                          elevation: MaterialStatePropertyAll(0)
+                                        ),
+                                        child: const Text("Hapus"),
+                                      )
+                                    ],
                                   )),
                                 ]
                               );

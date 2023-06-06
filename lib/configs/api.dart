@@ -55,7 +55,6 @@ class Api {
 
   static const String pStudent = "$pBaseUrl/student";
 
-
   // ADMIN
   static const String aLogin = "$aBaseUrl/login";
   static const String aGetUser = "$aBaseUrl/get-user";
@@ -83,4 +82,10 @@ class Api {
   static const String aEditStudent = "$aBaseUrl/edit/student";
   static const String aEditSupervisor = "$aBaseUrl/edit/supervisor";
   static const String aEditRoom = "$aBaseUrl/edit/room";
+
+  static const String aDeleteTeacher = "$aBaseUrl/delete/teacher";
+  static const String aDeleteStudent = "$aBaseUrl/delete/student";
+  static const String aDeleteSupervisor = "$aBaseUrl/delete/supervisor";
+  static const String aDeleteRoom = "$aBaseUrl/delete/room";
+  static const String aDeleteSchedule = "$aBaseUrl/delete/schedule";
 }
