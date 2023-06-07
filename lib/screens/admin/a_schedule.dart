@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:fancy_drawer/fancy_drawer.dart';
 import 'package:file_picker/file_picker.dart';
@@ -80,12 +80,14 @@ class _AScheduleState extends State<ASchedule> with SingleTickerProviderStateMix
                       builder: (_, loadingProvider, __) {
                         return ElevatedButton(
                           onPressed: () async {
+                            final result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['xls', 'xlsx'], withData: true);
                             loadingProvider.setLoading(true);
-                            final result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['xls', 'xlsx']);
                                 
                             if (result != null) {
-                              File file = File(result.files.single.path.toString());
-                              _aImportService.schedulesImport(file).then((value) {
+                              PlatformFile file = result.files.first;
+                              Uint8List fileBytes = file.bytes!;
+                              
+                              _aImportService.schedulesImport(fileBytes).then((value) {
                                 loadingProvider.setLoading(false);
                                 value.fold(
                                   (errorMessage) {
@@ -128,6 +130,45 @@ class _AScheduleState extends State<ASchedule> with SingleTickerProviderStateMix
                         );
                       }
                     ),
+
+                    const SizedBox(width: 10.0),
+                    ElevatedButton(
+                      onPressed: () async {
+                        await _aImportService.downloadFormat('jadwal').then((value) {
+                          value.fold(
+                            (errorMessage) {
+                              showTopSnackBar(
+                                Overlay.of(context),
+                                CustomSnackBar.error(
+                                  message: errorMessage,
+                                )
+                              );
+                              return;
+                            },
+                            (response) {
+                              showTopSnackBar(
+                                Overlay.of(context),
+                                CustomSnackBar.success(
+                                  message: response,
+                                )
+                              );
+                              return null;
+                            },
+                          );
+                        }).catchError((err) {
+                          showTopSnackBar(
+                            Overlay.of(context),
+                            const CustomSnackBar.error(
+                              message: "Terjadi kesalahan",
+                            )
+                          );
+                        });
+                      },
+                      style: const ButtonStyle(
+                        elevation: MaterialStatePropertyAll(0)
+                      ),
+                      child: const Text("Download Format")
+                    )
                   ],
                 ),
 

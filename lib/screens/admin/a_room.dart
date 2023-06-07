@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:fancy_drawer/fancy_drawer.dart';
 import 'package:file_picker/file_picker.dart';
@@ -81,12 +81,14 @@ class _ARoomState extends State<ARoom> with SingleTickerProviderStateMixin {
                       builder: (_, loadingProvider, __) {
                         return ElevatedButton(
                           onPressed: () async {
+                            final result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['xls', 'xlsx'], withData: true);
                             loadingProvider.setLoading(true);
-                            final result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['xls', 'xlsx']);
                                 
                             if (result != null) {
-                              File file = File(result.files.single.path.toString());
-                              _aImportService.roomsImport(file).then((value) {
+                              PlatformFile file = result.files.first;
+                              Uint8List fileBytes = file.bytes!;
+                              
+                              _aImportService.roomsImport(fileBytes).then((value) {
                                 loadingProvider.setLoading(false);
                                 value.fold(
                                   (errorMessage) {

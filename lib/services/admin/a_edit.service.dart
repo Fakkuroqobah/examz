@@ -11,10 +11,11 @@ import '../../models/teacher_model.dart';
 class AEditService {
   final Dio _dio = Dio();
   
-  Future<Either<String, TeacherModel>> editTeacher(int id, String txtName, String txtUsername, String txtPassword) async {
+  Future<Either<String, TeacherModel>> editTeacher(int id, String txtCode, String txtName, String txtUsername, String txtPassword) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     final data = FormData.fromMap({
+      "code": txtCode,
       "name": txtName,
       "username": txtUsername,
       "password": txtPassword,
@@ -48,10 +49,11 @@ class AEditService {
     }
   }
 
-  Future<Either<String, StudentModel>> editStudent(int id, String txtName, String txtUsername, String txtClass, String txtPassword) async {
+  Future<Either<String, StudentModel>> editStudent(int id, String txtNis, String txtName, String txtUsername, String txtClass, String txtPassword) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     final data = FormData.fromMap({
+      "nis": txtNis,
       "name": txtName,
       "class": txtClass,
       "username": txtUsername,
@@ -86,10 +88,11 @@ class AEditService {
     }
   }
 
-  Future<Either<String, SupervisorModel>> editSupervisor(int id, String txtName, String txtUsername, String txtPassword) async {
+  Future<Either<String, SupervisorModel>> editSupervisor(int id, String txtCode, String txtName, String txtUsername, String txtPassword) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     final data = FormData.fromMap({
+      "code": txtCode,
       "name": txtName,
       "username": txtUsername,
       "password": txtPassword,

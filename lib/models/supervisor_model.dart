@@ -1,5 +1,6 @@
 class SupervisorModel {
   int id;
+  String code;
   String name;
   String username;
   String role;
@@ -8,6 +9,7 @@ class SupervisorModel {
 
   SupervisorModel({
     required this.id,
+    required this.code,
     required this.name,
     required this.username,
     required this.role,
@@ -17,6 +19,7 @@ class SupervisorModel {
 
   factory SupervisorModel.fromJson(Map<String, dynamic> json) => SupervisorModel(
     id: json["id"],
+    code: json["code"],
     name: json["name"],
     username: json["username"],
     role: json["role"],
@@ -26,6 +29,7 @@ class SupervisorModel {
 
   Map<String, dynamic> toJson() => {
     "id": id,
+    "code": code,
     "name": name,
     "username": username,
     "role": role,

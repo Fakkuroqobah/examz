@@ -19,6 +19,7 @@ class ASupervisorEdit extends StatefulWidget {
 
 class _ASupervisorEditState extends State<ASupervisorEdit> {
   final AEditService _aEditService = AEditService();
+  final TextEditingController _controllerCode = TextEditingController();
   final TextEditingController _controllerName = TextEditingController();
   final TextEditingController _controllerUsername = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
@@ -27,6 +28,7 @@ class _ASupervisorEditState extends State<ASupervisorEdit> {
   void initState() {
     super.initState();
 
+    _controllerCode.text = widget.data.code;
     _controllerName.text = widget.data.name;
     _controllerUsername.text = widget.data.username;
   }
@@ -44,6 +46,15 @@ class _ASupervisorEditState extends State<ASupervisorEdit> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              TextField(
+                controller: _controllerCode,
+                keyboardType: TextInputType.text,
+                maxLength: 3,
+                decoration: const InputDecoration(
+                  labelText: "Masukan kode pengawas",
+                ),
+              ),
+
               TextField(
                 controller: _controllerUsername,
                 keyboardType: TextInputType.text,
@@ -88,11 +99,21 @@ class _ASupervisorEditState extends State<ASupervisorEdit> {
               onPressed: () async {
                 loadingProvider.setLoading(true);
 
+                String code = _controllerCode.text.toString();
                 String name = _controllerName.text.toString();
                 String username = _controllerUsername.text.toString();
                 String password = _controllerPassword.text.toString();
 
-                if(name == "") {
+                if(code == "") {
+                  loadingProvider.setLoading(false);
+                  if (!mounted) return;
+                  showTopSnackBar(
+                    Overlay.of(context),
+                    const CustomSnackBar.error(
+                      message: "Kode pengawas harus diisi",
+                    )
+                  );
+                }else if(name == "") {
                   loadingProvider.setLoading(false);
                   if (!mounted) return;
                   showTopSnackBar(
@@ -111,7 +132,7 @@ class _ASupervisorEditState extends State<ASupervisorEdit> {
                     )
                   );
                 }else{
-                  _aEditService.editSupervisor(widget.data.id, name,  username, password).then((value) {
+                  _aEditService.editSupervisor(widget.data.id, code, name,  username, password).then((value) {
                     loadingProvider.setLoading(false);
                     value.fold(
                       (errorMessage) {

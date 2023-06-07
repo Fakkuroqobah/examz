@@ -27,6 +27,7 @@ class PAuthService {
 
     preferences.setString("token", loginModel.accessToken);
     preferences.setInt("id", supervisorModel.id);
+    preferences.setString("code", supervisorModel.code);
     preferences.setString("name", supervisorModel.name);
     preferences.setString("username", supervisorModel.username);
     preferences.setString("role", supervisorModel.role);

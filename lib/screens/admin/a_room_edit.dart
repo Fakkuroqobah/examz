@@ -32,7 +32,7 @@ class _ARoomEditState extends State<ARoomEdit> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Edit Siswa"),
+        title: const Text("Edit Ruangan"),
         elevation: 0,
       ),
       body: SingleChildScrollView(

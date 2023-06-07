@@ -20,6 +20,7 @@ class AStudentEdit extends StatefulWidget {
 class _AStudentEditState extends State<AStudentEdit> {
   final AEditService _aEditService = AEditService();
   final TextEditingController _controllerName = TextEditingController();
+  final TextEditingController _controllerNis = TextEditingController();
   final TextEditingController _controllerUsername = TextEditingController();
   final TextEditingController _controllerClass = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
@@ -28,6 +29,7 @@ class _AStudentEditState extends State<AStudentEdit> {
   void initState() {
     super.initState();
 
+    _controllerNis.text = widget.data.nis;
     _controllerName.text = widget.data.name;
     _controllerUsername.text = widget.data.username;
     _controllerClass.text = widget.data.studentModelClass;
@@ -46,6 +48,15 @@ class _AStudentEditState extends State<AStudentEdit> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              TextField(
+                controller: _controllerNis,
+                keyboardType: TextInputType.text,
+                maxLength: 10,
+                decoration: const InputDecoration(
+                  labelText: "Masukan nis",
+                ),
+              ),
+
               TextField(
                 controller: _controllerUsername,
                 keyboardType: TextInputType.text,
@@ -99,12 +110,22 @@ class _AStudentEditState extends State<AStudentEdit> {
               onPressed: () async {
                 loadingProvider.setLoading(true);
 
+                String nis = _controllerNis.text.toString();
                 String name = _controllerName.text.toString();
                 String username = _controllerUsername.text.toString();
                 String classStudent = _controllerClass.text.toString();
                 String password = _controllerPassword.text.toString();
 
-                if(name == "") {
+                if(nis == "") {
+                  loadingProvider.setLoading(false);
+                  if (!mounted) return;
+                  showTopSnackBar(
+                    Overlay.of(context),
+                    const CustomSnackBar.error(
+                      message: "NIS siswa harus diisi",
+                    )
+                  );
+                }else if(name == "") {
                   loadingProvider.setLoading(false);
                   if (!mounted) return;
                   showTopSnackBar(
@@ -132,7 +153,7 @@ class _AStudentEditState extends State<AStudentEdit> {
                     )
                   );
                 }else{
-                  _aEditService.editStudent(widget.data.id, name,  username, classStudent, password).then((value) {
+                  _aEditService.editStudent(widget.data.id, nis, name,  username, classStudent, password).then((value) {
                     loadingProvider.setLoading(false);
                     value.fold(
                       (errorMessage) {

@@ -27,6 +27,7 @@ class SAuthService {
 
     preferences.setString("token", loginModel.accessToken);
     preferences.setInt("id", studentModel.id);
+    preferences.setString("nis", studentModel.nis);
     preferences.setString("name", studentModel.name);
     preferences.setString("username", studentModel.username);
     preferences.setString("studentModelClass", studentModel.studentModelClass);

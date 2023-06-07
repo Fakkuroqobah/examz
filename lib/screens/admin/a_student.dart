@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:fancy_drawer/fancy_drawer.dart';
 import 'package:file_picker/file_picker.dart';
@@ -81,12 +81,14 @@ class _AStudentState extends State<AStudent> with SingleTickerProviderStateMixin
                       builder: (_, loadingProvider, __) {
                         return ElevatedButton(
                           onPressed: () async {
+                            final result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['xls', 'xlsx'], withData: true);
                             loadingProvider.setLoading(true);
-                            final result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['xls', 'xlsx']);
                                 
                             if (result != null) {
-                              File file = File(result.files.single.path.toString());
-                              _aImportService.studentsImport(file).then((value) {
+                              PlatformFile file = result.files.first;
+                              Uint8List fileBytes = file.bytes!;
+                              
+                              _aImportService.studentsImport(fileBytes).then((value) {
                                 loadingProvider.setLoading(false);
                                 value.fold(
                                   (errorMessage) {
@@ -197,6 +199,7 @@ class _AStudentState extends State<AStudent> with SingleTickerProviderStateMixin
                             showCheckboxColumn: false,
                             columns: const <DataColumn>[
                               DataColumn(label: Text("No")),
+                              DataColumn(label: Text("NIS")),
                               DataColumn(label: Text("Nama")),
                               DataColumn(label: Text("Kelas")),
                               DataColumn(label: Text("Username")),
@@ -206,6 +209,7 @@ class _AStudentState extends State<AStudent> with SingleTickerProviderStateMixin
                               return DataRow(
                                 cells: <DataCell>[
                                   DataCell(Text("${number++}")),
+                                  DataCell(Text(el.nis)),
                                   DataCell(Text(el.name)),
                                   DataCell(Text(el.studentModelClass)),
                                   DataCell(Text(el.username)),

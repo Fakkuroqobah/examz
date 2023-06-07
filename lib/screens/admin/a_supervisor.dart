@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:fancy_drawer/fancy_drawer.dart';
 import 'package:file_picker/file_picker.dart';
@@ -81,12 +81,14 @@ class _ASupervisorState extends State<ASupervisor> with SingleTickerProviderStat
                       builder: (_, loadingProvider, __) {
                         return ElevatedButton(
                           onPressed: () async {
+                            final result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['xls', 'xlsx'], withData: true);
                             loadingProvider.setLoading(true);
-                            final result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['xls', 'xlsx']);
                                 
                             if (result != null) {
-                              File file = File(result.files.single.path.toString());
-                              _aImportService.supervisorsImport(file).then((value) {
+                              PlatformFile file = result.files.first;
+                              Uint8List fileBytes = file.bytes!;
+                              
+                              _aImportService.supervisorsImport(fileBytes).then((value) {
                                 loadingProvider.setLoading(false);
                                 value.fold(
                                   (errorMessage) {
@@ -197,6 +199,7 @@ class _ASupervisorState extends State<ASupervisor> with SingleTickerProviderStat
                             showCheckboxColumn: false,
                             columns: const <DataColumn>[
                               DataColumn(label: Text("No")),
+                              DataColumn(label: Text("Kode")),
                               DataColumn(label: Text("Nama")),
                               DataColumn(label: Text("Username")),
                               DataColumn(label: Text("Aksi")),
@@ -205,6 +208,7 @@ class _ASupervisorState extends State<ASupervisor> with SingleTickerProviderStat
                               return DataRow(
                                 cells: <DataCell>[
                                   DataCell(Text("${number++}")),
+                                  DataCell(Text(el.code)),
                                   DataCell(Text(el.name)),
                                   DataCell(Text(el.username)),
                                   DataCell(Row(

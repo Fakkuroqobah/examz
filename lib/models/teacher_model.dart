@@ -7,6 +7,7 @@ String teacherModelToJson(TeacherModel data) => json.encode(data.toJson());
 class TeacherModel {
   TeacherModel({
     required this.id,
+    required this.code,
     required this.name,
     required this.username,
     required this.role,
@@ -15,6 +16,7 @@ class TeacherModel {
   });
 
   int id;
+  String code;
   String name;
   String username;
   String role;
@@ -23,6 +25,7 @@ class TeacherModel {
 
   factory TeacherModel.fromJson(Map<String, dynamic> json) => TeacherModel(
     id: json["id"],
+    code: json["code"],
     name: json["name"],
     username: json["username"],
     role: json["role"],
@@ -32,6 +35,7 @@ class TeacherModel {
 
   Map<String, dynamic> toJson() => {
     "id": id,
+    "code": code,
     "name": name,
     "username": username,
     "role": role,

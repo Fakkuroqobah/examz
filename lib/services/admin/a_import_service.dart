@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
@@ -86,11 +86,11 @@ class AImportService {
     return data;
   }
 
-  Future<Either<String, List<RoomModel>>> roomsImport(File excel) async {
+  Future<Either<String, List<RoomModel>>> roomsImport(Uint8List excel) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     
     FormData data = FormData.fromMap({
-      "excel": await MultipartFile.fromFile(excel.path, filename: "file.xlsx"),
+      "excel": MultipartFile.fromBytes(excel, filename: "file.xlsx"),
     });
 
     try {
@@ -113,11 +113,11 @@ class AImportService {
     }
   }
 
-  Future<Either<String, List<TeacherModel>>> teachersImport(File excel) async {
+  Future<Either<String, List<TeacherModel>>> teachersImport(Uint8List excel) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     
     FormData data = FormData.fromMap({
-      "excel": await MultipartFile.fromFile(excel.path, filename: "file.xlsx"),
+      "excel": MultipartFile.fromBytes(excel, filename: "file.xlsx"),
     });
 
     try {
@@ -140,11 +140,11 @@ class AImportService {
     }
   }
   
-  Future<Either<String, List<StudentModel>>> studentsImport(File excel) async {
+  Future<Either<String, List<StudentModel>>> studentsImport(Uint8List excel) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     
     FormData data = FormData.fromMap({
-      "excel": await MultipartFile.fromFile(excel.path, filename: "file.xlsx"),
+      "excel": MultipartFile.fromBytes(excel, filename: "file.xlsx"),
     });
 
     try {
@@ -167,11 +167,11 @@ class AImportService {
     }
   }
 
-  Future<Either<String, List<SupervisorModel>>> supervisorsImport(File excel) async {
+  Future<Either<String, List<SupervisorModel>>> supervisorsImport(Uint8List excel) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     
     FormData data = FormData.fromMap({
-      "excel": await MultipartFile.fromFile(excel.path, filename: "file.xlsx"),
+      "excel": MultipartFile.fromBytes(excel, filename: "file.xlsx"),
     });
 
     try {
@@ -194,11 +194,11 @@ class AImportService {
     }
   }
 
-  Future<Either<String, List<ScheduleModel>>> schedulesImport(File excel) async {
+  Future<Either<String, List<ScheduleModel>>> schedulesImport(Uint8List excel) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     
     FormData data = FormData.fromMap({
-      "excel": await MultipartFile.fromFile(excel.path, filename: "file.xlsx"),
+      "excel": MultipartFile.fromBytes(excel, filename: "file.xlsx"),
     });
 
     try {

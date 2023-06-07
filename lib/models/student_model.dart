@@ -7,6 +7,7 @@ String studentModelToJson(StudentModel? data) => json.encode(data!.toJson());
 class StudentModel {
   StudentModel({
     required this.id,
+    required this.nis,
     required this.name,
     required this.studentModelClass,
     required this.username,
@@ -17,6 +18,7 @@ class StudentModel {
   });
 
   int id;
+  String nis;
   String name;
   String studentModelClass;
   String username;
@@ -27,6 +29,7 @@ class StudentModel {
 
   factory StudentModel.fromJson(Map<String, dynamic> json) => StudentModel(
     id: json["id"],
+    nis: json["nis"],
     name: json["name"],
     studentModelClass: json["class"],
     username: json["username"],
@@ -38,6 +41,7 @@ class StudentModel {
 
   Map<String, dynamic> toJson() => {
     "id": id,
+    "nis": nis,
     "name": name,
     "class": studentModelClass,
     "username": username,

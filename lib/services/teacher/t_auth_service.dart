@@ -27,6 +27,7 @@ class TAuthService {
 
     preferences.setString("token", loginModel.accessToken);
     preferences.setInt("id", teacherModel.id);
+    preferences.setString("code", teacherModel.code);
     preferences.setString("name", teacherModel.name);
     preferences.setString("username", teacherModel.username);
     preferences.setString("role", teacherModel.role);

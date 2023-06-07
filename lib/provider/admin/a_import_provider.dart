@@ -144,6 +144,7 @@ class AImportProvider extends ChangeNotifier {
   void updateTeacher(TeacherModel data) {
     TeacherModel el = TeacherModel(
       id: data.id, 
+      code: data.code, 
       name: data.name, 
       username: data.username, 
       role: data.role, 
@@ -158,6 +159,7 @@ class AImportProvider extends ChangeNotifier {
   void updateStudent(StudentModel data) {
     StudentModel el = StudentModel(
       id: data.id, 
+      nis: data.nis, 
       name: data.name, 
       studentModelClass: data.studentModelClass, 
       username: data.username, 
@@ -174,6 +176,7 @@ class AImportProvider extends ChangeNotifier {
   void updateSupervisor(SupervisorModel data) {
     SupervisorModel el = SupervisorModel(
       id: data.id, 
+      code: data.code, 
       name: data.name, 
       username: data.username, 
       role: data.role, 
