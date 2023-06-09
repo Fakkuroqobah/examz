@@ -63,6 +63,7 @@ class Api {
 
   static const String aExam = "$aBaseUrl/exam";
   static const String aTrigger = "$aBaseUrl/exam/trigger";
+  static const String aTriggerRated = "$aBaseUrl/exam/trigger-rated";
 
   static const String aRooms = "$aBaseUrl/rooms";
   static const String aSchedules = "$aBaseUrl/schedules";
