@@ -11,16 +11,16 @@ import '../../provider/teacher/t_is_correct_answer_provider.dart';
 import '../../provider/teacher/t_question_provider.dart';
 import '../../services/teacher/t_question_service.dart';
 
-class TQuestionEdit extends StatefulWidget {
-  const TQuestionEdit({super.key, required this.data});
+class TQuestionEditChoice extends StatefulWidget {
+  const TQuestionEditChoice({super.key, required this.data});
 
   final QuestionModel data;
 
   @override
-  State<TQuestionEdit> createState() => _TQuestionEditState();
+  State<TQuestionEditChoice> createState() => _TQuestionEditChoiceState();
 }
 
-class _TQuestionEditState extends State<TQuestionEdit> {
+class _TQuestionEditChoiceState extends State<TQuestionEditChoice> {
   final TQuestionService _tQuestionService = TQuestionService();
   final HtmlEditorController _controllerSubject = HtmlEditorController();
   final HtmlEditorController _controllerQuestion1 = HtmlEditorController();
@@ -33,7 +33,7 @@ class _TQuestionEditState extends State<TQuestionEdit> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<TIsCorrectAnswerProvider>(context, listen: false).setCheckedEdit(widget.data.answerOption);
+      Provider.of<TIsCorrectAnswerProvider>(context, listen: false).setCheckedEdit(widget.data.answerOption!);
     });
   }
 
@@ -41,7 +41,7 @@ class _TQuestionEditState extends State<TQuestionEdit> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Tambah Pertanyaan"),
+        title: const Text("Edit Pertanyaan Pilgan"),
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -90,7 +90,7 @@ class _TQuestionEditState extends State<TQuestionEdit> {
                 controller: _controllerQuestion1,
                 htmlEditorOptions: HtmlEditorOptions(
                   hint: "Masukan jawaban soal",
-                  initialText: widget.data.answerOption[0].subject
+                  initialText: widget.data.answerOption![0].subject
                 ),
                 htmlToolbarOptions: const HtmlToolbarOptions(
                   toolbarType: ToolbarType.nativeExpandable,
@@ -124,7 +124,7 @@ class _TQuestionEditState extends State<TQuestionEdit> {
                 controller: _controllerQuestion2,
                 htmlEditorOptions: HtmlEditorOptions(
                   hint: "Masukan jawaban soal",
-                  initialText: widget.data.answerOption[1].subject
+                  initialText: widget.data.answerOption![1].subject
                 ),
                 htmlToolbarOptions: const HtmlToolbarOptions(
                   toolbarType: ToolbarType.nativeExpandable,
@@ -158,7 +158,7 @@ class _TQuestionEditState extends State<TQuestionEdit> {
                 controller: _controllerQuestion3,
                 htmlEditorOptions: HtmlEditorOptions(
                   hint: "Masukan jawaban soal",
-                  initialText: widget.data.answerOption[2].subject
+                  initialText: widget.data.answerOption![2].subject
                 ),
                 htmlToolbarOptions: const HtmlToolbarOptions(
                   toolbarType: ToolbarType.nativeExpandable,
@@ -192,7 +192,7 @@ class _TQuestionEditState extends State<TQuestionEdit> {
                 controller: _controllerQuestion4,
                 htmlEditorOptions: HtmlEditorOptions(
                   hint: "Masukan jawaban soal",
-                  initialText: widget.data.answerOption[3].subject
+                  initialText: widget.data.answerOption![3].subject
                 ),
                 htmlToolbarOptions: const HtmlToolbarOptions(
                   toolbarType: ToolbarType.nativeExpandable,
@@ -226,7 +226,7 @@ class _TQuestionEditState extends State<TQuestionEdit> {
                 controller: _controllerQuestion5,
                 htmlEditorOptions: HtmlEditorOptions(
                   hint: "Masukan jawaban soal",
-                  initialText: widget.data.answerOption[4].subject
+                  initialText: widget.data.answerOption![4].subject
                 ),
                 htmlToolbarOptions: const HtmlToolbarOptions(
                   toolbarType: ToolbarType.nativeExpandable,
@@ -279,7 +279,7 @@ class _TQuestionEditState extends State<TQuestionEdit> {
                     }
                   };
 
-                  _tQuestionService.addOrEditQuestion(widget.data.id, subject, answer, 'edit', examId: widget.data.examId).then((value) {
+                  _tQuestionService.addOrEditQuestion(widget.data.id, 'choice', subject, answer, 'edit', examId: widget.data.examId).then((value) {
                     loadingProvider.setLoading(false);
                     value.fold(
                       (errorMessage) {

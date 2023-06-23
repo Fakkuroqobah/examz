@@ -47,8 +47,8 @@ class _SExamQuestionBodyState extends State<SExamQuestionBody> {
               ),
 
               const SizedBox(height: 22.0),
-              for (int i = 0; i < widget.data.answerOption.length; i++)
-                btnAnswer(widget.data.answerOption[i].subject, widget.data.answerOption[i].id),
+              for (int i = 0; i < widget.data.answerOption!.length; i++)
+                btnAnswer(widget.data.answerOption![i].subject, widget.data.answerOption![i].id),
 
               const SizedBox(height: 22.0),
               ElevatedButton(

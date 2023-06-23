@@ -48,9 +48,9 @@ class _QuestionCardStudentState extends State<QuestionCardStudent> {
             SizedBox(
               height: 200.0,
               child: ListView.builder(
-                itemCount: widget.data.answerOption.length,
+                itemCount: widget.data.answerOption!.length,
                 itemBuilder: (_, index) {
-                  AnswerOptionModel answerOption = widget.data.answerOption[index];
+                  AnswerOptionModel answerOption = widget.data.answerOption![index];
                   List<String> al = ['A', 'B', 'C', 'D', 'E'];
                   Text option;
 

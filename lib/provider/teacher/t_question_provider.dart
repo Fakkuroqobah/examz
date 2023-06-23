@@ -39,9 +39,11 @@ class TQuestionProvider extends ChangeNotifier {
       id: data.id, 
       examId: data.examId, 
       subject: data.subject, 
+      type: data.type, 
       createdAt: data.createdAt, 
       updatedAt: data.updatedAt, 
-      answerOption: data.answerOption
+      answerOption: data.answerOption,
+      answerEssay: data.answerEssay
     );
     _questionList[_questionList.indexWhere((el) => el.id == data.id)] = el;
     notifyListeners();

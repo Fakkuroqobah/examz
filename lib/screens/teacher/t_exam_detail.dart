@@ -9,7 +9,8 @@ import '../../models/question_model.dart';
 import '../../provider/teacher/t_question_provider.dart';
 import '../../widgets/empty_condition.dart';
 import '../../widgets/question_card.dart';
-import 't_question_add.dart';
+import 't_question_add_choice.dart';
+import 't_question_add_essay.dart';
 
 class TExamDetail extends StatefulWidget {
   const TExamDetail({super.key, required this.data});
@@ -47,7 +48,47 @@ class _TExamDetailState extends State<TExamDetail> {
             icon: const Icon(Icons.add),
             tooltip: 'Tambah Pertanyaan',
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TQuestionAdd(id: widget.data.id)));
+              showDialog(
+                context: context,
+                builder: (_) {
+                  return AlertDialog(
+                    title: const Text("Pilih tipe soal"),
+                    content: const Text("Silahkan pilih tipe soal yang ingin kamu buat"),
+                    actions: <Widget>[
+                      ElevatedButton(
+                        style: const ButtonStyle(
+                          backgroundColor: MaterialStatePropertyAll<Color>(Colors.green),
+                          elevation: MaterialStatePropertyAll(0)
+                        ),
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TQuestionAddChoice(id: widget.data.id)));
+                        },
+                        child: const Text("Pilgan"),
+                      ),
+                      ElevatedButton(
+                        style: const ButtonStyle(
+                          backgroundColor: MaterialStatePropertyAll<Color>(Colors.green),
+                          elevation: MaterialStatePropertyAll(0)
+                        ),
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TQuestionAddEssay(id: widget.data.id)));
+                        },
+                        child: const Text("Essai"),
+                      ),
+                      ElevatedButton(
+                        style: const ButtonStyle(
+                          backgroundColor: MaterialStatePropertyAll<Color>(Colors.grey),
+                          elevation: MaterialStatePropertyAll(0)
+                        ),
+                        child: const Text("Tidak"),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      )
+                    ],
+                  );
+                }
+              );
             },
           ) : Container()
         ],

@@ -16,26 +16,38 @@ class TQuestionService {
 
     List<QuestionModel> data = <QuestionModel>[];
     response.data['data'].forEach((val) {
+      // print(val);
       data.add(QuestionModel.fromJson(val));
     });
 
     return data;
   }
 
-  Future<Either<String, QuestionModel>> addOrEditQuestion(int id, String txtSubject, Map<String, dynamic> answer, String type, {int? examId}) async {
+  Future<Either<String, QuestionModel>> addOrEditQuestion(int id, String type, String txtSubject, Map<String, dynamic> answer, String addOrEdit, {int? examId}) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
-    final data = {
-      "exam_id": (type == 'add') ? id : examId,
-      "subject": txtSubject,
-      "answer": answer,
-    };
+    final Map<String, dynamic> data;
+    if(type == 'choice') {
+      data = {
+        "exam_id": (addOrEdit == 'add') ? id : examId,
+        "subject": txtSubject,
+        "answer": answer,
+        "type": type
+      };
+    }else{
+      data = {
+        "exam_id": (addOrEdit == 'add') ? id : examId,
+        "subject": txtSubject,
+        "answer": answer['essay'],
+        "type": type
+      };
+    }
 
     try {
       _dio.options.headers['authorization'] = 'Bearer ${preferences.getString("token")}';
       _dio.options.headers['accept'] = 'application/json';
 
-      final response = await _dio.post((type == 'add') ? Api.tQuestionAdd : "${Api.tQuestionEdit}/$id", 
+      final response = await _dio.post((addOrEdit == 'add') ? Api.tQuestionAdd : "${Api.tQuestionEdit}/$id", 
         data: data,
       );
 

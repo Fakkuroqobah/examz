@@ -1,4 +1,3 @@
-import 'package:examz/provider/supervisor/p_exam_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +8,7 @@ import 'provider/auth/o_select_role_provider.dart';
 import 'provider/loading_provider.dart';
 import 'provider/student/s_exam_provider.dart';
 import 'provider/student/s_timer_provider.dart';
+import 'provider/supervisor/p_exam_provider.dart';
 import 'provider/teacher/t_exam_provider.dart';
 import 'provider/teacher/t_is_correct_answer_provider.dart';
 import 'provider/teacher/t_is_random_provider.dart';

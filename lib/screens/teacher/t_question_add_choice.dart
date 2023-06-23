@@ -10,16 +10,16 @@ import '../../provider/teacher/t_is_correct_answer_provider.dart';
 import '../../provider/teacher/t_question_provider.dart';
 import '../../services/teacher/t_question_service.dart';
 
-class TQuestionAdd extends StatefulWidget {
-  const TQuestionAdd({super.key, required this.id});
+class TQuestionAddChoice extends StatefulWidget {
+  const TQuestionAddChoice({super.key, required this.id});
 
   final int id;
 
   @override
-  State<TQuestionAdd> createState() => _TQuestionAddState();
+  State<TQuestionAddChoice> createState() => _TQuestionAddChoiceState();
 }
 
-class _TQuestionAddState extends State<TQuestionAdd> {
+class _TQuestionAddChoiceState extends State<TQuestionAddChoice> {
   final TQuestionService _tQuestionService = TQuestionService();
   final HtmlEditorController _controllerSubject = HtmlEditorController();
   final HtmlEditorController _controllerQuestion1 = HtmlEditorController();
@@ -40,7 +40,7 @@ class _TQuestionAddState extends State<TQuestionAdd> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Tambah Pertanyaan"),
+        title: const Text("Tambah Pertanyaan Pilgan"),
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -278,7 +278,7 @@ class _TQuestionAddState extends State<TQuestionAdd> {
                     }
                   };
 
-                  _tQuestionService.addOrEditQuestion(widget.id, subject, answer, 'add').then((value) {
+                  _tQuestionService.addOrEditQuestion(widget.id, 'choice', subject, answer, 'add').then((value) {
                     loadingProvider.setLoading(false);
                     value.fold(
                       (errorMessage) {

@@ -8,7 +8,8 @@ import '../models/answer_option_model.dart';
 import '../models/exam_model.dart';
 import '../models/question_model.dart';
 import '../provider/teacher/t_question_provider.dart';
-import '../screens/teacher/t_question_edit.dart';
+import '../screens/teacher/t_question_edit_choice.dart';
+import '../screens/teacher/t_question_edit_essay.dart';
 import '../services/teacher/t_question_service.dart';
 
 class QuestionCard extends StatefulWidget {
@@ -27,6 +28,9 @@ class _QuestionCardState extends State<QuestionCard> {
 
   @override
   Widget build(BuildContext context) {
+    String tipe = "";
+    (widget.question.type == "choice") ? tipe = "Pilihan ganda" : tipe = "Essai";
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -36,7 +40,7 @@ class _QuestionCardState extends State<QuestionCard> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Soal ${widget.number}", style: const TextStyle(fontWeight: FontWeight.bold)),
+                Text("Soal ${widget.number} - $tipe", style: const TextStyle(fontWeight: FontWeight.bold)),
 
                 const SizedBox(height: 8.0),
                 Html(
@@ -55,12 +59,12 @@ class _QuestionCardState extends State<QuestionCard> {
             ),
             
             const Divider(),
-            SizedBox(
+            (widget.question.type == "choice") ? SizedBox(
               height: 200.0,
               child: ListView.builder(
-                itemCount: widget.question.answerOption.length,
+                itemCount: widget.question.answerOption!.length,
                 itemBuilder: (ctx, index) {
-                  AnswerOptionModel answerOption = widget.question.answerOption[index];
+                  AnswerOptionModel answerOption = widget.question.answerOption![index];
                   List<String> al = ['A', 'B', 'C', 'D', 'E'];
                   
                   return Row(
@@ -94,6 +98,24 @@ class _QuestionCardState extends State<QuestionCard> {
                   );
                 },
               ),
+            ) : SizedBox(
+              height: 100.0,
+              child: ListView(
+                children: [
+                  Html(
+                    data: widget.question.answerEssay!.defaultAnswer,
+                    style: {
+                      "body": Style(
+                        padding: const EdgeInsets.all(0),
+                        margin: const EdgeInsets.all(0),
+                      ),
+                      "p": Style(
+                        margin: const EdgeInsets.only(top: 0, bottom: 10),
+                      ),
+                    }
+                  )
+                ],
+              )
             ),
             
             (widget.exam.status == "inactive") ? Column(
@@ -104,7 +126,11 @@ class _QuestionCardState extends State<QuestionCard> {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TQuestionEdit(data: widget.question)));
+                        if(widget.question.type == "choice") {
+                          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TQuestionEditChoice(data: widget.question)));
+                        }else{
+                          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TQuestionEditEssay(data: widget.question)));
+                        }
                       },
                       style: const ButtonStyle(
                         backgroundColor: MaterialStatePropertyAll<Color>(Colors.orange),
