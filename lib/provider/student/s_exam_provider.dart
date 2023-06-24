@@ -65,7 +65,7 @@ class SExamProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void answer(int id, int answer) {
+  void answer(int id, dynamic answer) {
     for (int i = 0; i < _questionAnswer.length; i++) {
       if(_questionAnswer[i][0] == id) {
         _questionAnswer[i][1] = answer;
@@ -74,14 +74,18 @@ class SExamProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  int answerChecked(int id) {
+  dynamic getAnswer(int id, String type) {
     for (int i = 0; i < _questionAnswer.length; i++) {
       if(_questionAnswer[i][0] == id) {
         return _questionAnswer[i][1];
       }
     }
 
-    return 0;
+    if(type == 'choice') {
+      return 0;
+    }else{
+      return null;
+    }
   }
 
   void setActivePage(int page) {

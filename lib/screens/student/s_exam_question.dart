@@ -39,7 +39,11 @@ class _SExamQuestionState extends State<SExamQuestion> with WidgetsBindingObserv
     List initAnswer = Provider.of<SExamProvider>(context, listen: false).questionAnswer;
     for (int i = 0; i < sqm.length; i++) {
       _pages.add(SExamQuestionBody(data: sqm[i]));
-      initAnswer.add([sqm[i].id, 0]);
+      if(sqm[i].type == 'choice') {
+        initAnswer.add([sqm[i].id, 0]);
+      }else{
+        initAnswer.add([sqm[i].id, '']);
+      }
     }
   }
 
@@ -355,6 +359,7 @@ class _SExamQuestionState extends State<SExamQuestion> with WidgetsBindingObserv
   Widget btnNumber(int no) {
     return Consumer<SExamProvider>(
       builder: (_, sExamProvider, __) {
+        dynamic valAnswer = sExamProvider.questionAnswer[no - 1][1];
         return OutlinedButton(
           onPressed: () {
             sExamProvider.setActivePage(no - 1);
@@ -363,14 +368,14 @@ class _SExamQuestionState extends State<SExamQuestion> with WidgetsBindingObserv
                 curve: Curves.easeIn);
           },
           style: OutlinedButton.styleFrom(
-            backgroundColor: (sExamProvider.questionAnswer[no - 1][1] != 0) ? Colors.green : Colors.white,
+            backgroundColor: (valAnswer != 0 && valAnswer != '') ? Colors.green : Colors.white,
             alignment: Alignment.center,
             shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),
             ),
           ),
           child: Text(no.toString(),
             style: TextStyle(
-              color: (sExamProvider.questionAnswer[no - 1][1] != 0) ? Colors.white : Colors.black54,
+              color: (valAnswer != 0 && valAnswer != '') ? Colors.white : Colors.black54,
             ),
           ),
         );

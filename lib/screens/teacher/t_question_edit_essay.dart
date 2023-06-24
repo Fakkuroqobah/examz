@@ -66,7 +66,7 @@ class _TQuestionEditEssayState extends State<TQuestionEditEssay> {
                 controller: _controllerDefaultAnswer,
                 htmlEditorOptions: HtmlEditorOptions(
                   hint: "Masukan ekspektasi jawaban",
-                  initialText: widget.data.answerEssay!.defaultAnswer
+                  initialText: widget.data.answerEssay?.defaultAnswer ?? ''
                 ),
                 htmlToolbarOptions: const HtmlToolbarOptions(
                   toolbarType: ToolbarType.nativeExpandable,

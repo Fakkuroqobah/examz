@@ -26,7 +26,7 @@ class QuestionModel {
     this.answer,
     required this.createdAt,
     required this.updatedAt,
-    required this.answerOption,
+    this.answerOption,
     this.answerEssay,
   });
 

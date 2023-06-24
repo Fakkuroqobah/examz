@@ -85,13 +85,21 @@ class SExamService {
     }
   }
 
-  Future<Either<String, String>> answer(int id, int answer) async {
+  Future<Either<String, String>> answer(int id, String type, dynamic answer) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
-    final data = {
-      "question_id": id,
-      "answer_option_id": answer,
-    };
+    final Map<String, dynamic> data;
+    if(type == 'choice') {
+      data = {
+        "question_id": id,
+        "answer_option_id": answer,
+      };
+    }else{
+      data = {
+        "question_id": id,
+        "answer_essay": answer,
+      };
+    }
 
     try {
       _dio.options.headers['authorization'] = 'Bearer ${preferences.getString("token")}';

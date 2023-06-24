@@ -103,7 +103,7 @@ class _QuestionCardState extends State<QuestionCard> {
               child: ListView(
                 children: [
                   Html(
-                    data: widget.question.answerEssay!.defaultAnswer,
+                    data: widget.question.answerEssay?.defaultAnswer ?? '',
                     style: {
                       "body": Style(
                         padding: const EdgeInsets.all(0),
