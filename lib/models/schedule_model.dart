@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'exam_model.dart';
 import 'room_model.dart';
+import 'student_schedule_model.dart';
 import 'supervisor_model.dart';
 
 List<ScheduleModel> scheduleModelFromJson(String str) => List<ScheduleModel>.from(json.decode(str).map((x) => ScheduleModel.fromJson(x)));
@@ -19,6 +20,7 @@ class ScheduleModel {
   RoomModel? room;
   SupervisorModel? supervisor;
   ExamModel exam;
+  StudentScheduleModel? studentSchedule;
 
   ScheduleModel({
     required this.id,
@@ -31,6 +33,7 @@ class ScheduleModel {
     this.room,
     this.supervisor,
     required this.exam,
+    this.studentSchedule
   });
 
   factory ScheduleModel.fromJson(Map<String, dynamic> json) => ScheduleModel(
@@ -44,6 +47,7 @@ class ScheduleModel {
     room: json["room"] == null ? null : RoomModel.fromJson(json["room"]),
     supervisor: json["supervisor"] == null ? null : SupervisorModel.fromJson(json["supervisor"]),
     exam: ExamModel.fromJson(json["exam"]),
+    studentSchedule: json["student_schedule"] == null ? null : StudentScheduleModel.fromJson(json["student_schedule"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -57,5 +61,6 @@ class ScheduleModel {
     "room": room?.toJson(),
     "supervisor": supervisor?.toJson(),
     "exam": exam.toJson(),
+    "student_schedule": studentSchedule?.toJson(),
   };
 }

@@ -84,7 +84,7 @@ class SExamProvider extends ChangeNotifier {
     if(type == 'choice') {
       return 0;
     }else{
-      return null;
+      return '';
     }
   }
 
