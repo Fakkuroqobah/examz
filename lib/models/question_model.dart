@@ -12,6 +12,7 @@ class QuestionModel {
   int examId;
   String subject;
   String type;
+  int score;
   int? answer;
   DateTime? createdAt;
   DateTime? updatedAt;
@@ -23,6 +24,7 @@ class QuestionModel {
     required this.examId,
     required this.subject,
     required this.type,
+    required this.score,
     this.answer,
     required this.createdAt,
     required this.updatedAt,
@@ -36,6 +38,7 @@ class QuestionModel {
     subject: json["subject"],
     type: json["type"],
     answer: json["answer"],
+    score: json["score"],
     createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
     updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
     answerOption: json["answer_option"] == null ? null : List<AnswerOptionModel>.from(json["answer_option"].map((x) => AnswerOptionModel.fromJson(x))),
@@ -47,6 +50,7 @@ class QuestionModel {
     "exam_id": examId,
     "subject": subject,
     "type": type,
+    "score": score,
     "answer": answer,
     "created_at": createdAt?.toIso8601String(),
     "updated_at": updatedAt?.toIso8601String(),

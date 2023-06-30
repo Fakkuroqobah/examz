@@ -93,11 +93,13 @@ class SExamService {
       data = {
         "question_id": id,
         "answer_option_id": answer,
+        "type": type
       };
     }else{
       data = {
         "question_id": id,
         "answer_essay": answer,
+        "type": type
       };
     }
 

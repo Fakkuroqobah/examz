@@ -175,6 +175,8 @@ class _SExamDetailState extends State<SExamDetail> {
                                               return;
                                             },
                                             (response) {
+                                              // index 0 = remaining time
+                                              // index 1 = data
                                               context.read<SExamProvider>().token(response[1]);
                                               showTopSnackBar(
                                                 Overlay.of(context),

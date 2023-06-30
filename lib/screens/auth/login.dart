@@ -42,6 +42,7 @@ class _LoginState extends State<Login> {
   
   @override
   Widget build(BuildContext context) {
+    txtUsername.text = "teacher";
     txtPassword.text = "password";
 
     return Scaffold(

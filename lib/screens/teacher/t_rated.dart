@@ -122,11 +122,24 @@ class _TRatedState extends State<TRated> with SingleTickerProviderStateMixin {
                     itemCount: exam?.length,
                     itemBuilder: (ctx, index) {
                       ExamModel data = exam![index];
+                      String status = '';
+                      switch (data.status) {
+                        case 'inactive':
+                          status = 'Nonaktif';
+                          break;
+                        case 'launched':
+                          status = 'Berlangsung';
+                          break;
+                        case 'finished':
+                          status = 'Selesai';
+                          break;
+                        default:
+                      }
 
                       return ListTile(
                         leading: const Icon(Icons.book),
                         title: Text(data.name),
-                        subtitle: Text("Kelas ${data.examClass}"),
+                        subtitle: Text("Kelas ${data.examClass} - $status"),
                         trailing: const Icon(Icons.chevron_right),
                         onTap: () {
                           Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TRatedStudent(data: data)));

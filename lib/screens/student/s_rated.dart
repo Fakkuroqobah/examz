@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-
+import '../../models/answer_student_model.dart';
 import '../../models/exam_model.dart';
 import '../../models/question_model.dart';
 import '../../models/rated_model.dart';
@@ -55,6 +55,7 @@ class _SRatedState extends State<SRated> {
                     int total = snapshot.data!.total;
                     int totalQuestion = snapshot.data!.questions.length;
                     List<QuestionModel> questionList = snapshot.data!.questions;
+                    List<AnswerStudentModel> answerStudentList = snapshot.data!.answerStudent;
           
                     return (snapshot.data!.answerStudent.isNotEmpty) ? Column(
                       children: [
@@ -88,13 +89,10 @@ class _SRatedState extends State<SRated> {
                             ],
                           ),
                         ),
-          
+
                         const SizedBox(height: 8.0),
                         Column(
-                          children: [
-                            for (QuestionModel val in questionList) 
-                              QuestionCardStudent(data: val, number: number++)
-                          ],
+                          children: generateQuestionCardStudent(questionList, answerStudentList, number),
                         )
                       ],
                     ) : const EmptyCondition();
@@ -108,5 +106,16 @@ class _SRatedState extends State<SRated> {
         ),
       )
     );
+  }
+
+  List<QuestionCardStudent> generateQuestionCardStudent(List<QuestionModel> questionList, List<AnswerStudentModel> answerStudentList, int number) {
+    List<QuestionCardStudent> data = [];
+
+    for (QuestionModel val in questionList) {
+      AnswerStudentModel answerStudent = answerStudentList[answerStudentList.indexWhere((el) => el.questionId == val.id)];
+      data.add(QuestionCardStudent(data: val, answerStudent: answerStudent, number: number++, role: 'student'));
+    }
+
+    return data;
   }
 }
