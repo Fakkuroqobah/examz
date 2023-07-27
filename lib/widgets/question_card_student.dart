@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:provider/provider.dart';
 
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import '../models/answer_option_model.dart';
 import '../models/answer_student_model.dart';
 import '../models/question_model.dart';
+import '../provider/loading_provider.dart';
+import '../provider/teacher/t_rated_provider.dart';
+import '../services/teacher/t_rated_service.dart';
 
 class QuestionCardStudent extends StatefulWidget {
   const QuestionCardStudent({super.key, required this.data, required this.answerStudent, required this.number, required this.role});
@@ -11,7 +17,7 @@ class QuestionCardStudent extends StatefulWidget {
   final QuestionModel data;
   final AnswerStudentModel? answerStudent;
   final int number;
-  final role;
+  final String role;
 
   @override
   State<QuestionCardStudent> createState() => _QuestionCardStudentState();
@@ -19,6 +25,7 @@ class QuestionCardStudent extends StatefulWidget {
 
 class _QuestionCardStudentState extends State<QuestionCardStudent> {
   final TextEditingController txtRateEssay = TextEditingController();
+  final TRatedService _tRatedService = TRatedService();
 
   @override
   Widget build(BuildContext context) {
@@ -163,50 +170,105 @@ class _QuestionCardStudentState extends State<QuestionCardStudent> {
         }
       }
 
-      return Text("0/${widget.data.score}");
+      return Text("0/${widget.data.score}",
+        style: const TextStyle(fontWeight: FontWeight.bold)
+      );
     }else{
-      return ElevatedButton(
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: Text('Soal ${widget.number}'),
-                content: TextFormField(
-                  controller: txtRateEssay,
-                  decoration: const InputDecoration(hintText: "Masukan nilai essai"),
-                  maxLength: 5,
-                ),
-                actions: <Widget>[
-                  ElevatedButton(
-                    style: const ButtonStyle(
-                      backgroundColor: MaterialStatePropertyAll<Color>(Colors.grey),
-                      elevation: MaterialStatePropertyAll(0)
-                    ),
-                    child: const Text('Batal'),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  ElevatedButton(
-                    style: const ButtonStyle(
-                      backgroundColor: MaterialStatePropertyAll<Color>(Colors.green),
-                      elevation: MaterialStatePropertyAll(0)
-                    ),
-                    child: const Text('Simpan'),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],
-              );
-            }
-          );
-        }, 
-        style: const ButtonStyle(
-          elevation: MaterialStatePropertyAll(0)
-        ),
-        child: const Text("Beri nilai")
+      if(widget.answerStudent != null) {
+        return Row(
+          children: [
+            (widget.answerStudent!.score != -1) ? Text("${widget.answerStudent?.score ?? 0}/${widget.data.score}", 
+              style: const TextStyle(fontWeight: FontWeight.bold)
+            ) : const Text(''),
+
+            const SizedBox(width: 5.0),
+            (widget.role == 'teacher') ? ElevatedButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text('Soal ${widget.number}'),
+                      content: TextFormField(
+                        controller: txtRateEssay,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(hintText: "Masukan nilai essai"),
+                        maxLength: 1,
+                      ),
+                      actions: <Widget>[
+                        ElevatedButton(
+                          style: const ButtonStyle(
+                            backgroundColor: MaterialStatePropertyAll<Color>(Colors.grey),
+                            elevation: MaterialStatePropertyAll(0)
+                          ),
+                          child: const Text('Batal'),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                        Consumer<LoadingProvider>(
+                          builder: (_, loadingProvider, __) {
+                            return ElevatedButton(
+                              style: const ButtonStyle(
+                                backgroundColor: MaterialStatePropertyAll<Color>(Colors.green),
+                                elevation: MaterialStatePropertyAll(0)
+                              ),
+                              child: Text(loadingProvider.isLoading ? 'Loading...' : 'Simpan'),
+                              onPressed: () {
+                                loadingProvider.setLoading(true);
+                                _tRatedService.update(widget.answerStudent!.id, widget.answerStudent!.studentId, widget.data.examId, txtRateEssay.text).then((value) {
+                                  loadingProvider.setLoading(false);
+                                  value.fold(
+                                    (errorMessage) {
+                                      showTopSnackBar(
+                                        Overlay.of(context),
+                                        CustomSnackBar.error(
+                                          message: errorMessage,
+                                        )
+                                      );
+                                      return;
+                                    },
+                                    (response) {
+                                      context.read<TRatedProvider>().updateRated(response);
+                                      showTopSnackBar(
+                                        Overlay.of(context),
+                                        const CustomSnackBar.success(
+                                          message: "Nilai essai berhasil disimpan",
+                                        )
+                                      );
+                                      Navigator.pop(context);
+                                      return null;
+                                    },
+                                  );
+                                }).catchError((err) {
+                                  loadingProvider.setLoading(false);
+                                  showTopSnackBar(
+                                    Overlay.of(context),
+                                    const CustomSnackBar.error(
+                                      message: "Terjadi kesalahan",
+                                    )
+                                  );
+                                });
+                              },
+                            );
+                          }
+                        ),
+                      ],
+                    );
+                  }
+                );
+              }, 
+              style: const ButtonStyle(
+                elevation: MaterialStatePropertyAll(0)
+              ),
+              child: const Text("Beri nilai")
+            ) : const Text(''),
+          ],
+        );
+      }
+
+      return Text("0/${widget.data.score}",
+        style: const TextStyle(fontWeight: FontWeight.bold)
       );
     }
   }

@@ -112,7 +112,11 @@ class _SRatedState extends State<SRated> {
     List<QuestionCardStudent> data = [];
 
     for (QuestionModel val in questionList) {
-      AnswerStudentModel answerStudent = answerStudentList[answerStudentList.indexWhere((el) => el.questionId == val.id)];
+      AnswerStudentModel? answerStudent;
+      if(answerStudentList.indexWhere((el) => el.questionId == val.id) != -1) {
+        answerStudent = answerStudentList[answerStudentList.indexWhere((el) => el.questionId == val.id)];
+      }
+      
       data.add(QuestionCardStudent(data: val, answerStudent: answerStudent, number: number++, role: 'student'));
     }
 

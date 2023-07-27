@@ -13,6 +13,7 @@ import 'provider/teacher/t_exam_provider.dart';
 import 'provider/teacher/t_is_correct_answer_provider.dart';
 import 'provider/teacher/t_is_random_provider.dart';
 import 'provider/teacher/t_question_provider.dart';
+import 'provider/teacher/t_rated_provider.dart';
 import 'provider/teacher/t_select_class_provider.dart';
 import 'provider/teacher/t_thumbnail_provider.dart';
 
@@ -41,6 +42,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<TExamProvider>(create: (_) => TExamProvider()),
         ChangeNotifierProvider<TQuestionProvider>(create: (_) => TQuestionProvider()),
         ChangeNotifierProvider<TIsCorrectAnswerProvider>(create: (_) => TIsCorrectAnswerProvider()),
+        ChangeNotifierProvider<TRatedProvider>(create: (_) => TRatedProvider()),
         
         ChangeNotifierProvider<AImportProvider>(create: (_) => AImportProvider()),
         ChangeNotifierProvider<AExamProvider>(create: (_) => AExamProvider()),
