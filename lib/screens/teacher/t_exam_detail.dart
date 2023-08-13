@@ -125,7 +125,7 @@ class _TExamDetailState extends State<TExamDetail> {
                                     ],
                                   ),
                                 ),
-        
+
                                 const SizedBox(height: 8.0),
                                 Text("Kelas ${widget.data.examClass}",
                                   style: TextStyle(color: Colors.black.withOpacity(0.6)),

@@ -192,7 +192,7 @@ class _QuestionCardStudentState extends State<QuestionCardStudent> {
                       content: TextFormField(
                         controller: txtRateEssay,
                         keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(hintText: "Masukan nilai essai"),
+                        decoration: InputDecoration(hintText: "Masukan nilai essai (max: ${widget.data.score})"),
                         maxLength: 1,
                       ),
                       actions: <Widget>[
@@ -215,40 +215,49 @@ class _QuestionCardStudentState extends State<QuestionCardStudent> {
                               ),
                               child: Text(loadingProvider.isLoading ? 'Loading...' : 'Simpan'),
                               onPressed: () {
-                                loadingProvider.setLoading(true);
-                                _tRatedService.update(widget.answerStudent!.id, widget.answerStudent!.studentId, widget.data.examId, txtRateEssay.text).then((value) {
-                                  loadingProvider.setLoading(false);
-                                  value.fold(
-                                    (errorMessage) {
-                                      showTopSnackBar(
-                                        Overlay.of(context),
-                                        CustomSnackBar.error(
-                                          message: errorMessage,
-                                        )
-                                      );
-                                      return;
-                                    },
-                                    (response) {
-                                      context.read<TRatedProvider>().updateRated(response);
-                                      showTopSnackBar(
-                                        Overlay.of(context),
-                                        const CustomSnackBar.success(
-                                          message: "Nilai essai berhasil disimpan",
-                                        )
-                                      );
-                                      Navigator.pop(context);
-                                      return null;
-                                    },
-                                  );
-                                }).catchError((err) {
-                                  loadingProvider.setLoading(false);
+                                if(int.parse(txtRateEssay.text) > widget.data.score) {
                                   showTopSnackBar(
                                     Overlay.of(context),
                                     const CustomSnackBar.error(
-                                      message: "Terjadi kesalahan",
+                                      message: "Nilai essai yang diberikan tidak boleh melebihi bobot nilai",
                                     )
                                   );
-                                });
+                                }else{
+                                  loadingProvider.setLoading(true);
+                                  _tRatedService.update(widget.answerStudent!.id, widget.answerStudent!.studentId, widget.data.examId, txtRateEssay.text).then((value) {
+                                    loadingProvider.setLoading(false);
+                                    value.fold(
+                                      (errorMessage) {
+                                        showTopSnackBar(
+                                          Overlay.of(context),
+                                          CustomSnackBar.error(
+                                            message: errorMessage,
+                                          )
+                                        );
+                                        return;
+                                      },
+                                      (response) {
+                                        context.read<TRatedProvider>().updateRated(response);
+                                        showTopSnackBar(
+                                          Overlay.of(context),
+                                          const CustomSnackBar.success(
+                                            message: "Nilai essai berhasil disimpan",
+                                          )
+                                        );
+                                        Navigator.pop(context);
+                                        return null;
+                                      },
+                                    );
+                                  }).catchError((err) {
+                                    loadingProvider.setLoading(false);
+                                    showTopSnackBar(
+                                      Overlay.of(context),
+                                      const CustomSnackBar.error(
+                                        message: "Terjadi kesalahan",
+                                      )
+                                    );
+                                  });
+                                }
                               },
                             );
                           }

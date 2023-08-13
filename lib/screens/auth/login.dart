@@ -134,6 +134,15 @@ class _LoginState extends State<Login> {
                               String password= txtPassword.text.toString();
                               String selectedRole = context.read<OSelectRoleProvider>().selectedItem;
 
+                              if(username.isEmpty || password.isEmpty) {
+                                showTopSnackBar(
+                                  Overlay.of(context),
+                                  const CustomSnackBar.error(
+                                    message: "Username atau password wajib diisi",
+                                  )
+                                );
+                              }
+
                               if(selectedRole == "Teacher") {
                                 _tAuthService.login(username, password).then((value) {
                                   loadingProvider.setLoading(false);

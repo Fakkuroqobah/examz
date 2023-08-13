@@ -1,6 +1,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:universal_html/html.dart' as html;
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 import '../../configs/api.dart';
 import '../../models/exam_model.dart';
@@ -70,6 +74,51 @@ class TRatedService {
       return const Left('Terjadi kesalahan');
     } on DioError catch (_) {
       return const Left('Terjadi kesalahan pada server');
+    }
+  }
+
+  Future<Either<String, String>> export(int examId) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    try {
+      if (kIsWeb) {
+        html.AnchorElement(href: "${Api.tRatedExport}/$examId")
+            ..setAttribute('download', 'penilaian.xlsx')
+            ..click();
+            
+        return const Right("Download penilaian berhasil. Tersimpan pada folder download");
+      }else{
+        Map<Permission, PermissionStatus> statuses = await [
+          Permission.storage, 
+        ].request();
+
+        if(statuses[Permission.storage]!.isGranted){ 
+          var dir = await DownloadsPathProvider.downloadsDirectory;
+          if(dir != null){
+            String savename = "penilaian.xlsx";
+            String savePath = "${dir.path}/$savename";
+            //output:  /storage/emulated/0/Download/banner.png
+
+            try {
+              _dio.options.headers['authorization'] = 'Bearer ${preferences.getString("token")}';
+              final response = await _dio.download("${Api.tRatedExport}/$examId", savePath);
+
+              if (response.statusCode == 200) {
+                return const Right("Download penilaian berhasil. Tersimpan pada folder download");
+              }
+              return const Left('Terjadi kesalahan');
+            } on DioError catch (_) {
+              return const Left('Terjadi kesalahan pada server');
+            }
+          }else{
+            return const Left('Terjadi kesalahan');
+          }
+        }else{
+          return const Left('Akses penyimpanan wajib disetuji');
+        }
+      }
+    } catch (_) {
+      return const Left('Terjadi kesalahan');
     }
   }
 }

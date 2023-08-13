@@ -139,6 +139,7 @@ class _SExamDetailState extends State<SExamDetail> {
                                 controller: txtToken,
                                 decoration: const InputDecoration(hintText: "Masukan Token Ujian"),
                                 maxLength: 5,
+                                keyboardType: TextInputType.number,
                               ),
                               actions: <Widget>[
                                 ElevatedButton(

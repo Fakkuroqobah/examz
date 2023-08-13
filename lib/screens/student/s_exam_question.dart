@@ -83,6 +83,7 @@ class _SExamQuestionState extends State<SExamQuestion> with WidgetsBindingObserv
           controller: _txtBlock,
           decoration: const InputDecoration(hintText: "Masukan Token Akses"),
           maxLength: 5,
+          keyboardType: TextInputType.number,
         ),
         actions: <Widget>[
           Consumer<LoadingProvider>(

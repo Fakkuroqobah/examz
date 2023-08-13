@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../models/exam_model.dart';
 import '../../models/student_schedule_model.dart';
+import '../../provider/loading_provider.dart';
 import '../../services/teacher/t_rated_service.dart';
 import '../../widgets/empty_condition.dart';
 import 't_rated_student_detail.dart';
+
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class TRatedStudent extends StatefulWidget {
   const TRatedStudent({super.key, required this.data});
@@ -34,6 +39,51 @@ class _TRatedStudentState extends State<TRatedStudent> with SingleTickerProvider
       appBar: AppBar(
         title: const Text("Penilaian"),
         elevation: 0,
+        actions: [
+          (widget.data.status == 'finished') ? Consumer<LoadingProvider>(
+            builder: (_, loadingProvider, __) {
+              return IconButton(
+                onPressed: () {
+                  loadingProvider.setLoading(true);
+
+                  _tRatedService.export(widget.data.id).then((value) {
+                    loadingProvider.setLoading(false);
+                    value.fold(
+                      (errorMessage) {
+                        showTopSnackBar(
+                          Overlay.of(context),
+                          CustomSnackBar.error(
+                            message: errorMessage,
+                          )
+                        );
+                        return;
+                      },
+                      (response) {
+                        showTopSnackBar(
+                          Overlay.of(context),
+                          CustomSnackBar.success(
+                            message: response,
+                          )
+                        );
+                        return null;
+                      },
+                    );
+                  }).catchError((err) {
+                    loadingProvider.setLoading(false);
+                    showTopSnackBar(
+                      Overlay.of(context),
+                      const CustomSnackBar.error(
+                        message: "Terjadi kesalahan",
+                      )
+                    );
+                  });
+                },
+                tooltip: "Unduh Nilai",
+                icon: Icon(loadingProvider.isLoading ? Icons.cached : Icons.download)
+              );
+            }
+          ) : Container()
+        ],
       ),
       body: RefreshIndicator(
         key: _refreshIndicatorKey,

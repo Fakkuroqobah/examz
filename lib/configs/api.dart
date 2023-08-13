@@ -27,6 +27,7 @@ class Api {
   static const String tRatedStudent = "$tBaseUrl/rated/student";
   static const String tRatedStudentDetail = "$tBaseUrl/rated/student-detail";
   static const String tRatedStudentUpdate = "$tBaseUrl/rated/student-rated";
+  static const String tRatedExport = "$tBaseUrl/rated/export";
 
   // STUDENT
   static const String sLogin = "$sBaseUrl/login";

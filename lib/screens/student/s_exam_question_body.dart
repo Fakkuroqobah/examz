@@ -111,7 +111,7 @@ class _SExamQuestionBodyState extends State<SExamQuestionBody> {
               ),
 
               const SizedBox(height: 22.0),
-              ElevatedButton(
+              if(widget.data.type == 'choice') ElevatedButton(
                 style: const ButtonStyle(
                   backgroundColor: MaterialStatePropertyAll<Color>(Colors.grey),
                   elevation: MaterialStatePropertyAll(0)
