@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../configs/api.dart';
+import '../../configs/utils.dart';
 import '../../models/room_model.dart';
 import '../../models/student_model.dart';
 import '../../models/supervisor_model.dart';
@@ -10,6 +11,11 @@ import '../../models/teacher_model.dart';
 
 class AEditService {
   final Dio _dio = Dio();
+  final Utils _utils = Utils();
+
+  AEditService() {
+    _utils.interceptor(_dio, 'admin');
+  }
   
   Future<Either<String, TeacherModel>> editTeacher(int id, String txtCode, String txtName, String txtUsername, String txtPassword) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();

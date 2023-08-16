@@ -3,10 +3,16 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../configs/api.dart';
+import '../../configs/utils.dart';
 import '../../models/exam_model.dart';
 
 class AExamService {
   final Dio _dio = Dio();
+  final Utils _utils = Utils();
+
+  AExamService() {
+    _utils.interceptor(_dio, 'admin');
+  }
 
   Future<List<ExamModel>> getExam() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();

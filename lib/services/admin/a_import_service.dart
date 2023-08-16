@@ -7,6 +7,7 @@ import 'package:universal_html/html.dart' as html;
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 import '../../configs/api.dart';
+import '../../configs/utils.dart';
 import '../../models/room_model.dart';
 import '../../models/schedule_model.dart';
 import '../../models/student_model.dart';
@@ -15,6 +16,11 @@ import '../../models/teacher_model.dart';
 
 class AImportService {
   final Dio _dio = Dio();
+  final Utils _utils = Utils();
+
+  AImportService() {
+    _utils.interceptor(_dio, 'admin');
+  }
   
   Future<List<TeacherModel>> getTeacher() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();

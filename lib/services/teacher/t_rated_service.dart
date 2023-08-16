@@ -7,12 +7,18 @@ import 'package:universal_html/html.dart' as html;
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 import '../../configs/api.dart';
+import '../../configs/utils.dart';
 import '../../models/exam_model.dart';
 import '../../models/rated_model.dart';
 import '../../models/student_schedule_model.dart';
 
 class TRatedService {
   final Dio _dio = Dio();
+  final Utils _utils = Utils();
+
+  TRatedService() {
+    _utils.interceptor(_dio, 'teacher');
+  }
 
   Future<List<ExamModel>> getExam() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();

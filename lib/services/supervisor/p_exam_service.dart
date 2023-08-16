@@ -3,10 +3,16 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../configs/api.dart';
+import '../../configs/utils.dart';
 import '../../models/schedule_model.dart';
 
 class PExamService {
   final Dio _dio = Dio();
+  final Utils _utils = Utils();
+
+  PExamService() {
+    _utils.interceptor(_dio, 'supervisor');
+  }
 
   Future<List<ScheduleModel>> getExam() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();

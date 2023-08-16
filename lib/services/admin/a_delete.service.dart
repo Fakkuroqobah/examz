@@ -3,9 +3,15 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../configs/api.dart';
+import '../../configs/utils.dart';
 
 class ADeleteService {
   final Dio _dio = Dio();
+  final Utils _utils = Utils();
+
+  ADeleteService() {
+    _utils.interceptor(_dio, 'admin');
+  }
   
   Future<Either<String, String>> deleteData(int id, String type) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();

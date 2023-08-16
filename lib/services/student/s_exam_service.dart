@@ -3,12 +3,18 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../configs/api.dart';
+import '../../configs/utils.dart';
 import '../../models/question_model.dart';
 import '../../models/schedule_model.dart';
 import '../../models/student_schedule_model.dart';
 
 class SExamService {
   final Dio _dio = Dio();
+  final Utils _utils = Utils();
+
+  SExamService() {
+    _utils.interceptor(_dio, 'student');
+  }
 
   Future<List<ScheduleModel>> getExamLaunched() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();

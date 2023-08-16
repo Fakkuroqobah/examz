@@ -4,11 +4,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http_parser/http_parser.dart';
 
 import '../../configs/api.dart';
+import '../../configs/utils.dart';
 import '../../models/exam_group_model.dart';
 import '../../models/exam_model.dart';
 
 class TExamService {
   final Dio _dio = Dio();
+  final Utils _utils = Utils();
+
+  TExamService() {
+    _utils.interceptor(_dio, 'teacher');
+  }
 
   Future<ExamGroupModel> getExam() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();

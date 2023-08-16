@@ -2,11 +2,17 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../configs/api.dart';
+import '../../configs/utils.dart';
 import '../../models/login_model.dart';
 import '../../models/supervisor_model.dart';
 
 class PAuthService {
   final Dio _dio = Dio();
+  final Utils _utils = Utils();
+
+  PAuthService() {
+    _utils.interceptor(_dio, 'supervisor');
+  }
   
   Future<bool> login(String txtUsername, String txtPassword) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();

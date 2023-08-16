@@ -3,10 +3,16 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../configs/api.dart';
+import '../../configs/utils.dart';
 import '../../models/question_model.dart';
 
 class TQuestionService {
   final Dio _dio = Dio();
+  final Utils _utils = Utils();
+
+  TQuestionService() {
+    _utils.interceptor(_dio, 'teacher');
+  }
 
   Future<List<QuestionModel>> getQuestion(int id) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
