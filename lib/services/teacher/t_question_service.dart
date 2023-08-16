@@ -22,7 +22,6 @@ class TQuestionService {
 
     List<QuestionModel> data = <QuestionModel>[];
     response.data['data'].forEach((val) {
-      // print(val);
       data.add(QuestionModel.fromJson(val));
     });
 

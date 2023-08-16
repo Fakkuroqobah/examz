@@ -228,6 +228,63 @@ class _SExamQuestionState extends State<SExamQuestion> with WidgetsBindingObserv
                 ),
                 GestureDetector(
                   onTap: () {
+                    double divideBtnNumber = sqm.length / 5;
+                    int modBtnNumber = sqm.length % 5;
+                    int ceilBtnNumber = divideBtnNumber.ceil();
+                    int floorBtnNumber = divideBtnNumber.floor();
+                    List<Row> rowBtnNumber = [];
+                    int loopRow = 5;
+                    int loopRow2 = 0;
+
+                    if(sqm.length > 5) {
+                      for (int j = 0; j < ceilBtnNumber; j++) {
+                        if(j < floorBtnNumber) {
+                          rowBtnNumber.add(
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                for (int i = loopRow2; i < loopRow; i++)
+                                  btnNumber(i + 1),
+                              ],
+                            )
+                          );
+
+                          loopRow += 5;
+                          loopRow2 += 5;
+                        }else{
+                          int j = modBtnNumber + loopRow2;
+                          rowBtnNumber.add(
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                for (int i = loopRow2; i < j; i++)
+                                  Row(
+                                    children: [
+                                      btnNumber(i + 1),
+                                      const SizedBox(width: 6.0),
+                                    ],
+                                  ),
+                                  
+                              ],
+                            )
+                          );
+                        }
+                      }
+                    }else{
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          for (int i = 0; i < sqm.length; i++)
+                            Row(
+                              children: [
+                                btnNumber(i + 1),
+                                const SizedBox(width: 6.0),
+                              ],
+                            ),
+                        ],
+                      );
+                    }
+
                     showModalBottomSheet(
                       context: context,
                       builder: (context) {
@@ -237,12 +294,8 @@ class _SExamQuestionState extends State<SExamQuestion> with WidgetsBindingObserv
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                Wrap(
-                                  alignment: WrapAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    for (int i = 0; i < sqm.length; i++)
-                                      btnNumber(i + 1),
-                                  ],
+                                Column(
+                                  children: rowBtnNumber,
                                 ),
                                 SizedBox(
                                   width: double.infinity,
@@ -371,8 +424,7 @@ class _SExamQuestionState extends State<SExamQuestion> with WidgetsBindingObserv
           style: OutlinedButton.styleFrom(
             backgroundColor: (valAnswer != 0 && valAnswer != '') ? Colors.green : Colors.white,
             alignment: Alignment.center,
-            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),
-            ),
+            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
           ),
           child: Text(no.toString(),
             style: TextStyle(
