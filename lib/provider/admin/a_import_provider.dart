@@ -165,6 +165,7 @@ class AImportProvider extends ChangeNotifier {
       username: data.username, 
       role: data.role, 
       roomId: data.roomId, 
+      room: data.room,
       createdAt: data.createdAt, 
       updatedAt: data.updatedAt
     );

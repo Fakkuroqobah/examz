@@ -11,7 +11,7 @@ import '../../services/student/s_auth_service.dart';
 import '../../services/supervisor/p_auth_service.dart';
 import '../../services/teacher/t_auth_service.dart';
 
-import '../admin/a_teacher.dart';
+import '../admin/a_room.dart';
 import '../student/s_exam.dart';
 import '../supervisor/p_exam.dart';
 import '../teacher/t_exam.dart';
@@ -162,7 +162,7 @@ class _LoginState extends State<Login> {
                               }else if(selectedRole == 'Admin') {
                                 _aAuthService.login(username, password).then((value) {
                                   loadingProvider.setLoading(false);
-                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => const ATeacher()));
+                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => const ARoom()));
                                 }).catchError((err) {
                                   loadingProvider.setLoading(false);
                                   catchErrorLogin(context, err);

@@ -77,7 +77,7 @@ class _SExamQuestionBodyState extends State<SExamQuestionBody> {
                     callbacks: Callbacks(
                       onChangeContent: (val) {
                         _debounceTimer?.cancel();
-                        _debounceTimer = Timer(const Duration(seconds: 3), () {
+                        _debounceTimer = Timer(const Duration(seconds: 1), () {
                           _sExamService.answer(widget.data.id, 'essay', val).then((value) {
                             value.fold(
                               (errorMessage) {
@@ -90,6 +90,7 @@ class _SExamQuestionBodyState extends State<SExamQuestionBody> {
                                 return;
                               },
                               (response) {
+                                print("TERSIMPAN");
                                 return;
                               },
                             );

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'provider/admin/a_exam_provider.dart';
 import 'provider/admin/a_import_provider.dart';
+import 'provider/admin/a_select_room_provider.dart';
 import 'provider/auth/o_select_role_provider.dart';
 import 'provider/loading_provider.dart';
 import 'provider/student/s_exam_provider.dart';
@@ -46,6 +47,7 @@ class MyApp extends StatelessWidget {
         
         ChangeNotifierProvider<AImportProvider>(create: (_) => AImportProvider()),
         ChangeNotifierProvider<AExamProvider>(create: (_) => AExamProvider()),
+        ChangeNotifierProvider<ASelectRoomProvider>(create: (_) => ASelectRoomProvider()),
         ChangeNotifierProvider<PExamProvider>(create: (_) => PExamProvider()),
         ChangeNotifierProvider<SExamProvider>(create: (_) => SExamProvider()),
         ChangeNotifierProvider<STimerProvider>(create: (_) => STimerProvider()),

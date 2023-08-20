@@ -37,7 +37,7 @@ class _AExamCardState extends State<AExamCard> {
               ListTile(
                 leading: Image.network(_api.tBaseUrlAsset + widget.exam.thumbnail),
                 title: Text(widget.exam.name),
-                subtitle: Text("Kelas ${widget.exam.examClass}",
+                subtitle: Text("Kelas ${widget.exam.examClass} - ID: ${widget.exam.id}",
                   style: TextStyle(color: Colors.black.withOpacity(0.6)),
                 ),
               ),

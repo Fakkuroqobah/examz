@@ -201,8 +201,9 @@ class _AStudentState extends State<AStudent> with SingleTickerProviderStateMixin
                               DataColumn(label: Text("No")),
                               DataColumn(label: Text("NIS")),
                               DataColumn(label: Text("Nama")),
-                              DataColumn(label: Text("Kelas")),
                               DataColumn(label: Text("Username")),
+                              DataColumn(label: Text("Kelas")),
+                              DataColumn(label: Text("Ruangan")),
                               DataColumn(label: Text("Aksi")),
                             ],
                             rows: aImportProvider.studentList.map((el) {
@@ -211,8 +212,9 @@ class _AStudentState extends State<AStudent> with SingleTickerProviderStateMixin
                                   DataCell(Text("${number++}")),
                                   DataCell(Text(el.nis)),
                                   DataCell(Text(el.name)),
-                                  DataCell(Text(el.studentModelClass)),
                                   DataCell(Text(el.username)),
+                                  DataCell(Text(el.studentModelClass)),
+                                  DataCell(Text(el.room?.name ?? '-')),
                                   DataCell(Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [

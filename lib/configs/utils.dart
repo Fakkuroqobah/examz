@@ -34,12 +34,14 @@ class Utils {
     _dio.options.headers['authorization'] = 'Bearer ${preferences.getString("token")}';
     final response = await _dio.get(url);
 
+    print("HAIYAAAAAA $role");
     preferences.setString("token", response.data['access_token']);
 
     return response.data['access_token'];
   }
 
   void interceptor(Dio dio, String role) async {
+    print("=====$role====");
     dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (RequestOptions options, RequestInterceptorHandler handler) {
@@ -53,6 +55,7 @@ class Utils {
             String newAccessToken = await refreshToken(role);
             e.requestOptions.headers['Authorization'] = 'Bearer $newAccessToken';
 
+            print("REFRESH");
             return handler.resolve(await dio.fetch(e.requestOptions));
           }
           return handler.next(e);

@@ -13,6 +13,20 @@ List<Widget> dataDrawer(BuildContext context, AAuthService aAuthService) {
   final List<Widget> data = [
     GestureDetector(
       onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const ARoom()));
+      },
+      child: const Text(
+        "Daftar Ruangan",
+        style: TextStyle(
+          fontSize: 18,
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ),
+    
+    GestureDetector(
+      onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const ATeacher()));
       },
       child: const Text(
@@ -55,10 +69,10 @@ List<Widget> dataDrawer(BuildContext context, AAuthService aAuthService) {
 
     GestureDetector(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const ARoom()));
+        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const AExam()));
       },
       child: const Text(
-        "Daftar Ruangan",
+        "Daftar Ujian",
         style: TextStyle(
           fontSize: 18,
           color: Colors.white,
@@ -73,20 +87,6 @@ List<Widget> dataDrawer(BuildContext context, AAuthService aAuthService) {
       },
       child: const Text(
         "Daftar Jadwal",
-        style: TextStyle(
-          fontSize: 18,
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    ),
-
-    GestureDetector(
-      onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const AExam()));
-      },
-      child: const Text(
-        "Daftar Ujian",
         style: TextStyle(
           fontSize: 18,
           color: Colors.white,

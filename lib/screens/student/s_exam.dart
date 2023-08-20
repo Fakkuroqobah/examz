@@ -1,7 +1,7 @@
 import 'package:fancy_drawer/fancy_drawer.dart';
 import 'package:flutter/material.dart';
 
-import '../../services/teacher/t_auth_service.dart';
+import '../../services/student/s_auth_service.dart';
 import '../auth/login.dart';
 import 's_exam_finished.dart';
 import 's_exam_launched.dart';
@@ -14,7 +14,7 @@ class SExam extends StatefulWidget {
 }
 
 class _SExamState extends State<SExam> with SingleTickerProviderStateMixin {
-  final TAuthService _tAuthService = TAuthService();
+  final SAuthService _sAuthService = SAuthService();
   late FancyDrawerController _controllerDrawer;
 
   int _selectedIndex = 0;
@@ -70,7 +70,7 @@ class _SExamState extends State<SExam> with SingleTickerProviderStateMixin {
 
           GestureDetector(
             onTap: () {
-              _tAuthService.logout().then((value) {
+              _sAuthService.logout().then((value) {
                 Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => const Login()));
               });
             },

@@ -168,7 +168,12 @@ class AImportService {
       }
 
       return const Left('Terjadi kesalahan');
-    } on DioError catch (_) {
+    } on DioError catch (e) {
+      if(e.response != null) {
+        if(e.response!.statusCode == 404) {
+          return const Left('Terdapat nama ruangan yang salah');
+        }
+      }
       return const Left('Terjadi kesalahan pada server');
     }
   }
@@ -222,7 +227,12 @@ class AImportService {
       }
 
       return const Left('Terjadi kesalahan');
-    } on DioError catch (_) {
+    } on DioError catch (e) {
+      if(e.response != null) {
+        if(e.response!.statusCode == 404) {
+          return const Left('Terdapat data yang salah');
+        }
+      }
       return const Left('Terjadi kesalahan pada server');
     }
   }

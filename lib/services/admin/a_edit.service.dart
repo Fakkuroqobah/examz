@@ -55,13 +55,14 @@ class AEditService {
     }
   }
 
-  Future<Either<String, StudentModel>> editStudent(int id, String txtNis, String txtName, String txtUsername, String txtClass, String txtPassword) async {
+  Future<Either<String, StudentModel>> editStudent(int id, String txtNis, String txtName, String txtUsername, String txtClass, String txtRoom, String txtPassword) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     final data = FormData.fromMap({
       "nis": txtNis,
       "name": txtName,
       "class": txtClass,
+      "room_id": txtRoom,
       "username": txtUsername,
       "password": txtPassword,
     });
