@@ -24,7 +24,9 @@ class _SExamFinishedCardState extends State<SExamFinishedCard> {
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: () {
-          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SRated(exam: exam)));
+          if(exam.isRated == 1) {
+            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SRated(exam: exam)));
+          }
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

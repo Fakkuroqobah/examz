@@ -60,8 +60,8 @@ class _TRatedStudentDetailState extends State<TRatedStudentDetail> {
                   }
 
                   int number = 1;
-                  int total = tRatedProvider.ratedModel.total;
-                  int totalQuestion = tRatedProvider.ratedModel.questions.length;
+                  int totalChoice = tRatedProvider.ratedModel.scoreChoice;
+                  int totalEssai = tRatedProvider.ratedModel.scoreEssai;
                   List<QuestionModel> questionList = tRatedProvider.ratedModel.questions;
                   List<AnswerStudentModel> answerStudentList = tRatedProvider.ratedModel.answerStudent;
 
@@ -76,7 +76,10 @@ class _TRatedStudentDetailState extends State<TRatedStudentDetail> {
                               Text(widget.tRatedModel.student!.name, style: const TextStyle(fontSize: 20.0)),
                         
                               const SizedBox(height: 6.0),
-                              Text("Nilai $total/$totalQuestion", style: const TextStyle(fontSize: 16.0)),
+                              Text("Nilai pilihan ganda $totalChoice", style: const TextStyle(fontSize: 16.0)),
+
+                              const SizedBox(height: 6.0),
+                              Text("Nilai esai $totalEssai", style: const TextStyle(fontSize: 16.0)),
                                         
                               const SizedBox(height: 6.0),
                               Text("Kelas ${widget.exam.examClass}",

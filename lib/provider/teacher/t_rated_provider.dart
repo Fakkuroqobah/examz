@@ -4,7 +4,7 @@ import '../../models/rated_model.dart';
 import '../../services/teacher/t_rated_service.dart';
 
 class TRatedProvider extends ChangeNotifier {
-  RatedModel _ratedModel = RatedModel(total: 0, answerStudent: [], questions: []);
+  RatedModel _ratedModel = RatedModel(scoreChoice: 0, scoreEssai: 0, answerStudent: [], questions: []);
   bool _isLoading = false;
   bool _hasError = false;
   
@@ -31,7 +31,8 @@ class TRatedProvider extends ChangeNotifier {
 
   void updateRated(RatedModel data) {
     RatedModel el = RatedModel(
-      total: data.total,
+      scoreChoice: data.scoreChoice,
+      scoreEssai: data.scoreEssai,
       answerStudent: data.answerStudent,
       questions: data.questions
     );

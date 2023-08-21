@@ -271,17 +271,19 @@ class _SExamQuestionState extends State<SExamQuestion> with WidgetsBindingObserv
                         }
                       }
                     }else{
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          for (int i = 0; i < sqm.length; i++)
-                            Row(
-                              children: [
-                                btnNumber(i + 1),
-                                const SizedBox(width: 6.0),
-                              ],
-                            ),
-                        ],
+                      rowBtnNumber.add(
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            for (int i = 0; i < sqm.length; i++)
+                              Row(
+                                children: [
+                                  btnNumber(i + 1),
+                                  const SizedBox(width: 6.0),
+                                ],
+                              ),
+                          ],
+                        )
                       );
                     }
 

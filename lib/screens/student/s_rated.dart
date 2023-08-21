@@ -52,8 +52,8 @@ class _SRatedState extends State<SRated> {
                     return Center(child: Text("Terjadi kesalahan dengan pesan : ${snapshot.error.toString()}"));
                   } else if (snapshot.connectionState == ConnectionState.done) {
                     int number = 1;
-                    int total = snapshot.data!.total;
-                    int totalQuestion = snapshot.data!.questions.length;
+                    int totalChoice = snapshot.data!.scoreChoice;
+                    int totalEssai = snapshot.data!.scoreEssai;
                     List<QuestionModel> questionList = snapshot.data!.questions;
                     List<AnswerStudentModel> answerStudentList = snapshot.data!.answerStudent;
           
@@ -68,7 +68,10 @@ class _SRatedState extends State<SRated> {
                                 Text(widget.exam.name, style: const TextStyle(fontSize: 20.0)),
                           
                                 const SizedBox(height: 6.0),
-                                Text("Nilai $total/$totalQuestion", style: const TextStyle(fontSize: 16.0)),
+                                Text("Nilai pilihan ganda $totalChoice", style: const TextStyle(fontSize: 16.0)),
+
+                                const SizedBox(height: 6.0),
+                                Text("Nilai esai $totalEssai", style: const TextStyle(fontSize: 16.0)),
                                           
                                 const SizedBox(height: 6.0),
                                 Text("Kelas ${widget.exam.examClass}",

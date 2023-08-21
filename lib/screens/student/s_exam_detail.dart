@@ -85,7 +85,7 @@ class _SExamDetailState extends State<SExamDetail> {
                                 ),
         
                                 const SizedBox(height: 8.0),
-                                Text("Tanggal Publish : ${Utils.getFormatedDate(exam.createdAt)}", style: const TextStyle(
+                                Text("Tanggal : ${Utils.getFormatedDate(exam.updatedAt)}", style: const TextStyle(
                                   fontSize: 12.0
                                 )),
         
