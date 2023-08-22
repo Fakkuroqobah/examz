@@ -23,4 +23,11 @@ class STimerProvider with ChangeNotifier {
       notifyListeners();
     });
   }
+
+  void resetTimer() {
+    _timerDurationMinutes = 0;
+    _currentSeconds = 0;
+    _timer = null;
+    notifyListeners();
+  }
 }

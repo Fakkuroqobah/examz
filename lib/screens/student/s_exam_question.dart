@@ -34,6 +34,7 @@ class _SExamQuestionState extends State<SExamQuestion> with WidgetsBindingObserv
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    Provider.of<STimerProvider>(context, listen: false).resetTimer();
     Provider.of<STimerProvider>(context, listen: false).startTimer(widget.remainingTime, showTimeoutDialog);
     sqm = Provider.of<SExamProvider>(context, listen: false).questionList;
     List initAnswer = Provider.of<SExamProvider>(context, listen: false).questionAnswer;

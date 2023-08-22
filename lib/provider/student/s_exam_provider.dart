@@ -61,6 +61,9 @@ class SExamProvider extends ChangeNotifier {
   }
 
   void token(List<QuestionModel> data) {
+    _questionList.clear();
+    _questionAnswer.clear();
+    _activePage = 0;
     if(_questionList.isEmpty) {
       _questionList.addAll(data);
       notifyListeners();
